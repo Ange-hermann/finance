@@ -102,11 +102,11 @@ export default async function CollectorDashboard() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-or/70 text-left border-b border-or/10">
-                  <th className="pb-3 pr-4">Date</th>
-                  <th className="pb-3 pr-4">Montant</th>
-                  <th className="pb-3 pr-4 hidden sm:table-cell">Catégorie</th>
-                  <th className="pb-3 pr-4 hidden sm:table-cell">Contributeur</th>
-                  <th className="pb-3">Statut</th>
+                  <th className="pb-3 pr-4 whitespace-nowrap">Date</th>
+                  <th className="pb-3 pr-4 whitespace-nowrap">Montant</th>
+                  <th className="pb-3 pr-4 whitespace-nowrap">Catégorie</th>
+                  <th className="pb-3 pr-4 whitespace-nowrap">Contributeur</th>
+                  <th className="pb-3 whitespace-nowrap">Statut</th>
                 </tr>
               </thead>
               <tbody>
@@ -114,8 +114,8 @@ export default async function CollectorDashboard() {
                   <tr key={t.id} className="border-b border-or/5">
                     <td className="py-3 pr-4 text-blanc/60 whitespace-nowrap">{formatDate(t.createdAt)}</td>
                     <td className="py-3 pr-4 text-blanc font-medium whitespace-nowrap">{formatMontant(Number(t.montant))}</td>
-                    <td className="py-3 pr-4 text-blanc/60 hidden sm:table-cell">{t.categorie}</td>
-                    <td className="py-3 pr-4 text-blanc/60 hidden sm:table-cell">{t.contributeur?.nom || "Anonyme"}</td>
+                    <td className="py-3 pr-4 text-blanc/60 whitespace-nowrap">{t.categorie}</td>
+                    <td className="py-3 pr-4 text-blanc/60 whitespace-nowrap">{t.contributeur?.nom || "Anonyme"}</td>
                     <td className="py-3">
                       <span className={`px-2 py-1 rounded-lg text-xs ${
                         t.statut === "VALIDE" ? "bg-green-500/10 text-green-400" :

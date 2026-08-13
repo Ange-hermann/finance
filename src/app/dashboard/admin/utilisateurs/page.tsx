@@ -37,20 +37,20 @@ export default async function UtilisateursPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="text-or/70 text-left border-b border-or/10">
-                <th className="pb-3 pr-4">Nom</th>
-                <th className="pb-3 pr-4 hidden sm:table-cell">Email</th>
-                <th className="pb-3 pr-4 hidden md:table-cell">Téléphone</th>
-                <th className="pb-3 pr-4">Rôle</th>
-                <th className="pb-3 pr-4">Statut</th>
-                <th className="pb-3 hidden md:table-cell">Créé le</th>
+                <th className="pb-3 pr-4 whitespace-nowrap">Nom</th>
+                <th className="pb-3 pr-4 whitespace-nowrap">Email</th>
+                <th className="pb-3 pr-4 whitespace-nowrap">Téléphone</th>
+                <th className="pb-3 pr-4 whitespace-nowrap">Rôle</th>
+                <th className="pb-3 pr-4 whitespace-nowrap">Statut</th>
+                <th className="pb-3 whitespace-nowrap">Créé le</th>
               </tr>
             </thead>
             <tbody>
               {users.map((u) => (
                 <tr key={u.id} className="border-b border-or/5">
                   <td className="py-3 pr-4 text-blanc whitespace-nowrap">{u.nom}</td>
-                  <td className="py-3 pr-4 text-blanc/60 hidden sm:table-cell">{u.email}</td>
-                  <td className="py-3 pr-4 text-blanc/60 hidden md:table-cell">{u.telephone || "—"}</td>
+                  <td className="py-3 pr-4 text-blanc/60 whitespace-nowrap">{u.email}</td>
+                  <td className="py-3 pr-4 text-blanc/60 whitespace-nowrap">{u.telephone || "—"}</td>
                   <td className="py-3 pr-4">
                     <span className="text-or text-xs px-2 py-1 rounded-lg bg-or/10">{u.role}</span>
                   </td>
@@ -61,7 +61,7 @@ export default async function UtilisateursPage() {
                       {u.actif ? "Actif" : "Inactif"}
                     </span>
                   </td>
-                  <td className="py-3 text-blanc/60 hidden md:table-cell whitespace-nowrap">{formatDate(u.createdAt)}</td>
+                  <td className="py-3 text-blanc/60 whitespace-nowrap">{formatDate(u.createdAt)}</td>
                 </tr>
               ))}
             </tbody>

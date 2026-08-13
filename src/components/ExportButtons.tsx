@@ -94,11 +94,11 @@ export default function ExportButtons({
   };
 
   return (
-    <div className="flex gap-3">
+    <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
       <button
         onClick={exportPDF}
         disabled={loading !== null}
-        className="btn-outline-or text-sm flex items-center gap-2"
+        className="btn-outline-or text-sm flex items-center justify-center gap-2 w-full sm:w-auto"
       >
         {loading === "pdf" ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileText className="w-4 h-4" />}
         Export PDF
@@ -106,7 +106,7 @@ export default function ExportButtons({
       <button
         onClick={exportExcel}
         disabled={loading !== null}
-        className="btn-outline-or text-sm flex items-center gap-2"
+        className="btn-outline-or text-sm flex items-center justify-center gap-2 w-full sm:w-auto"
       >
         {loading === "excel" ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileSpreadsheet className="w-4 h-4" />}
         Export Excel

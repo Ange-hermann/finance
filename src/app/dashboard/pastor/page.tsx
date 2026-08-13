@@ -91,10 +91,10 @@ export default async function PastorDashboard() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-or/70 text-left border-b border-or/10">
-                  <th className="pb-3 pr-4">Date</th>
-                  <th className="pb-3 pr-4">Montant</th>
-                  <th className="pb-3 pr-4 hidden sm:table-cell">Catégorie</th>
-                  <th className="pb-3 pr-4 hidden sm:table-cell">Contributeur</th>
+                  <th className="pb-3 pr-4 whitespace-nowrap">Date</th>
+                  <th className="pb-3 pr-4 whitespace-nowrap">Montant</th>
+                  <th className="pb-3 pr-4 whitespace-nowrap">Catégorie</th>
+                  <th className="pb-3 pr-4 whitespace-nowrap">Contributeur</th>
                 </tr>
               </thead>
               <tbody>
@@ -104,8 +104,8 @@ export default async function PastorDashboard() {
                       {new Date(t.createdAt).toLocaleDateString("fr-FR")}
                     </td>
                     <td className="py-3 pr-4 text-blanc font-medium whitespace-nowrap">{formatMontant(Number(t.montant))}</td>
-                    <td className="py-3 pr-4 text-blanc/60 hidden sm:table-cell">{t.categorie}</td>
-                    <td className="py-3 pr-4 text-blanc/60 hidden sm:table-cell">{t.contributeur?.nom || "Anonyme"}</td>
+                    <td className="py-3 pr-4 text-blanc/60 whitespace-nowrap">{t.categorie}</td>
+                    <td className="py-3 pr-4 text-blanc/60 whitespace-nowrap">{t.contributeur?.nom || "Anonyme"}</td>
                   </tr>
                 ))}
               </tbody>

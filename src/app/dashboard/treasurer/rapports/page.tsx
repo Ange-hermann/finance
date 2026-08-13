@@ -62,7 +62,7 @@ export default async function RapportsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="font-display text-2xl sm:text-3xl font-bold text-blanc">Rapports & Export</h1>
           <p className="text-blanc/50 text-sm mt-1">Génération de rapports PDF et Excel</p>
@@ -103,13 +103,13 @@ export default async function RapportsPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-or/70 text-left border-b border-or/10">
-                  <th className="pb-3 pr-4">Date</th>
-                  <th className="pb-3 pr-4">Montant</th>
-                  <th className="pb-3 pr-4 hidden sm:table-cell">Catégorie</th>
-                  <th className="pb-3 pr-4 hidden md:table-cell">Mode</th>
-                  <th className="pb-3 pr-4 hidden md:table-cell">Agent</th>
-                  <th className="pb-3 pr-4 hidden sm:table-cell">Contributeur</th>
-                  <th className="pb-3 pr-4 hidden lg:table-cell">Référence</th>
+                  <th className="pb-3 pr-4 whitespace-nowrap">Date</th>
+                  <th className="pb-3 pr-4 whitespace-nowrap">Montant</th>
+                  <th className="pb-3 pr-4 whitespace-nowrap">Catégorie</th>
+                  <th className="pb-3 pr-4 whitespace-nowrap">Mode</th>
+                  <th className="pb-3 pr-4 whitespace-nowrap">Agent</th>
+                  <th className="pb-3 pr-4 whitespace-nowrap">Contributeur</th>
+                  <th className="pb-3 pr-4 whitespace-nowrap">Référence</th>
                 </tr>
               </thead>
               <tbody>
@@ -117,11 +117,11 @@ export default async function RapportsPage() {
                   <tr key={t.id} className="border-b border-or/5">
                     <td className="py-3 pr-4 text-blanc/60 whitespace-nowrap">{formatDate(t.createdAt)}</td>
                     <td className="py-3 pr-4 text-blanc font-medium whitespace-nowrap">{formatMontant(Number(t.montant))}</td>
-                    <td className="py-3 pr-4 text-blanc/60 hidden sm:table-cell">{t.categorie}</td>
-                    <td className="py-3 pr-4 text-blanc/60 hidden md:table-cell">{t.mode}</td>
-                    <td className="py-3 pr-4 text-blanc/60 hidden md:table-cell">{t.agent?.nom || "—"}</td>
-                    <td className="py-3 pr-4 text-blanc/60 hidden sm:table-cell">{t.contributeur?.nom || "Anonyme"}</td>
-                    <td className="py-3 pr-4 text-blanc/40 text-xs hidden lg:table-cell">{t.referencePaiement || "—"}</td>
+                    <td className="py-3 pr-4 text-blanc/60 whitespace-nowrap">{t.categorie}</td>
+                    <td className="py-3 pr-4 text-blanc/60 whitespace-nowrap">{t.mode}</td>
+                    <td className="py-3 pr-4 text-blanc/60 whitespace-nowrap">{t.agent?.nom || "—"}</td>
+                    <td className="py-3 pr-4 text-blanc/60 whitespace-nowrap">{t.contributeur?.nom || "Anonyme"}</td>
+                    <td className="py-3 pr-4 text-blanc/40 text-xs whitespace-nowrap">{t.referencePaiement || "—"}</td>
                   </tr>
                 ))}
               </tbody>
