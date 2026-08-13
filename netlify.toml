@@ -1,0 +1,14 @@
+[build]
+  command = "npx prisma generate && npm run build"
+  publish = ".next"
+
+[build.environment]
+  NEXTAUTH_SECRET = "changez-moi-par-une-chaine-aleatoire-secrete"
+  NEXTAUTH_URL = "https://ctf-finance.netlify.app"
+  PAYMENT_PROVIDER = "mock"
+  APP_URL = "https://ctf-finance.netlify.app"
+  APP_NAME = "CTF Finance"
+  EMAIL_FROM = "ctf@example.com"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"

@@ -6,20 +6,20 @@ import { FileSpreadsheet, FileText, Loader2 } from "lucide-react";
 
 interface TransactionData {
   id: string;
-  montant: number | { toNumber: () => number };
+  montant: number;
   categorie: string;
   mode: string;
   referencePaiement: string | null;
-  createdAt: Date;
+  createdAt: string;
   contributeur: { nom: string | null } | null;
   agent: { nom: string } | null;
   repartition: {
-    montantEconomie: number | { toNumber: () => number };
-    montantEpargne: number | { toNumber: () => number };
-    montantActionSociale: number | { toNumber: () => number };
-    montantDimeDeLaDime: number | { toNumber: () => number } | null;
-    montantCaisse: number | { toNumber: () => number };
-    montantFondsDedie: number | { toNumber: () => number };
+    montantEconomie: number;
+    montantEpargne: number;
+    montantActionSociale: number;
+    montantDimeDeLaDime: number | null;
+    montantCaisse: number;
+    montantFondsDedie: number;
   } | null;
 }
 
