@@ -104,18 +104,18 @@ export default async function CollectorDashboard() {
                 <tr className="text-or/70 text-left border-b border-or/10">
                   <th className="pb-3 pr-4">Date</th>
                   <th className="pb-3 pr-4">Montant</th>
-                  <th className="pb-3 pr-4">Catégorie</th>
-                  <th className="pb-3 pr-4">Contributeur</th>
+                  <th className="pb-3 pr-4 hidden sm:table-cell">Catégorie</th>
+                  <th className="pb-3 pr-4 hidden sm:table-cell">Contributeur</th>
                   <th className="pb-3">Statut</th>
                 </tr>
               </thead>
               <tbody>
                 {transactions.map((t) => (
                   <tr key={t.id} className="border-b border-or/5">
-                    <td className="py-3 pr-4 text-blanc/60">{formatDate(t.createdAt)}</td>
-                    <td className="py-3 pr-4 text-blanc font-medium">{formatMontant(Number(t.montant))}</td>
-                    <td className="py-3 pr-4 text-blanc/60">{t.categorie}</td>
-                    <td className="py-3 pr-4 text-blanc/60">{t.contributeur?.nom || "Anonyme"}</td>
+                    <td className="py-3 pr-4 text-blanc/60 whitespace-nowrap">{formatDate(t.createdAt)}</td>
+                    <td className="py-3 pr-4 text-blanc font-medium whitespace-nowrap">{formatMontant(Number(t.montant))}</td>
+                    <td className="py-3 pr-4 text-blanc/60 hidden sm:table-cell">{t.categorie}</td>
+                    <td className="py-3 pr-4 text-blanc/60 hidden sm:table-cell">{t.contributeur?.nom || "Anonyme"}</td>
                     <td className="py-3">
                       <span className={`px-2 py-1 rounded-lg text-xs ${
                         t.statut === "VALIDE" ? "bg-green-500/10 text-green-400" :

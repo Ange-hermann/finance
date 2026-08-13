@@ -17,7 +17,7 @@ export default async function DashboardLayout({
 
   return (
     <Providers>
-      <div className="min-h-screen bg-noir">
+      <div className="min-h-screen bg-noir overflow-x-hidden">
         <Sidebar />
         <div className="md:ml-64 pt-14 md:pt-0 p-4 md:p-8">
           <div className="max-w-7xl mx-auto">{children}</div>

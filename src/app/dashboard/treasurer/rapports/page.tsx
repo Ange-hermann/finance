@@ -105,23 +105,23 @@ export default async function RapportsPage() {
                 <tr className="text-or/70 text-left border-b border-or/10">
                   <th className="pb-3 pr-4">Date</th>
                   <th className="pb-3 pr-4">Montant</th>
-                  <th className="pb-3 pr-4">Catégorie</th>
-                  <th className="pb-3 pr-4">Mode</th>
-                  <th className="pb-3 pr-4">Agent</th>
-                  <th className="pb-3 pr-4">Contributeur</th>
-                  <th className="pb-3 pr-4">Référence</th>
+                  <th className="pb-3 pr-4 hidden sm:table-cell">Catégorie</th>
+                  <th className="pb-3 pr-4 hidden md:table-cell">Mode</th>
+                  <th className="pb-3 pr-4 hidden md:table-cell">Agent</th>
+                  <th className="pb-3 pr-4 hidden sm:table-cell">Contributeur</th>
+                  <th className="pb-3 pr-4 hidden lg:table-cell">Référence</th>
                 </tr>
               </thead>
               <tbody>
                 {transactions.map((t) => (
                   <tr key={t.id} className="border-b border-or/5">
-                    <td className="py-3 pr-4 text-blanc/60">{formatDate(t.createdAt)}</td>
-                    <td className="py-3 pr-4 text-blanc font-medium">{formatMontant(Number(t.montant))}</td>
-                    <td className="py-3 pr-4 text-blanc/60">{t.categorie}</td>
-                    <td className="py-3 pr-4 text-blanc/60">{t.mode}</td>
-                    <td className="py-3 pr-4 text-blanc/60">{t.agent?.nom || "—"}</td>
-                    <td className="py-3 pr-4 text-blanc/60">{t.contributeur?.nom || "Anonyme"}</td>
-                    <td className="py-3 pr-4 text-blanc/40 text-xs">{t.referencePaiement || "—"}</td>
+                    <td className="py-3 pr-4 text-blanc/60 whitespace-nowrap">{formatDate(t.createdAt)}</td>
+                    <td className="py-3 pr-4 text-blanc font-medium whitespace-nowrap">{formatMontant(Number(t.montant))}</td>
+                    <td className="py-3 pr-4 text-blanc/60 hidden sm:table-cell">{t.categorie}</td>
+                    <td className="py-3 pr-4 text-blanc/60 hidden md:table-cell">{t.mode}</td>
+                    <td className="py-3 pr-4 text-blanc/60 hidden md:table-cell">{t.agent?.nom || "—"}</td>
+                    <td className="py-3 pr-4 text-blanc/60 hidden sm:table-cell">{t.contributeur?.nom || "Anonyme"}</td>
+                    <td className="py-3 pr-4 text-blanc/40 text-xs hidden lg:table-cell">{t.referencePaiement || "—"}</td>
                   </tr>
                 ))}
               </tbody>

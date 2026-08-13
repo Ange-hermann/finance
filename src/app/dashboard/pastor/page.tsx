@@ -73,9 +73,9 @@ export default async function PastorDashboard() {
             className="card-noir hover:shadow-gold transition-all animate-slide-up"
             style={{ animationDelay: `${i * 50}ms` }}
           >
-            <kpi.icon className="w-7 h-7 text-or mb-2" />
-            <p className="text-blanc/50 text-xs">{kpi.label}</p>
-            <p className="font-display text-lg text-blanc mt-1">{formatMontant(kpi.value)}</p>
+            <kpi.icon className="w-6 h-6 sm:w-7 sm:h-7 text-or mb-2" />
+            <p className="text-blanc/50 text-xs truncate">{kpi.label}</p>
+            <p className="font-display text-base sm:text-lg text-blanc mt-1">{formatMontant(kpi.value)}</p>
           </div>
         ))}
       </div>
@@ -93,19 +93,19 @@ export default async function PastorDashboard() {
                 <tr className="text-or/70 text-left border-b border-or/10">
                   <th className="pb-3 pr-4">Date</th>
                   <th className="pb-3 pr-4">Montant</th>
-                  <th className="pb-3 pr-4">Catégorie</th>
-                  <th className="pb-3 pr-4">Contributeur</th>
+                  <th className="pb-3 pr-4 hidden sm:table-cell">Catégorie</th>
+                  <th className="pb-3 pr-4 hidden sm:table-cell">Contributeur</th>
                 </tr>
               </thead>
               <tbody>
                 {transactions.map((t) => (
                   <tr key={t.id} className="border-b border-or/5">
-                    <td className="py-3 pr-4 text-blanc/60">
+                    <td className="py-3 pr-4 text-blanc/60 whitespace-nowrap">
                       {new Date(t.createdAt).toLocaleDateString("fr-FR")}
                     </td>
-                    <td className="py-3 pr-4 text-blanc font-medium">{formatMontant(Number(t.montant))}</td>
-                    <td className="py-3 pr-4 text-blanc/60">{t.categorie}</td>
-                    <td className="py-3 pr-4 text-blanc/60">{t.contributeur?.nom || "Anonyme"}</td>
+                    <td className="py-3 pr-4 text-blanc font-medium whitespace-nowrap">{formatMontant(Number(t.montant))}</td>
+                    <td className="py-3 pr-4 text-blanc/60 hidden sm:table-cell">{t.categorie}</td>
+                    <td className="py-3 pr-4 text-blanc/60 hidden sm:table-cell">{t.contributeur?.nom || "Anonyme"}</td>
                   </tr>
                 ))}
               </tbody>
