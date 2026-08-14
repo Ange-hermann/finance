@@ -75,16 +75,16 @@ export default async function CollectorDashboard() {
           <div className="bg-blanc-pur p-3 sm:p-4 rounded-xl shrink-0">
             <QRCodeSVG value={lienPaiement} size={160} />
           </div>
-          <div className="flex-1">
+          <div className="flex-1 w-full min-w-0">
             <p className="text-blanc/60 text-sm mb-2">
               Partagez ce QR code ou le lien ci-dessous avec les fidèles via WhatsApp, SMS, ou affiche.
               Ils pourront payer sans créer de compte.
             </p>
-            <div className="flex items-center gap-2 mt-3">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 mt-3">
               <input
                 readOnly
                 value={lienPaiement}
-                className="input-noir flex-1 text-sm"
+                className="input-noir flex-1 text-sm min-w-0 truncate"
               />
               <CopyButton text={lienPaiement} />
             </div>

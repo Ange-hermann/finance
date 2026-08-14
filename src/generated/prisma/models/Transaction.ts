@@ -277,6 +277,7 @@ export type TransactionWhereInput = {
   repartition?: Prisma.XOR<Prisma.RepartitionNullableScalarRelationFilter, Prisma.RepartitionWhereInput> | null
   recu?: Prisma.XOR<Prisma.RecuNullableScalarRelationFilter, Prisma.RecuWhereInput> | null
   annotations?: Prisma.AnnotationAuditListRelationFilter
+  depenses?: Prisma.DepenseListRelationFilter
 }
 
 export type TransactionOrderByWithRelationInput = {
@@ -297,6 +298,7 @@ export type TransactionOrderByWithRelationInput = {
   repartition?: Prisma.RepartitionOrderByWithRelationInput
   recu?: Prisma.RecuOrderByWithRelationInput
   annotations?: Prisma.AnnotationAuditOrderByRelationAggregateInput
+  depenses?: Prisma.DepenseOrderByRelationAggregateInput
 }
 
 export type TransactionWhereUniqueInput = Prisma.AtLeast<{
@@ -320,6 +322,7 @@ export type TransactionWhereUniqueInput = Prisma.AtLeast<{
   repartition?: Prisma.XOR<Prisma.RepartitionNullableScalarRelationFilter, Prisma.RepartitionWhereInput> | null
   recu?: Prisma.XOR<Prisma.RecuNullableScalarRelationFilter, Prisma.RecuWhereInput> | null
   annotations?: Prisma.AnnotationAuditListRelationFilter
+  depenses?: Prisma.DepenseListRelationFilter
 }, "id">
 
 export type TransactionOrderByWithAggregationInput = {
@@ -376,6 +379,7 @@ export type TransactionCreateInput = {
   repartition?: Prisma.RepartitionCreateNestedOneWithoutTransactionInput
   recu?: Prisma.RecuCreateNestedOneWithoutTransactionInput
   annotations?: Prisma.AnnotationAuditCreateNestedManyWithoutTransactionInput
+  depenses?: Prisma.DepenseCreateNestedManyWithoutTransactionInput
 }
 
 export type TransactionUncheckedCreateInput = {
@@ -394,6 +398,7 @@ export type TransactionUncheckedCreateInput = {
   repartition?: Prisma.RepartitionUncheckedCreateNestedOneWithoutTransactionInput
   recu?: Prisma.RecuUncheckedCreateNestedOneWithoutTransactionInput
   annotations?: Prisma.AnnotationAuditUncheckedCreateNestedManyWithoutTransactionInput
+  depenses?: Prisma.DepenseUncheckedCreateNestedManyWithoutTransactionInput
 }
 
 export type TransactionUpdateInput = {
@@ -412,6 +417,7 @@ export type TransactionUpdateInput = {
   repartition?: Prisma.RepartitionUpdateOneWithoutTransactionNestedInput
   recu?: Prisma.RecuUpdateOneWithoutTransactionNestedInput
   annotations?: Prisma.AnnotationAuditUpdateManyWithoutTransactionNestedInput
+  depenses?: Prisma.DepenseUpdateManyWithoutTransactionNestedInput
 }
 
 export type TransactionUncheckedUpdateInput = {
@@ -430,6 +436,7 @@ export type TransactionUncheckedUpdateInput = {
   repartition?: Prisma.RepartitionUncheckedUpdateOneWithoutTransactionNestedInput
   recu?: Prisma.RecuUncheckedUpdateOneWithoutTransactionNestedInput
   annotations?: Prisma.AnnotationAuditUncheckedUpdateManyWithoutTransactionNestedInput
+  depenses?: Prisma.DepenseUncheckedUpdateManyWithoutTransactionNestedInput
 }
 
 export type TransactionCreateManyInput = {
@@ -541,6 +548,11 @@ export type TransactionSumOrderByAggregateInput = {
 export type TransactionScalarRelationFilter = {
   is?: Prisma.TransactionWhereInput
   isNot?: Prisma.TransactionWhereInput
+}
+
+export type TransactionNullableScalarRelationFilter = {
+  is?: Prisma.TransactionWhereInput | null
+  isNot?: Prisma.TransactionWhereInput | null
 }
 
 export type TransactionCreateNestedManyWithoutAgentInput = {
@@ -693,6 +705,22 @@ export type TransactionUpdateOneRequiredWithoutAnnotationsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TransactionUpdateToOneWithWhereWithoutAnnotationsInput, Prisma.TransactionUpdateWithoutAnnotationsInput>, Prisma.TransactionUncheckedUpdateWithoutAnnotationsInput>
 }
 
+export type TransactionCreateNestedOneWithoutDepensesInput = {
+  create?: Prisma.XOR<Prisma.TransactionCreateWithoutDepensesInput, Prisma.TransactionUncheckedCreateWithoutDepensesInput>
+  connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutDepensesInput
+  connect?: Prisma.TransactionWhereUniqueInput
+}
+
+export type TransactionUpdateOneWithoutDepensesNestedInput = {
+  create?: Prisma.XOR<Prisma.TransactionCreateWithoutDepensesInput, Prisma.TransactionUncheckedCreateWithoutDepensesInput>
+  connectOrCreate?: Prisma.TransactionCreateOrConnectWithoutDepensesInput
+  upsert?: Prisma.TransactionUpsertWithoutDepensesInput
+  disconnect?: Prisma.TransactionWhereInput | boolean
+  delete?: Prisma.TransactionWhereInput | boolean
+  connect?: Prisma.TransactionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TransactionUpdateToOneWithWhereWithoutDepensesInput, Prisma.TransactionUpdateWithoutDepensesInput>, Prisma.TransactionUncheckedUpdateWithoutDepensesInput>
+}
+
 export type TransactionCreateWithoutAgentInput = {
   id?: string
   montant: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -708,6 +736,7 @@ export type TransactionCreateWithoutAgentInput = {
   repartition?: Prisma.RepartitionCreateNestedOneWithoutTransactionInput
   recu?: Prisma.RecuCreateNestedOneWithoutTransactionInput
   annotations?: Prisma.AnnotationAuditCreateNestedManyWithoutTransactionInput
+  depenses?: Prisma.DepenseCreateNestedManyWithoutTransactionInput
 }
 
 export type TransactionUncheckedCreateWithoutAgentInput = {
@@ -725,6 +754,7 @@ export type TransactionUncheckedCreateWithoutAgentInput = {
   repartition?: Prisma.RepartitionUncheckedCreateNestedOneWithoutTransactionInput
   recu?: Prisma.RecuUncheckedCreateNestedOneWithoutTransactionInput
   annotations?: Prisma.AnnotationAuditUncheckedCreateNestedManyWithoutTransactionInput
+  depenses?: Prisma.DepenseUncheckedCreateNestedManyWithoutTransactionInput
 }
 
 export type TransactionCreateOrConnectWithoutAgentInput = {
@@ -786,6 +816,7 @@ export type TransactionCreateWithoutContributeurInput = {
   repartition?: Prisma.RepartitionCreateNestedOneWithoutTransactionInput
   recu?: Prisma.RecuCreateNestedOneWithoutTransactionInput
   annotations?: Prisma.AnnotationAuditCreateNestedManyWithoutTransactionInput
+  depenses?: Prisma.DepenseCreateNestedManyWithoutTransactionInput
 }
 
 export type TransactionUncheckedCreateWithoutContributeurInput = {
@@ -803,6 +834,7 @@ export type TransactionUncheckedCreateWithoutContributeurInput = {
   repartition?: Prisma.RepartitionUncheckedCreateNestedOneWithoutTransactionInput
   recu?: Prisma.RecuUncheckedCreateNestedOneWithoutTransactionInput
   annotations?: Prisma.AnnotationAuditUncheckedCreateNestedManyWithoutTransactionInput
+  depenses?: Prisma.DepenseUncheckedCreateNestedManyWithoutTransactionInput
 }
 
 export type TransactionCreateOrConnectWithoutContributeurInput = {
@@ -846,6 +878,7 @@ export type TransactionCreateWithoutRepartitionInput = {
   agent?: Prisma.UserCreateNestedOneWithoutTransactionsInput
   recu?: Prisma.RecuCreateNestedOneWithoutTransactionInput
   annotations?: Prisma.AnnotationAuditCreateNestedManyWithoutTransactionInput
+  depenses?: Prisma.DepenseCreateNestedManyWithoutTransactionInput
 }
 
 export type TransactionUncheckedCreateWithoutRepartitionInput = {
@@ -863,6 +896,7 @@ export type TransactionUncheckedCreateWithoutRepartitionInput = {
   updatedAt?: Date | string
   recu?: Prisma.RecuUncheckedCreateNestedOneWithoutTransactionInput
   annotations?: Prisma.AnnotationAuditUncheckedCreateNestedManyWithoutTransactionInput
+  depenses?: Prisma.DepenseUncheckedCreateNestedManyWithoutTransactionInput
 }
 
 export type TransactionCreateOrConnectWithoutRepartitionInput = {
@@ -896,6 +930,7 @@ export type TransactionUpdateWithoutRepartitionInput = {
   agent?: Prisma.UserUpdateOneWithoutTransactionsNestedInput
   recu?: Prisma.RecuUpdateOneWithoutTransactionNestedInput
   annotations?: Prisma.AnnotationAuditUpdateManyWithoutTransactionNestedInput
+  depenses?: Prisma.DepenseUpdateManyWithoutTransactionNestedInput
 }
 
 export type TransactionUncheckedUpdateWithoutRepartitionInput = {
@@ -913,6 +948,7 @@ export type TransactionUncheckedUpdateWithoutRepartitionInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recu?: Prisma.RecuUncheckedUpdateOneWithoutTransactionNestedInput
   annotations?: Prisma.AnnotationAuditUncheckedUpdateManyWithoutTransactionNestedInput
+  depenses?: Prisma.DepenseUncheckedUpdateManyWithoutTransactionNestedInput
 }
 
 export type TransactionCreateWithoutRecuInput = {
@@ -930,6 +966,7 @@ export type TransactionCreateWithoutRecuInput = {
   agent?: Prisma.UserCreateNestedOneWithoutTransactionsInput
   repartition?: Prisma.RepartitionCreateNestedOneWithoutTransactionInput
   annotations?: Prisma.AnnotationAuditCreateNestedManyWithoutTransactionInput
+  depenses?: Prisma.DepenseCreateNestedManyWithoutTransactionInput
 }
 
 export type TransactionUncheckedCreateWithoutRecuInput = {
@@ -947,6 +984,7 @@ export type TransactionUncheckedCreateWithoutRecuInput = {
   updatedAt?: Date | string
   repartition?: Prisma.RepartitionUncheckedCreateNestedOneWithoutTransactionInput
   annotations?: Prisma.AnnotationAuditUncheckedCreateNestedManyWithoutTransactionInput
+  depenses?: Prisma.DepenseUncheckedCreateNestedManyWithoutTransactionInput
 }
 
 export type TransactionCreateOrConnectWithoutRecuInput = {
@@ -980,6 +1018,7 @@ export type TransactionUpdateWithoutRecuInput = {
   agent?: Prisma.UserUpdateOneWithoutTransactionsNestedInput
   repartition?: Prisma.RepartitionUpdateOneWithoutTransactionNestedInput
   annotations?: Prisma.AnnotationAuditUpdateManyWithoutTransactionNestedInput
+  depenses?: Prisma.DepenseUpdateManyWithoutTransactionNestedInput
 }
 
 export type TransactionUncheckedUpdateWithoutRecuInput = {
@@ -997,6 +1036,7 @@ export type TransactionUncheckedUpdateWithoutRecuInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   repartition?: Prisma.RepartitionUncheckedUpdateOneWithoutTransactionNestedInput
   annotations?: Prisma.AnnotationAuditUncheckedUpdateManyWithoutTransactionNestedInput
+  depenses?: Prisma.DepenseUncheckedUpdateManyWithoutTransactionNestedInput
 }
 
 export type TransactionCreateWithoutAnnotationsInput = {
@@ -1014,6 +1054,7 @@ export type TransactionCreateWithoutAnnotationsInput = {
   agent?: Prisma.UserCreateNestedOneWithoutTransactionsInput
   repartition?: Prisma.RepartitionCreateNestedOneWithoutTransactionInput
   recu?: Prisma.RecuCreateNestedOneWithoutTransactionInput
+  depenses?: Prisma.DepenseCreateNestedManyWithoutTransactionInput
 }
 
 export type TransactionUncheckedCreateWithoutAnnotationsInput = {
@@ -1031,6 +1072,7 @@ export type TransactionUncheckedCreateWithoutAnnotationsInput = {
   updatedAt?: Date | string
   repartition?: Prisma.RepartitionUncheckedCreateNestedOneWithoutTransactionInput
   recu?: Prisma.RecuUncheckedCreateNestedOneWithoutTransactionInput
+  depenses?: Prisma.DepenseUncheckedCreateNestedManyWithoutTransactionInput
 }
 
 export type TransactionCreateOrConnectWithoutAnnotationsInput = {
@@ -1064,6 +1106,7 @@ export type TransactionUpdateWithoutAnnotationsInput = {
   agent?: Prisma.UserUpdateOneWithoutTransactionsNestedInput
   repartition?: Prisma.RepartitionUpdateOneWithoutTransactionNestedInput
   recu?: Prisma.RecuUpdateOneWithoutTransactionNestedInput
+  depenses?: Prisma.DepenseUpdateManyWithoutTransactionNestedInput
 }
 
 export type TransactionUncheckedUpdateWithoutAnnotationsInput = {
@@ -1081,6 +1124,95 @@ export type TransactionUncheckedUpdateWithoutAnnotationsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   repartition?: Prisma.RepartitionUncheckedUpdateOneWithoutTransactionNestedInput
   recu?: Prisma.RecuUncheckedUpdateOneWithoutTransactionNestedInput
+  depenses?: Prisma.DepenseUncheckedUpdateManyWithoutTransactionNestedInput
+}
+
+export type TransactionCreateWithoutDepensesInput = {
+  id?: string
+  montant: runtime.Decimal | runtime.DecimalJsLike | number | string
+  categorie: $Enums.CategorieTransaction
+  mode: $Enums.ModeTransaction
+  modePaiementPhysique?: $Enums.ModePaiementPhysique | null
+  statut?: $Enums.StatutTransaction
+  referencePaiement?: string | null
+  lienId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  contributeur?: Prisma.ContributeurCreateNestedOneWithoutTransactionsInput
+  agent?: Prisma.UserCreateNestedOneWithoutTransactionsInput
+  repartition?: Prisma.RepartitionCreateNestedOneWithoutTransactionInput
+  recu?: Prisma.RecuCreateNestedOneWithoutTransactionInput
+  annotations?: Prisma.AnnotationAuditCreateNestedManyWithoutTransactionInput
+}
+
+export type TransactionUncheckedCreateWithoutDepensesInput = {
+  id?: string
+  montant: runtime.Decimal | runtime.DecimalJsLike | number | string
+  categorie: $Enums.CategorieTransaction
+  mode: $Enums.ModeTransaction
+  modePaiementPhysique?: $Enums.ModePaiementPhysique | null
+  contributeurId?: string | null
+  agentId?: string | null
+  statut?: $Enums.StatutTransaction
+  referencePaiement?: string | null
+  lienId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  repartition?: Prisma.RepartitionUncheckedCreateNestedOneWithoutTransactionInput
+  recu?: Prisma.RecuUncheckedCreateNestedOneWithoutTransactionInput
+  annotations?: Prisma.AnnotationAuditUncheckedCreateNestedManyWithoutTransactionInput
+}
+
+export type TransactionCreateOrConnectWithoutDepensesInput = {
+  where: Prisma.TransactionWhereUniqueInput
+  create: Prisma.XOR<Prisma.TransactionCreateWithoutDepensesInput, Prisma.TransactionUncheckedCreateWithoutDepensesInput>
+}
+
+export type TransactionUpsertWithoutDepensesInput = {
+  update: Prisma.XOR<Prisma.TransactionUpdateWithoutDepensesInput, Prisma.TransactionUncheckedUpdateWithoutDepensesInput>
+  create: Prisma.XOR<Prisma.TransactionCreateWithoutDepensesInput, Prisma.TransactionUncheckedCreateWithoutDepensesInput>
+  where?: Prisma.TransactionWhereInput
+}
+
+export type TransactionUpdateToOneWithWhereWithoutDepensesInput = {
+  where?: Prisma.TransactionWhereInput
+  data: Prisma.XOR<Prisma.TransactionUpdateWithoutDepensesInput, Prisma.TransactionUncheckedUpdateWithoutDepensesInput>
+}
+
+export type TransactionUpdateWithoutDepensesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  montant?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  categorie?: Prisma.EnumCategorieTransactionFieldUpdateOperationsInput | $Enums.CategorieTransaction
+  mode?: Prisma.EnumModeTransactionFieldUpdateOperationsInput | $Enums.ModeTransaction
+  modePaiementPhysique?: Prisma.NullableEnumModePaiementPhysiqueFieldUpdateOperationsInput | $Enums.ModePaiementPhysique | null
+  statut?: Prisma.EnumStatutTransactionFieldUpdateOperationsInput | $Enums.StatutTransaction
+  referencePaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lienId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  contributeur?: Prisma.ContributeurUpdateOneWithoutTransactionsNestedInput
+  agent?: Prisma.UserUpdateOneWithoutTransactionsNestedInput
+  repartition?: Prisma.RepartitionUpdateOneWithoutTransactionNestedInput
+  recu?: Prisma.RecuUpdateOneWithoutTransactionNestedInput
+  annotations?: Prisma.AnnotationAuditUpdateManyWithoutTransactionNestedInput
+}
+
+export type TransactionUncheckedUpdateWithoutDepensesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  montant?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  categorie?: Prisma.EnumCategorieTransactionFieldUpdateOperationsInput | $Enums.CategorieTransaction
+  mode?: Prisma.EnumModeTransactionFieldUpdateOperationsInput | $Enums.ModeTransaction
+  modePaiementPhysique?: Prisma.NullableEnumModePaiementPhysiqueFieldUpdateOperationsInput | $Enums.ModePaiementPhysique | null
+  contributeurId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  agentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  statut?: Prisma.EnumStatutTransactionFieldUpdateOperationsInput | $Enums.StatutTransaction
+  referencePaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lienId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  repartition?: Prisma.RepartitionUncheckedUpdateOneWithoutTransactionNestedInput
+  recu?: Prisma.RecuUncheckedUpdateOneWithoutTransactionNestedInput
+  annotations?: Prisma.AnnotationAuditUncheckedUpdateManyWithoutTransactionNestedInput
 }
 
 export type TransactionCreateManyAgentInput = {
@@ -1112,6 +1244,7 @@ export type TransactionUpdateWithoutAgentInput = {
   repartition?: Prisma.RepartitionUpdateOneWithoutTransactionNestedInput
   recu?: Prisma.RecuUpdateOneWithoutTransactionNestedInput
   annotations?: Prisma.AnnotationAuditUpdateManyWithoutTransactionNestedInput
+  depenses?: Prisma.DepenseUpdateManyWithoutTransactionNestedInput
 }
 
 export type TransactionUncheckedUpdateWithoutAgentInput = {
@@ -1129,6 +1262,7 @@ export type TransactionUncheckedUpdateWithoutAgentInput = {
   repartition?: Prisma.RepartitionUncheckedUpdateOneWithoutTransactionNestedInput
   recu?: Prisma.RecuUncheckedUpdateOneWithoutTransactionNestedInput
   annotations?: Prisma.AnnotationAuditUncheckedUpdateManyWithoutTransactionNestedInput
+  depenses?: Prisma.DepenseUncheckedUpdateManyWithoutTransactionNestedInput
 }
 
 export type TransactionUncheckedUpdateManyWithoutAgentInput = {
@@ -1174,6 +1308,7 @@ export type TransactionUpdateWithoutContributeurInput = {
   repartition?: Prisma.RepartitionUpdateOneWithoutTransactionNestedInput
   recu?: Prisma.RecuUpdateOneWithoutTransactionNestedInput
   annotations?: Prisma.AnnotationAuditUpdateManyWithoutTransactionNestedInput
+  depenses?: Prisma.DepenseUpdateManyWithoutTransactionNestedInput
 }
 
 export type TransactionUncheckedUpdateWithoutContributeurInput = {
@@ -1191,6 +1326,7 @@ export type TransactionUncheckedUpdateWithoutContributeurInput = {
   repartition?: Prisma.RepartitionUncheckedUpdateOneWithoutTransactionNestedInput
   recu?: Prisma.RecuUncheckedUpdateOneWithoutTransactionNestedInput
   annotations?: Prisma.AnnotationAuditUncheckedUpdateManyWithoutTransactionNestedInput
+  depenses?: Prisma.DepenseUncheckedUpdateManyWithoutTransactionNestedInput
 }
 
 export type TransactionUncheckedUpdateManyWithoutContributeurInput = {
@@ -1214,10 +1350,12 @@ export type TransactionUncheckedUpdateManyWithoutContributeurInput = {
 
 export type TransactionCountOutputType = {
   annotations: number
+  depenses: number
 }
 
 export type TransactionCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   annotations?: boolean | TransactionCountOutputTypeCountAnnotationsArgs
+  depenses?: boolean | TransactionCountOutputTypeCountDepensesArgs
 }
 
 /**
@@ -1235,6 +1373,13 @@ export type TransactionCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.
  */
 export type TransactionCountOutputTypeCountAnnotationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.AnnotationAuditWhereInput
+}
+
+/**
+ * TransactionCountOutputType without action
+ */
+export type TransactionCountOutputTypeCountDepensesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DepenseWhereInput
 }
 
 
@@ -1256,6 +1401,7 @@ export type TransactionSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   repartition?: boolean | Prisma.Transaction$repartitionArgs<ExtArgs>
   recu?: boolean | Prisma.Transaction$recuArgs<ExtArgs>
   annotations?: boolean | Prisma.Transaction$annotationsArgs<ExtArgs>
+  depenses?: boolean | Prisma.Transaction$depensesArgs<ExtArgs>
   _count?: boolean | Prisma.TransactionCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["transaction"]>
 
@@ -1315,6 +1461,7 @@ export type TransactionInclude<ExtArgs extends runtime.Types.Extensions.Internal
   repartition?: boolean | Prisma.Transaction$repartitionArgs<ExtArgs>
   recu?: boolean | Prisma.Transaction$recuArgs<ExtArgs>
   annotations?: boolean | Prisma.Transaction$annotationsArgs<ExtArgs>
+  depenses?: boolean | Prisma.Transaction$depensesArgs<ExtArgs>
   _count?: boolean | Prisma.TransactionCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TransactionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1334,6 +1481,7 @@ export type $TransactionPayload<ExtArgs extends runtime.Types.Extensions.Interna
     repartition: Prisma.$RepartitionPayload<ExtArgs> | null
     recu: Prisma.$RecuPayload<ExtArgs> | null
     annotations: Prisma.$AnnotationAuditPayload<ExtArgs>[]
+    depenses: Prisma.$DepensePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1747,6 +1895,7 @@ export interface Prisma__TransactionClient<T, Null = never, ExtArgs extends runt
   repartition<T extends Prisma.Transaction$repartitionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Transaction$repartitionArgs<ExtArgs>>): Prisma.Prisma__RepartitionClient<runtime.Types.Result.GetResult<Prisma.$RepartitionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   recu<T extends Prisma.Transaction$recuArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Transaction$recuArgs<ExtArgs>>): Prisma.Prisma__RecuClient<runtime.Types.Result.GetResult<Prisma.$RecuPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   annotations<T extends Prisma.Transaction$annotationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Transaction$annotationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AnnotationAuditPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  depenses<T extends Prisma.Transaction$depensesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Transaction$depensesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DepensePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2286,6 +2435,30 @@ export type Transaction$annotationsArgs<ExtArgs extends runtime.Types.Extensions
   take?: number
   skip?: number
   distinct?: Prisma.AnnotationAuditScalarFieldEnum | Prisma.AnnotationAuditScalarFieldEnum[]
+}
+
+/**
+ * Transaction.depenses
+ */
+export type Transaction$depensesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Depense
+   */
+  select?: Prisma.DepenseSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Depense
+   */
+  omit?: Prisma.DepenseOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DepenseInclude<ExtArgs> | null
+  where?: Prisma.DepenseWhereInput
+  orderBy?: Prisma.DepenseOrderByWithRelationInput | Prisma.DepenseOrderByWithRelationInput[]
+  cursor?: Prisma.DepenseWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DepenseScalarFieldEnum | Prisma.DepenseScalarFieldEnum[]
 }
 
 /**

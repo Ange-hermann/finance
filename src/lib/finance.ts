@@ -113,3 +113,27 @@ export function verifierCoherenceRepartition(
 
   return Math.abs(total - montant) < 0.01;
 }
+
+export function calculerMontantNet(
+  montantBrut: number,
+  depensesCulte: number
+): number {
+  const net = montantBrut - depensesCulte;
+  return Math.max(0, Math.round(net * 100) / 100);
+}
+
+export function calculerRepartitionAvecDepenses(
+  montantBrut: number,
+  categorie: CategorieTransaction,
+  depensesCulte: number,
+  tauxCustom?: Partial<Record<CategorieTransaction, Partial<TauxRepartitionConfig>>>
+): { montantNet: number; totalDepensesCulte: number; repartition: ResultatRepartition } {
+  const montantNet = calculerMontantNet(montantBrut, depensesCulte);
+  const repartition = calculerRepartition(montantNet, categorie, tauxCustom);
+
+  return {
+    montantNet,
+    totalDepensesCulte: Math.round(depensesCulte * 100) / 100,
+    repartition,
+  };
+}

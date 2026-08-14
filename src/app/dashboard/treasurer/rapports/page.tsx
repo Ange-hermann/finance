@@ -79,14 +79,14 @@ export default async function RapportsPage() {
           {totals.map((t, i) => (
             <div
               key={i}
-              className={`flex justify-between p-3 rounded-xl ${
+              className={`flex items-center justify-between gap-2 p-3 rounded-xl ${
                 t.label === "Total général" ? "bg-or/10 border border-or/30" : "bg-noir-soft"
               }`}
             >
-              <span className={`text-sm ${t.label === "Total général" ? "text-or font-medium" : "text-blanc/60"}`}>
+              <span className={`text-sm min-w-0 truncate ${t.label === "Total général" ? "text-or font-medium" : "text-blanc/60"}`}>
                 {t.label}
               </span>
-              <span className={`font-display ${t.label === "Total général" ? "text-or text-xl" : "text-blanc"}`}>
+              <span className={`font-display text-sm sm:text-base whitespace-nowrap ${t.label === "Total général" ? "text-or sm:text-xl" : "text-blanc"}`}>
                 {formatMontant(t.value)}
               </span>
             </div>

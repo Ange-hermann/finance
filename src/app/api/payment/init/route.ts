@@ -94,6 +94,31 @@ export async function POST(req: NextRequest) {
       });
     }
 
+    // Pour les providers réels (Money Fusion, etc.), créer une transaction en attente
+    let contributeurId: string | null = null;
+    if (contributeurNom || contributeurTelephone || contributeurEmail) {
+      const contributeur = await prisma.contributeur.create({
+        data: {
+          nom: contributeurNom || null,
+          telephone: contributeurTelephone || null,
+          email: contributeurEmail || null,
+        },
+      });
+      contributeurId = contributeur.id;
+    }
+
+    await prisma.transaction.create({
+      data: {
+        montant: parseFloat(montant),
+        categorie: categorie as CategorieTransaction,
+        mode: "EN_LIGNE",
+        contributeurId,
+        statut: "EN_ATTENTE",
+        referencePaiement: session.sessionId,
+        lienId: lienId || null,
+      },
+    });
+
     return NextResponse.json({ url: session.url, sessionId: session.sessionId });
   } catch (error) {
     console.error("Erreur init paiement:", error);

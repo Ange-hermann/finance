@@ -217,6 +217,7 @@ export type UserWhereInput = {
   transactions?: Prisma.TransactionListRelationFilter
   annotations?: Prisma.AnnotationAuditListRelationFilter
   logs?: Prisma.LogAuditListRelationFilter
+  depenses?: Prisma.DepenseListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -232,6 +233,7 @@ export type UserOrderByWithRelationInput = {
   transactions?: Prisma.TransactionOrderByRelationAggregateInput
   annotations?: Prisma.AnnotationAuditOrderByRelationAggregateInput
   logs?: Prisma.LogAuditOrderByRelationAggregateInput
+  depenses?: Prisma.DepenseOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -250,6 +252,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   transactions?: Prisma.TransactionListRelationFilter
   annotations?: Prisma.AnnotationAuditListRelationFilter
   logs?: Prisma.LogAuditListRelationFilter
+  depenses?: Prisma.DepenseListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -295,6 +298,7 @@ export type UserCreateInput = {
   transactions?: Prisma.TransactionCreateNestedManyWithoutAgentInput
   annotations?: Prisma.AnnotationAuditCreateNestedManyWithoutAuteurInput
   logs?: Prisma.LogAuditCreateNestedManyWithoutUserInput
+  depenses?: Prisma.DepenseCreateNestedManyWithoutAgentInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -310,6 +314,7 @@ export type UserUncheckedCreateInput = {
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutAgentInput
   annotations?: Prisma.AnnotationAuditUncheckedCreateNestedManyWithoutAuteurInput
   logs?: Prisma.LogAuditUncheckedCreateNestedManyWithoutUserInput
+  depenses?: Prisma.DepenseUncheckedCreateNestedManyWithoutAgentInput
 }
 
 export type UserUpdateInput = {
@@ -325,6 +330,7 @@ export type UserUpdateInput = {
   transactions?: Prisma.TransactionUpdateManyWithoutAgentNestedInput
   annotations?: Prisma.AnnotationAuditUpdateManyWithoutAuteurNestedInput
   logs?: Prisma.LogAuditUpdateManyWithoutUserNestedInput
+  depenses?: Prisma.DepenseUpdateManyWithoutAgentNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -340,6 +346,7 @@ export type UserUncheckedUpdateInput = {
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutAgentNestedInput
   annotations?: Prisma.AnnotationAuditUncheckedUpdateManyWithoutAuteurNestedInput
   logs?: Prisma.LogAuditUncheckedUpdateManyWithoutUserNestedInput
+  depenses?: Prisma.DepenseUncheckedUpdateManyWithoutAgentNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -490,6 +497,22 @@ export type UserUpdateOneWithoutLogsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutLogsInput, Prisma.UserUpdateWithoutLogsInput>, Prisma.UserUncheckedUpdateWithoutLogsInput>
 }
 
+export type UserCreateNestedOneWithoutDepensesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDepensesInput, Prisma.UserUncheckedCreateWithoutDepensesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDepensesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutDepensesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDepensesInput, Prisma.UserUncheckedCreateWithoutDepensesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDepensesInput
+  upsert?: Prisma.UserUpsertWithoutDepensesInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutDepensesInput, Prisma.UserUpdateWithoutDepensesInput>, Prisma.UserUncheckedUpdateWithoutDepensesInput>
+}
+
 export type UserCreateWithoutTransactionsInput = {
   id?: string
   nom: string
@@ -502,6 +525,7 @@ export type UserCreateWithoutTransactionsInput = {
   updatedAt?: Date | string
   annotations?: Prisma.AnnotationAuditCreateNestedManyWithoutAuteurInput
   logs?: Prisma.LogAuditCreateNestedManyWithoutUserInput
+  depenses?: Prisma.DepenseCreateNestedManyWithoutAgentInput
 }
 
 export type UserUncheckedCreateWithoutTransactionsInput = {
@@ -516,6 +540,7 @@ export type UserUncheckedCreateWithoutTransactionsInput = {
   updatedAt?: Date | string
   annotations?: Prisma.AnnotationAuditUncheckedCreateNestedManyWithoutAuteurInput
   logs?: Prisma.LogAuditUncheckedCreateNestedManyWithoutUserInput
+  depenses?: Prisma.DepenseUncheckedCreateNestedManyWithoutAgentInput
 }
 
 export type UserCreateOrConnectWithoutTransactionsInput = {
@@ -546,6 +571,7 @@ export type UserUpdateWithoutTransactionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   annotations?: Prisma.AnnotationAuditUpdateManyWithoutAuteurNestedInput
   logs?: Prisma.LogAuditUpdateManyWithoutUserNestedInput
+  depenses?: Prisma.DepenseUpdateManyWithoutAgentNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTransactionsInput = {
@@ -560,6 +586,7 @@ export type UserUncheckedUpdateWithoutTransactionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   annotations?: Prisma.AnnotationAuditUncheckedUpdateManyWithoutAuteurNestedInput
   logs?: Prisma.LogAuditUncheckedUpdateManyWithoutUserNestedInput
+  depenses?: Prisma.DepenseUncheckedUpdateManyWithoutAgentNestedInput
 }
 
 export type UserCreateWithoutAnnotationsInput = {
@@ -574,6 +601,7 @@ export type UserCreateWithoutAnnotationsInput = {
   updatedAt?: Date | string
   transactions?: Prisma.TransactionCreateNestedManyWithoutAgentInput
   logs?: Prisma.LogAuditCreateNestedManyWithoutUserInput
+  depenses?: Prisma.DepenseCreateNestedManyWithoutAgentInput
 }
 
 export type UserUncheckedCreateWithoutAnnotationsInput = {
@@ -588,6 +616,7 @@ export type UserUncheckedCreateWithoutAnnotationsInput = {
   updatedAt?: Date | string
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutAgentInput
   logs?: Prisma.LogAuditUncheckedCreateNestedManyWithoutUserInput
+  depenses?: Prisma.DepenseUncheckedCreateNestedManyWithoutAgentInput
 }
 
 export type UserCreateOrConnectWithoutAnnotationsInput = {
@@ -618,6 +647,7 @@ export type UserUpdateWithoutAnnotationsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transactions?: Prisma.TransactionUpdateManyWithoutAgentNestedInput
   logs?: Prisma.LogAuditUpdateManyWithoutUserNestedInput
+  depenses?: Prisma.DepenseUpdateManyWithoutAgentNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAnnotationsInput = {
@@ -632,6 +662,7 @@ export type UserUncheckedUpdateWithoutAnnotationsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutAgentNestedInput
   logs?: Prisma.LogAuditUncheckedUpdateManyWithoutUserNestedInput
+  depenses?: Prisma.DepenseUncheckedUpdateManyWithoutAgentNestedInput
 }
 
 export type UserCreateWithoutLogsInput = {
@@ -646,6 +677,7 @@ export type UserCreateWithoutLogsInput = {
   updatedAt?: Date | string
   transactions?: Prisma.TransactionCreateNestedManyWithoutAgentInput
   annotations?: Prisma.AnnotationAuditCreateNestedManyWithoutAuteurInput
+  depenses?: Prisma.DepenseCreateNestedManyWithoutAgentInput
 }
 
 export type UserUncheckedCreateWithoutLogsInput = {
@@ -660,6 +692,7 @@ export type UserUncheckedCreateWithoutLogsInput = {
   updatedAt?: Date | string
   transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutAgentInput
   annotations?: Prisma.AnnotationAuditUncheckedCreateNestedManyWithoutAuteurInput
+  depenses?: Prisma.DepenseUncheckedCreateNestedManyWithoutAgentInput
 }
 
 export type UserCreateOrConnectWithoutLogsInput = {
@@ -690,6 +723,7 @@ export type UserUpdateWithoutLogsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transactions?: Prisma.TransactionUpdateManyWithoutAgentNestedInput
   annotations?: Prisma.AnnotationAuditUpdateManyWithoutAuteurNestedInput
+  depenses?: Prisma.DepenseUpdateManyWithoutAgentNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLogsInput = {
@@ -704,6 +738,83 @@ export type UserUncheckedUpdateWithoutLogsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transactions?: Prisma.TransactionUncheckedUpdateManyWithoutAgentNestedInput
   annotations?: Prisma.AnnotationAuditUncheckedUpdateManyWithoutAuteurNestedInput
+  depenses?: Prisma.DepenseUncheckedUpdateManyWithoutAgentNestedInput
+}
+
+export type UserCreateWithoutDepensesInput = {
+  id?: string
+  nom: string
+  email: string
+  telephone?: string | null
+  role?: $Enums.Role
+  motDePasseHash: string
+  actif?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  transactions?: Prisma.TransactionCreateNestedManyWithoutAgentInput
+  annotations?: Prisma.AnnotationAuditCreateNestedManyWithoutAuteurInput
+  logs?: Prisma.LogAuditCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutDepensesInput = {
+  id?: string
+  nom: string
+  email: string
+  telephone?: string | null
+  role?: $Enums.Role
+  motDePasseHash: string
+  actif?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutAgentInput
+  annotations?: Prisma.AnnotationAuditUncheckedCreateNestedManyWithoutAuteurInput
+  logs?: Prisma.LogAuditUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutDepensesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutDepensesInput, Prisma.UserUncheckedCreateWithoutDepensesInput>
+}
+
+export type UserUpsertWithoutDepensesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutDepensesInput, Prisma.UserUncheckedUpdateWithoutDepensesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutDepensesInput, Prisma.UserUncheckedCreateWithoutDepensesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutDepensesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutDepensesInput, Prisma.UserUncheckedUpdateWithoutDepensesInput>
+}
+
+export type UserUpdateWithoutDepensesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nom?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  telephone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  motDePasseHash?: Prisma.StringFieldUpdateOperationsInput | string
+  actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transactions?: Prisma.TransactionUpdateManyWithoutAgentNestedInput
+  annotations?: Prisma.AnnotationAuditUpdateManyWithoutAuteurNestedInput
+  logs?: Prisma.LogAuditUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutDepensesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nom?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  telephone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  motDePasseHash?: Prisma.StringFieldUpdateOperationsInput | string
+  actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutAgentNestedInput
+  annotations?: Prisma.AnnotationAuditUncheckedUpdateManyWithoutAuteurNestedInput
+  logs?: Prisma.LogAuditUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -715,12 +826,14 @@ export type UserCountOutputType = {
   transactions: number
   annotations: number
   logs: number
+  depenses: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   transactions?: boolean | UserCountOutputTypeCountTransactionsArgs
   annotations?: boolean | UserCountOutputTypeCountAnnotationsArgs
   logs?: boolean | UserCountOutputTypeCountLogsArgs
+  depenses?: boolean | UserCountOutputTypeCountDepensesArgs
 }
 
 /**
@@ -754,6 +867,13 @@ export type UserCountOutputTypeCountLogsArgs<ExtArgs extends runtime.Types.Exten
   where?: Prisma.LogAuditWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountDepensesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DepenseWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -768,6 +888,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   transactions?: boolean | Prisma.User$transactionsArgs<ExtArgs>
   annotations?: boolean | Prisma.User$annotationsArgs<ExtArgs>
   logs?: boolean | Prisma.User$logsArgs<ExtArgs>
+  depenses?: boolean | Prisma.User$depensesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -812,6 +933,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   transactions?: boolean | Prisma.User$transactionsArgs<ExtArgs>
   annotations?: boolean | Prisma.User$annotationsArgs<ExtArgs>
   logs?: boolean | Prisma.User$logsArgs<ExtArgs>
+  depenses?: boolean | Prisma.User$depensesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -823,6 +945,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     transactions: Prisma.$TransactionPayload<ExtArgs>[]
     annotations: Prisma.$AnnotationAuditPayload<ExtArgs>[]
     logs: Prisma.$LogAuditPayload<ExtArgs>[]
+    depenses: Prisma.$DepensePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1231,6 +1354,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   transactions<T extends Prisma.User$transactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   annotations<T extends Prisma.User$annotationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$annotationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AnnotationAuditPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   logs<T extends Prisma.User$logsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$logsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LogAuditPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  depenses<T extends Prisma.User$depensesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$depensesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DepensePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1731,6 +1855,30 @@ export type User$logsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   take?: number
   skip?: number
   distinct?: Prisma.LogAuditScalarFieldEnum | Prisma.LogAuditScalarFieldEnum[]
+}
+
+/**
+ * User.depenses
+ */
+export type User$depensesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Depense
+   */
+  select?: Prisma.DepenseSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Depense
+   */
+  omit?: Prisma.DepenseOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DepenseInclude<ExtArgs> | null
+  where?: Prisma.DepenseWhereInput
+  orderBy?: Prisma.DepenseOrderByWithRelationInput | Prisma.DepenseOrderByWithRelationInput[]
+  cursor?: Prisma.DepenseWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DepenseScalarFieldEnum | Prisma.DepenseScalarFieldEnum[]
 }
 
 /**

@@ -67,3 +67,8 @@ export type LogAudit = Prisma.LogAuditModel
  * 
  */
 export type LienPaiement = Prisma.LienPaiementModel
+/**
+ * Model Depense
+ * 
+ */
+export type Depense = Prisma.DepenseModel

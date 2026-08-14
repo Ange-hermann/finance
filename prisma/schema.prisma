@@ -44,6 +44,28 @@ enum ModePaiementPhysique {
   CHEQUE
 }
 
+enum TypeDepense {
+  DEPENSE_CULTE
+  DEPENSE_NORMALE
+}
+
+enum CategorieDepense {
+  MUSICIEN
+  TRANSPORT
+  MATERIEL
+  ENTRETIEN
+  FACTURE
+  SALAIRE
+  DIME_MENSUELLE
+  AUTRE
+}
+
+enum StatutDepense {
+  EN_ATTENTE
+  VALIDE
+  ANNULE
+}
+
 // ========================
 // MODÈLES
 // ========================
@@ -62,6 +84,7 @@ model User {
   transactions    Transaction[]
   annotations     AnnotationAudit[]
   logs            LogAudit[]
+  depenses        Depense[]
 }
 
 model Contributeur {
@@ -93,6 +116,7 @@ model Transaction {
   repartition        Repartition?
   recu               Recu?
   annotations        AnnotationAudit[]
+  depenses           Depense[]
 }
 
 model Repartition {
@@ -160,4 +184,21 @@ model LienPaiement {
   actif       Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Depense {
+  id              String            @id @default(cuid())
+  type            TypeDepense
+  categorie       CategorieDepense
+  description     String
+  montant         Decimal           @db.Decimal(12, 2)
+  transactionId   String?
+  transaction     Transaction?      @relation(fields: [transactionId], references: [id])
+  agentId         String?
+  agent           User?             @relation(fields: [agentId], references: [id])
+  dateDepense     DateTime          @default(now())
+  justificatif    String?
+  statut          StatutDepense     @default(EN_ATTENTE)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
 }

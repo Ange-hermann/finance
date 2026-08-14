@@ -55,3 +55,34 @@ export const ModePaiementPhysique = {
 } as const
 
 export type ModePaiementPhysique = (typeof ModePaiementPhysique)[keyof typeof ModePaiementPhysique]
+
+
+export const TypeDepense = {
+  DEPENSE_CULTE: 'DEPENSE_CULTE',
+  DEPENSE_NORMALE: 'DEPENSE_NORMALE'
+} as const
+
+export type TypeDepense = (typeof TypeDepense)[keyof typeof TypeDepense]
+
+
+export const CategorieDepense = {
+  MUSICIEN: 'MUSICIEN',
+  TRANSPORT: 'TRANSPORT',
+  MATERIEL: 'MATERIEL',
+  ENTRETIEN: 'ENTRETIEN',
+  FACTURE: 'FACTURE',
+  SALAIRE: 'SALAIRE',
+  DIME_MENSUELLE: 'DIME_MENSUELLE',
+  AUTRE: 'AUTRE'
+} as const
+
+export type CategorieDepense = (typeof CategorieDepense)[keyof typeof CategorieDepense]
+
+
+export const StatutDepense = {
+  EN_ATTENTE: 'EN_ATTENTE',
+  VALIDE: 'VALIDE',
+  ANNULE: 'ANNULE'
+} as const
+
+export type StatutDepense = (typeof StatutDepense)[keyof typeof StatutDepense]

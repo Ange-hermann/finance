@@ -406,7 +406,8 @@ export const ModelName = {
   Recu: 'Recu',
   AnnotationAudit: 'AnnotationAudit',
   LogAudit: 'LogAudit',
-  LienPaiement: 'LienPaiement'
+  LienPaiement: 'LienPaiement',
+  Depense: 'Depense'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -422,7 +423,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "contributeur" | "transaction" | "repartition" | "tauxRepartition" | "caisse" | "recu" | "annotationAudit" | "logAudit" | "lienPaiement"
+    modelProps: "user" | "contributeur" | "transaction" | "repartition" | "tauxRepartition" | "caisse" | "recu" | "annotationAudit" | "logAudit" | "lienPaiement" | "depense"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1166,6 +1167,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Depense: {
+      payload: Prisma.$DepensePayload<ExtArgs>
+      fields: Prisma.DepenseFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DepenseFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DepensePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DepenseFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DepensePayload>
+        }
+        findFirst: {
+          args: Prisma.DepenseFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DepensePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DepenseFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DepensePayload>
+        }
+        findMany: {
+          args: Prisma.DepenseFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DepensePayload>[]
+        }
+        create: {
+          args: Prisma.DepenseCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DepensePayload>
+        }
+        createMany: {
+          args: Prisma.DepenseCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.DepenseCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DepensePayload>[]
+        }
+        delete: {
+          args: Prisma.DepenseDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DepensePayload>
+        }
+        update: {
+          args: Prisma.DepenseUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DepensePayload>
+        }
+        deleteMany: {
+          args: Prisma.DepenseDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DepenseUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.DepenseUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DepensePayload>[]
+        }
+        upsert: {
+          args: Prisma.DepenseUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DepensePayload>
+        }
+        aggregate: {
+          args: Prisma.DepenseAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDepense>
+        }
+        groupBy: {
+          args: Prisma.DepenseGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DepenseGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DepenseCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DepenseCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1330,6 +1405,24 @@ export const LienPaiementScalarFieldEnum = {
 export type LienPaiementScalarFieldEnum = (typeof LienPaiementScalarFieldEnum)[keyof typeof LienPaiementScalarFieldEnum]
 
 
+export const DepenseScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  categorie: 'categorie',
+  description: 'description',
+  montant: 'montant',
+  transactionId: 'transactionId',
+  agentId: 'agentId',
+  dateDepense: 'dateDepense',
+  justificatif: 'justificatif',
+  statut: 'statut',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DepenseScalarFieldEnum = (typeof DepenseScalarFieldEnum)[keyof typeof DepenseScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1476,6 +1569,48 @@ export type EnumStatutTransactionFieldRefInput<$PrismaModel> = FieldRefInputType
  * Reference to a field of type 'StatutTransaction[]'
  */
 export type ListEnumStatutTransactionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StatutTransaction[]'>
+    
+
+
+/**
+ * Reference to a field of type 'TypeDepense'
+ */
+export type EnumTypeDepenseFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TypeDepense'>
+    
+
+
+/**
+ * Reference to a field of type 'TypeDepense[]'
+ */
+export type ListEnumTypeDepenseFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TypeDepense[]'>
+    
+
+
+/**
+ * Reference to a field of type 'CategorieDepense'
+ */
+export type EnumCategorieDepenseFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CategorieDepense'>
+    
+
+
+/**
+ * Reference to a field of type 'CategorieDepense[]'
+ */
+export type ListEnumCategorieDepenseFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CategorieDepense[]'>
+    
+
+
+/**
+ * Reference to a field of type 'StatutDepense'
+ */
+export type EnumStatutDepenseFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StatutDepense'>
+    
+
+
+/**
+ * Reference to a field of type 'StatutDepense[]'
+ */
+export type ListEnumStatutDepenseFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StatutDepense[]'>
     
 
 
@@ -1653,6 +1788,7 @@ export type GlobalOmitConfig = {
   annotationAudit?: Prisma.AnnotationAuditOmit
   logAudit?: Prisma.LogAuditOmit
   lienPaiement?: Prisma.LienPaiementOmit
+  depense?: Prisma.DepenseOmit
 }
 
 /* Types for Logging */

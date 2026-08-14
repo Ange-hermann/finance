@@ -4,6 +4,7 @@
 -- ============================================================
 
 -- Drop existing tables and types (CASCADE pour les dépendances)
+DROP TABLE IF EXISTS "Depense" CASCADE;
 DROP TABLE IF EXISTS "AnnotationAudit" CASCADE;
 DROP TABLE IF EXISTS "LogAudit" CASCADE;
 DROP TABLE IF EXISTS "Recu" CASCADE;
@@ -20,6 +21,9 @@ DROP TYPE IF EXISTS "CategorieTransaction" CASCADE;
 DROP TYPE IF EXISTS "ModeTransaction" CASCADE;
 DROP TYPE IF EXISTS "StatutTransaction" CASCADE;
 DROP TYPE IF EXISTS "ModePaiementPhysique" CASCADE;
+DROP TYPE IF EXISTS "TypeDepense" CASCADE;
+DROP TYPE IF EXISTS "CategorieDepense" CASCADE;
+DROP TYPE IF EXISTS "StatutDepense" CASCADE;
 
 -- Create Enums
 CREATE TYPE "Role" AS ENUM ('COLLECTOR', 'TREASURER', 'PASTOR', 'AUDITOR', 'ADMIN');
@@ -31,6 +35,12 @@ CREATE TYPE "ModeTransaction" AS ENUM ('EN_LIGNE', 'MANUEL');
 CREATE TYPE "StatutTransaction" AS ENUM ('EN_ATTENTE', 'VALIDE', 'ANNULE');
 
 CREATE TYPE "ModePaiementPhysique" AS ENUM ('ESPECES', 'CHEQUE');
+
+CREATE TYPE "TypeDepense" AS ENUM ('DEPENSE_CULTE', 'DEPENSE_NORMALE');
+
+CREATE TYPE "CategorieDepense" AS ENUM ('MUSICIEN', 'TRANSPORT', 'MATERIEL', 'ENTRETIEN', 'FACTURE', 'SALAIRE', 'DIME_MENSUELLE', 'AUTRE');
+
+CREATE TYPE "StatutDepense" AS ENUM ('EN_ATTENTE', 'VALIDE', 'ANNULE');
 
 -- Create Tables
 
@@ -139,6 +149,22 @@ CREATE TABLE "LienPaiement" (
     CONSTRAINT "LienPaiement_pkey" PRIMARY KEY ("id")
 );
 
+CREATE TABLE "Depense" (
+    "id" TEXT NOT NULL,
+    "type" "TypeDepense" NOT NULL,
+    "categorie" "CategorieDepense" NOT NULL,
+    "description" TEXT NOT NULL,
+    "montant" DECIMAL(12,2) NOT NULL,
+    "transactionId" TEXT,
+    "agentId" TEXT,
+    "dateDepense" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "justificatif" TEXT,
+    "statut" "StatutDepense" NOT NULL DEFAULT 'EN_ATTENTE',
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    CONSTRAINT "Depense_pkey" PRIMARY KEY ("id")
+);
+
 -- Create Indexes
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 CREATE UNIQUE INDEX "Repartition_transactionId_key" ON "Repartition"("transactionId");
@@ -154,6 +180,8 @@ ALTER TABLE "Recu" ADD CONSTRAINT "Recu_transactionId_fkey" FOREIGN KEY ("transa
 ALTER TABLE "AnnotationAudit" ADD CONSTRAINT "AnnotationAudit_auteurId_fkey" FOREIGN KEY ("auteurId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 ALTER TABLE "AnnotationAudit" ADD CONSTRAINT "AnnotationAudit_transactionId_fkey" FOREIGN KEY ("transactionId") REFERENCES "Transaction"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "LogAudit" ADD CONSTRAINT "LogAudit_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Depense" ADD CONSTRAINT "Depense_transactionId_fkey" FOREIGN KEY ("transactionId") REFERENCES "Transaction"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Depense" ADD CONSTRAINT "Depense_agentId_fkey" FOREIGN KEY ("agentId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- ============================================================
 -- Seed : Utilisateurs de test (mots de passe hashés avec bcrypt)

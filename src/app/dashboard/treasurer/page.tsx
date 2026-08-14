@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { formatMontant, formatDate } from "@/lib/utils";
-import { TrendingUp, Wallet, PiggyBank, Heart, Building2, Coins } from "lucide-react";
+import Link from "next/link";
+import { TrendingUp, Wallet, PiggyBank, Heart, Building2, Coins, Receipt } from "lucide-react";
 import TreasurerCharts from "@/components/TreasurerCharts";
 
 export default async function TreasurerDashboard() {
@@ -59,11 +60,15 @@ export default async function TreasurerDashboard() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="font-display text-2xl sm:text-3xl font-bold text-blanc">Tableau de bord — Trésorière</h1>
           <p className="text-blanc/50 text-sm mt-1">Vue complète, validation, rapports et export</p>
         </div>
+        <Link href="/dashboard/treasurer/depenses" className="btn-outline-or text-sm flex items-center gap-2">
+          <Receipt className="w-4 h-4" />
+          Gérer les dépenses
+        </Link>
       </div>
 
       {/* KPIs */}
