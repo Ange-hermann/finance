@@ -61,7 +61,7 @@ export default async function DepensesPage() {
         ))}
       </div>
 
-      <DepenseManager transactions={transactions.map((t) => ({ ...t, montant: Number(t.montant) }))} />
+      <DepenseManager transactions={transactions.map((t) => ({ ...t, montant: Number(t.montant), createdAt: t.createdAt.toISOString() }))} />
     </div>
   );
 }
