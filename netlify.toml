@@ -9,6 +9,9 @@
   APP_URL = "https://ctf-finance.netlify.app"
   APP_NAME = "CTF Finance"
   EMAIL_FROM = "ctf@example.com"
+  DATABASE_URL = "postgresql://postgres.zdmslxmjwgomqyiebskx:zdF%2AE%3DhpV6AQQw%2B@aws-0-eu-central-1.pooler.supabase.com:5432/postgres?schema=public"
+  NEXT_PUBLIC_SUPABASE_URL = "https://zdmslxmjwgomqyiebskx.supabase.co"
+  NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY = "sb_publishable_jQsGqokjNWNwCn8tl6xxrA_AODtgygA"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
