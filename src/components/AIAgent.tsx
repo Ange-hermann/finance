@@ -14,18 +14,46 @@ export default function AIAgent() {
   const [actions, setActions] = useState<{ label: string; href: string }[]>([]);
   const [hasGreeted, setHasGreeted] = useState(false);
   const [showWelcome, setShowWelcome] = useState(true);
+  const [voicesLoaded, setVoicesLoaded] = useState(false);
   const recognitionRef = useRef<any>(null);
   const router = useRouter();
 
-  // Pré-charger les voix dès le montage
+  // Charger les voix (asynchrone sur mobile)
   useEffect(() => {
-    if (typeof window !== "undefined" && window.speechSynthesis) {
-      window.speechSynthesis.getVoices();
-      window.speechSynthesis.onvoiceschanged = () => {
-        window.speechSynthesis.getVoices();
-      };
-    }
+    if (typeof window === "undefined" || !window.speechSynthesis) return;
+
+    const loadVoices = () => {
+      const v = window.speechSynthesis.getVoices();
+      if (v.length > 0) setVoicesLoaded(true);
+    };
+
+    loadVoices();
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+
+    // Fallback: retry après 1s si pas chargé
+    const retry = setTimeout(loadVoices, 1000);
+    return () => clearTimeout(retry);
   }, []);
+
+  function pickFemaleVoice(): SpeechSynthesisVoice | null {
+    if (typeof window === "undefined" || !window.speechSynthesis) return null;
+    const voices = window.speechSynthesis.getVoices();
+    if (voices.length === 0) return null;
+
+    // 1. Voix françaises féminines connues
+    const femaleNames = ["Amelie", "Marie", "Pauline", "Julie", "Sophie", "Natural", "Google français", "female", "Female", "femme", "Femme"];
+    for (const name of femaleNames) {
+      const v = voices.find(v => v.lang.startsWith("fr") && v.name.includes(name));
+      if (v) return v;
+    }
+
+    // 2. Voix française quelconque
+    const fr = voices.find(v => v.lang.startsWith("fr"));
+    if (fr) return fr;
+
+    // 3. Dernier recours: première voix
+    return voices[0];
+  }
 
   const cleanTextForSpeech = (text: string): string => {
     return text
@@ -41,38 +69,47 @@ export default function AIAgent() {
     if (typeof window === "undefined" || !window.speechSynthesis) return;
     window.speechSynthesis.cancel();
 
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "fr-FR";
-    utterance.rate = 0.95;
-    utterance.pitch = 1.3;
-    utterance.volume = 1;
+    const doSpeak = () => {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "fr-FR";
+      utterance.rate = 0.95;
+      utterance.pitch = 1.5;
+      utterance.volume = 1;
 
-    const voices = window.speechSynthesis.getVoices();
-    const preferred = voices.find((v) =>
-      v.lang.startsWith("fr") &&
-      (v.name.includes("Amelie") || v.name.includes("Marie") || v.name.includes("Pauline") || v.name.includes("Natural") || v.name.includes("Google") || v.name.includes("female") || v.name.includes("Female"))
-    );
-    const frVoice = preferred || voices.find((v) => v.lang.startsWith("fr"));
-    if (frVoice) utterance.voice = frVoice;
+      const voice = pickFemaleVoice();
+      if (voice) utterance.voice = voice;
 
-    utterance.onstart = () => setIsSpeaking(true);
-    utterance.onend = () => setIsSpeaking(false);
-    utterance.onerror = () => setIsSpeaking(false);
+      const resumeInterval = setInterval(() => {
+        if (window.speechSynthesis.speaking && window.speechSynthesis.paused) {
+          window.speechSynthesis.resume();
+        }
+      }, 5000);
 
-    // Chrome bug fix: resume si pause
-    const resumeInterval = setInterval(() => {
-      if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
-        // keep alive
-      } else if (window.speechSynthesis.speaking && window.speechSynthesis.paused) {
-        window.speechSynthesis.resume();
-      }
-    }, 5000);
-    utterance.onend = () => {
-      setIsSpeaking(false);
-      clearInterval(resumeInterval);
+      utterance.onstart = () => setIsSpeaking(true);
+      utterance.onend = () => { setIsSpeaking(false); clearInterval(resumeInterval); };
+      utterance.onerror = () => setIsSpeaking(false);
+
+      window.speechSynthesis.speak(utterance);
     };
 
-    window.speechSynthesis.speak(utterance);
+    // Sur mobile, les voix peuvent ne pas être chargées immédiatement
+    if (!voicesLoaded) {
+      const waitVoices = setInterval(() => {
+        const v = window.speechSynthesis.getVoices();
+        if (v.length > 0) {
+          clearInterval(waitVoices);
+          setVoicesLoaded(true);
+          doSpeak();
+        }
+      }, 200);
+      // Timeout: parler quand même après 2s
+      setTimeout(() => {
+        clearInterval(waitVoices);
+        doSpeak();
+      }, 2000);
+    } else {
+      doSpeak();
+    }
   };
 
   const speak = useCallback((text: string) => {

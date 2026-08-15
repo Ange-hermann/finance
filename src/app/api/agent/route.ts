@@ -151,7 +151,7 @@ function getDashboardData(role: string, stats: DashboardStats): string {
 
 // === IA ultra-rapide : prompt court, timeout 6s ===
 async function askAI(userMessage: string, dashboardData: string): Promise<string> {
-  const prompt = `Assistant vocal église CTF. Français, bref (2 phrases), naturel. ${dashboardData} Question: ${userMessage}`;
+  const prompt = `Tu es un assistant vocal d'église. Réponds UNIQUEMENT en français, sois bref (2 phrases maximum), naturel et conversationnel. Ne jamais utiliser l'anglais. ${dashboardData} Question: ${userMessage}`;
 
   try {
     const res = await fetch(`https://text.pollinations.ai/${encodeURIComponent(prompt)}`, {
