@@ -23,7 +23,31 @@ function getTimeGreeting(): string {
 function normalize(str: string): string {
   return str.toLowerCase().trim()
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\b(dimee|dimes|dimme|dîme|dîmes|tithe|tithes)\b/g, "dime")
+    .replace(/\b(dorca|dorcat|dorkas|dorka)\b/g, "dorcas")
+    .replace(/\b(tresoriere|tresor)\b/g, "tresoriere")
+    .replace(/\b(pasteur|pastor)\b/g, "pasteur")
+    .replace(/\b(auditeur|audit)\b/g, "auditeur")
+    .replace(/\b(collecteur|collect)\b/g, "collecteur")
+    .replace(/\b(offrand|offrande|offrandes)\b/g, "offrande")
+    .replace(/\b(epargn|epargne)\b/g, "epargne")
+    .replace(/\b(economi|economie)\b/g, "economie")
+    .replace(/\b(construction|constru)\b/g, "construction")
+    .replace(/\b(social|sociale)\b/g, "sociale")
+    .replace(/\b(caisse)\b/g, "caisse")
+    .replace(/\b(depense|depenses|charge|charges)\b/g, "depense")
+    .replace(/\b(transaction|transactions|paiement|payement)\b/g, "transaction")
+    .replace(/\b(rapport|rapports|report)\b/g, "rapport")
+    .replace(/\b(utilisateur|utilisateurs|user|users|membre|membres)\b/g, "utilisateur");
+}
+
+function correctPronunciation(text: string): string {
+  return text
+    .replace(/\bDorcas\b/g, "Dorquasse")
+    .replace(/\bDorca\b/g, "Dorquasse")
+    .replace(/\bFCFA\b/g, "francs CFA")
+    .replace(/\bXOF\b/g, "francs CFA");
 }
 
 function getRoleTitle(role: string, name: string): string {
@@ -152,8 +176,12 @@ export async function POST(req: NextRequest) {
   const userName = session.user?.name || "";
   const role = (session.user as any)?.role as string;
 
-  if (isInitial) return NextResponse.json(await getInitialGreeting(userName, role, (session.user as any)?.id));
-  return NextResponse.json(await processMessage(message, role, userName));
+  if (isInitial) {
+    const greeting = await getInitialGreeting(userName, role, (session.user as any)?.id);
+    return NextResponse.json({ ...greeting, message: correctPronunciation(greeting.message) });
+  }
+  const result = await processMessage(message, role, userName);
+  return NextResponse.json({ ...result, message: correctPronunciation(result.message) });
 }
 
 // === Greeting instantané (DB directe, pas d'IA) ===
@@ -234,8 +262,8 @@ const NAV_ACTIONS: { keywords: string[]; action: { label: string; href: string }
 // === Réponses DB instantanées par fond précis (sans IA) ===
 function getInstantDBResponse(msg: string, s: DashboardStats): string | null {
   // Dîme de la dîme
-  if (msg.includes("dime")) {
-    return `La dîme de la dîme s'élève à ${formatNum(s.totalDime)} FCFA au total. ${formatNum(s.dimeVersee)} FCFA ont déjà été versés, et il reste ${formatNum(s.dimeRestant)} FCFA à verser.`;
+  if (msg.includes("dime") || msg.includes("dim") || msg.includes("tithe")) {
+    return `La dîme de la dîme s'élève à ${formatNum(s.totalDime)} francs CFA au total. ${formatNum(s.dimeVersee)} francs CFA ont déjà été versés, et il reste ${formatNum(s.dimeRestant)} francs CFA à verser.`;
   }
   // Dépenses
   if (msg.includes("depense") || msg.includes("charge")) {
@@ -332,7 +360,7 @@ async function getDetailedResponse(msg: string, role: string): Promise<string | 
   }
 
   // === Dîme mensuelle ===
-  if (msg.includes("dime mensuelle") || msg.includes("dime du mois") || (msg.includes("dime") && isList)) {
+  if (msg.includes("dime mensuelle") || msg.includes("dime du mois") || msg.includes("dime mensuel") || (msg.includes("dime") && isList)) {
     const dimes = await prisma.dimeMensuelle.findMany({
       orderBy: [{ annee: "desc" }, { mois: "desc" }],
       take: 5,

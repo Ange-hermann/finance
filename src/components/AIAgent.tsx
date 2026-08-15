@@ -44,13 +44,13 @@ export default function AIAgent() {
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = "fr-FR";
     utterance.rate = 0.95;
-    utterance.pitch = 1.1;
+    utterance.pitch = 1.3;
     utterance.volume = 1;
 
     const voices = window.speechSynthesis.getVoices();
     const preferred = voices.find((v) =>
       v.lang.startsWith("fr") &&
-      (v.name.includes("Amelie") || v.name.includes("Google") || v.name.includes("Marie") || v.name.includes("Pauline") || v.name.includes("Natural"))
+      (v.name.includes("Amelie") || v.name.includes("Marie") || v.name.includes("Pauline") || v.name.includes("Natural") || v.name.includes("Google") || v.name.includes("female") || v.name.includes("Female"))
     );
     const frVoice = preferred || voices.find((v) => v.lang.startsWith("fr"));
     if (frVoice) utterance.voice = frVoice;
