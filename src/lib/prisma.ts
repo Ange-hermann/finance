@@ -9,12 +9,14 @@ const globalForPrisma = globalThis as unknown as {
 function createPrismaClient() {
   const pool = new Pool({
     connectionString: process.env.DATABASE_URL!,
-    max: 3,
+    max: process.env.NODE_ENV === "production" ? 1 : 3,
+    idleTimeoutMillis: 10000,
+    connectionTimeoutMillis: 10000,
     ssl: { rejectUnauthorized: false },
   });
   const adapter = new PrismaPg(pool);
   const client = new PrismaClient({ adapter });
-  client.$connect().catch(console.error);
+  client.$connect().catch((e) => console.error("[Prisma] Connection error:", e));
   return client;
 }
 
