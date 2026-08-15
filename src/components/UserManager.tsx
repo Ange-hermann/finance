@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { toast } from "sonner";
-import { Loader2, Plus } from "lucide-react";
+import { Loader2, Plus, Eye, EyeOff } from "lucide-react";
 
 interface UserItem {
   id: string;
@@ -17,6 +17,7 @@ interface UserItem {
 export default function UserManager({ users }: { users: UserItem[] }) {
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [form, setForm] = useState({
     nom: "",
     email: "",
@@ -126,14 +127,23 @@ export default function UserManager({ users }: { users: UserItem[] }) {
             </div>
             <div className="md:col-span-2">
               <label className="label-or">Mot de passe *</label>
-              <input
-                required
-                type="password"
-                value={form.password}
-                onChange={(e) => setForm({ ...form, password: e.target.value })}
-                className="input-noir w-full"
-                placeholder="••••••••"
-              />
+              <div className="relative">
+                <input
+                  required
+                  type={showPassword ? "text" : "password"}
+                  value={form.password}
+                  onChange={(e) => setForm({ ...form, password: e.target.value })}
+                  className="input-noir w-full pr-11"
+                  placeholder="••••••••"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-or/50 hover:text-or transition-colors"
+                >
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
             </div>
           </div>
           <button type="submit" disabled={loading} className="btn-or flex items-center gap-2">
