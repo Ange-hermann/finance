@@ -73,7 +73,9 @@ export default function AIAgent() {
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = "fr-FR";
       utterance.rate = 0.95;
-      utterance.pitch = 1.5;
+      // Pitch plus élevé sur mobile pour voix féminine, normal sur desktop
+      const isMobile = typeof window !== "undefined" && (window.innerWidth < 768 || /Android|iPhone|iPad/i.test(navigator.userAgent));
+      utterance.pitch = isMobile ? 1.5 : 1.1;
       utterance.volume = 1;
 
       const voice = pickFemaleVoice();
@@ -94,18 +96,24 @@ export default function AIAgent() {
 
     // Sur mobile, les voix peuvent ne pas être chargées immédiatement
     if (!voicesLoaded) {
+      let spoken = false;
       const waitVoices = setInterval(() => {
         const v = window.speechSynthesis.getVoices();
-        if (v.length > 0) {
+        if (v.length > 0 && !spoken) {
+          spoken = true;
           clearInterval(waitVoices);
+          clearTimeout(fallbackTimeout);
           setVoicesLoaded(true);
           doSpeak();
         }
       }, 200);
       // Timeout: parler quand même après 2s
-      setTimeout(() => {
-        clearInterval(waitVoices);
-        doSpeak();
+      const fallbackTimeout = setTimeout(() => {
+        if (!spoken) {
+          spoken = true;
+          clearInterval(waitVoices);
+          doSpeak();
+        }
       }, 2000);
     } else {
       doSpeak();
@@ -271,7 +279,7 @@ export default function AIAgent() {
 
   return (
     <>
-      {/* Indicateur vocal en haut quand l'agent parle */}
+      {/* Indicateur vocal en haut quand l'agent parle - discret sur mobile */}
       {isSpeaking && (
         <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 max-w-md w-[90%] pointer-events-none">
           <div className="bg-noir-soft/95 backdrop-blur border border-or/20 rounded-2xl px-5 py-3 shadow-2xl flex items-center gap-3">
@@ -284,7 +292,7 @@ export default function AIAgent() {
                 <span className="w-1 h-4 bg-or rounded-full animate-pulse" style={{ animationDelay: "100ms" }} />
                 <span className="w-1 h-4 bg-or rounded-full animate-pulse" style={{ animationDelay: "200ms" }} />
               </span>
-              <span className="text-blanc/60 text-xs truncate ml-1">Assistant CTF parle...</span>
+              <span className="text-blanc/60 text-xs truncate ml-1 hidden sm:inline">Assistant CTF parle...</span>
             </div>
             <button
               onClick={stopSpeaking}
@@ -306,13 +314,13 @@ export default function AIAgent() {
         </div>
       )}
 
-      {/* Suggestions + contrôles en bas de l'écran */}
+      {/* Suggestions + contrôles en bas de l'écran - minimal sur mobile */}
       {hasContent && !isListening && (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 max-w-2xl w-[90%]">
           <div className="flex flex-col items-center gap-3">
-            {/* Actions de navigation */}
+            {/* Actions de navigation - cachées sur mobile */}
             {actions.length > 0 && (
-              <div className="flex flex-wrap gap-2 justify-center">
+              <div className="hidden sm:flex flex-wrap gap-2 justify-center">
                 {actions.map((action, j) => (
                   <button
                     key={j}
@@ -326,9 +334,9 @@ export default function AIAgent() {
               </div>
             )}
 
-            {/* Suggestions cliquables */}
+            {/* Suggestions cliquables - cachées sur mobile */}
             {suggestions.length > 0 && (
-              <div className="flex flex-wrap gap-2 justify-center">
+              <div className="hidden sm:flex flex-wrap gap-2 justify-center">
                 {suggestions.map((suggestion, j) => (
                   <button
                     key={j}
@@ -342,7 +350,7 @@ export default function AIAgent() {
               </div>
             )}
 
-            {/* Contrôles vocaux */}
+            {/* Contrôles vocaux - toujours visibles */}
             <div className="flex items-center gap-2 mt-1">
               <button
                 onClick={isListening ? stopListening : startListening}

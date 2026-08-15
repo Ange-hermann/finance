@@ -59,6 +59,7 @@ function getRoleTitle(role: string, name: string): string {
       if (n.includes("dorcas")) return "Diaconesse";
       return "Frère";
     case "ADMIN":
+      if (n.includes("joel") || n.includes("joël")) return "Mentor";
       if (n.includes("boua")) return "Monsieur";
       return "Frère";
     case "AUDITOR":
@@ -232,7 +233,12 @@ async function getInitialGreeting(userName: string, role: string, userId: string
   } else if (role === "AUDITOR") {
     message = `${greeting} ${displayName} ! Espace audit : ${formatTransactions(transactions)}, grande caisse ${formatNum(grandCaisse)} FCFA, ${logs} entrées dans le journal. Que voulez-vous examiner ?`;
   } else if (role === "ADMIN") {
-    message = `${greeting} ${displayName} ! Administration : ${users} utilisateurs, ${formatTransactionsValidees(transactions)}. Que souhaitez-vous configurer ?`;
+    const isAdminJoel = normalize(userName).includes("joel") || normalize(userName).includes("joël");
+    if (isAdminJoel) {
+      message = `${greeting} Mentor ${userName} de CTF ! Nous sommes le ${dateStr}. Administration : ${users} utilisateurs, ${formatTransactionsValidees(transactions)}. Que souhaitez-vous configurer ?`;
+    } else {
+      message = `${greeting} ${displayName} ! Administration : ${users} utilisateurs, ${formatTransactionsValidees(transactions)}. Que souhaitez-vous configurer ?`;
+    }
   } else if (role === "COLLECTOR") {
     const stats = await prisma.transaction.aggregate({
       where: { agentId: userId, mode: "MANUEL", statut: "VALIDE" },
