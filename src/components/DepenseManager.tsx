@@ -8,6 +8,7 @@ interface Depense {
   id: string;
   type: "DEPENSE_CULTE" | "DEPENSE_NORMALE";
   categorie: string;
+  sourceFonds: string;
   description: string;
   montant: number;
   dateDepense: string;
@@ -24,7 +25,7 @@ interface Transaction {
 }
 
 const CATEGORIES_CULTE = ["MUSICIEN", "TRANSPORT", "MATERIEL", "AUTRE"];
-const CATEGORIES_NORMALE = ["ENTRETIEN", "FACTURE", "SALAIRE", "DIME_MENSUELLE", "AUTRE"];
+const CATEGORIES_NORMALE = ["ENTRETIEN", "FACTURE", "SALAIRE", "AUTRE"];
 
 const LABELS: Record<string, string> = {
   MUSICIEN: "Musiciens",
@@ -33,9 +34,18 @@ const LABELS: Record<string, string> = {
   ENTRETIEN: "Entretien",
   FACTURE: "Factures",
   SALAIRE: "Salaires",
-  DIME_MENSUELLE: "Dîme mensuelle",
   AUTRE: "Autre",
 };
+
+const SOURCE_LABELS: Record<string, string> = {
+  CAISSE: "Caisse",
+  ECONOMIE: "Économie",
+  EPARGNE: "Épargne",
+  CONSTRUCTION: "Construction",
+  ACTION_SOCIALE: "Action sociale",
+};
+
+const SOURCES = ["CAISSE", "ECONOMIE", "EPARGNE", "CONSTRUCTION", "ACTION_SOCIALE"];
 
 export default function DepenseManager({
   transactions,
@@ -50,17 +60,23 @@ export default function DepenseManager({
   const [form, setForm] = useState({
     type: "DEPENSE_CULTE" as "DEPENSE_CULTE" | "DEPENSE_NORMALE",
     categorie: "MUSICIEN",
+    sourceFonds: "CAISSE",
     description: "",
     montant: "",
     transactionId: "",
     dateDepense: "",
   });
+  const [soldes, setSoldes] = useState<Record<string, number> | null>(null);
 
   const fetchDepenses = async () => {
     setLoading(true);
     const res = await fetch("/api/depenses");
     const data = await res.json();
     setDepenses(data);
+    const resSoldes = await fetch("/api/depenses/soldes");
+    if (resSoldes.ok) {
+      setSoldes(await resSoldes.json());
+    }
     setLoading(false);
   };
 
@@ -78,6 +94,7 @@ export default function DepenseManager({
       body: JSON.stringify({
         type: form.type,
         categorie: form.categorie,
+        sourceFonds: form.type === "DEPENSE_NORMALE" ? form.sourceFonds : undefined,
         description: form.description,
         montant: parseFloat(form.montant),
         transactionId: form.type === "DEPENSE_CULTE" ? form.transactionId || null : null,
@@ -90,6 +107,7 @@ export default function DepenseManager({
       setForm({
         type: "DEPENSE_CULTE",
         categorie: "MUSICIEN",
+        sourceFonds: "CAISSE",
         description: "",
         montant: "",
         transactionId: "",
@@ -98,7 +116,8 @@ export default function DepenseManager({
       setShowForm(false);
       fetchDepenses();
     } else {
-      toast.error("Erreur lors de l'enregistrement");
+      const data = await res.json();
+      toast.error(data.error || "Erreur lors de l'enregistrement");
     }
     setSubmitting(false);
   };
@@ -199,6 +218,28 @@ export default function DepenseManager({
               />
             </div>
 
+            {form.type === "DEPENSE_NORMALE" && (
+              <div className="sm:col-span-2">
+                <label className="label-or">Source du fonds</label>
+                <select
+                  value={form.sourceFonds}
+                  onChange={(e) => setForm({ ...form, sourceFonds: e.target.value })}
+                  className="input-noir w-full"
+                >
+                  {SOURCES.map((s) => (
+                    <option key={s} value={s}>
+                      {SOURCE_LABELS[s]}{soldes ? ` — Solde: ${soldes[s]?.toLocaleString("fr-FR") || 0} FCFA` : ""}
+                    </option>
+                  ))}
+                </select>
+                {soldes && form.sourceFonds && soldes[form.sourceFonds] <= 0 && (
+                  <p className="text-red-400 text-xs mt-1">
+                    ⚠ Solde insuffisant dans {SOURCE_LABELS[form.sourceFonds]}
+                  </p>
+                )}
+              </div>
+            )}
+
             {form.type === "DEPENSE_CULTE" && (
               <div className="sm:col-span-2">
                 <label className="label-or">Transaction liée (offrande du culte)</label>
@@ -281,6 +322,11 @@ export default function DepenseManager({
                     <span className="text-xs px-2 py-1 rounded-lg bg-blanc/5 text-blanc/60 whitespace-nowrap">
                       {LABELS[d.categorie] || d.categorie}
                     </span>
+                    {d.type === "DEPENSE_NORMALE" && d.sourceFonds && (
+                      <span className="text-xs px-2 py-1 rounded-lg bg-purple-500/10 text-purple-400 whitespace-nowrap">
+                        {SOURCE_LABELS[d.sourceFonds] || d.sourceFonds}
+                      </span>
+                    )}
                     {d.statut === "VALIDE" && (
                       <span className="text-xs px-2 py-1 rounded-lg bg-green-500/10 text-green-400 whitespace-nowrap">
                         Validée

@@ -19,6 +19,7 @@ import {
   Menu,
   X,
   Receipt,
+  Calendar,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -31,6 +32,7 @@ const roleMenus: Record<string, { href: string; label: string; icon: any }[]> = 
   TREASURER: [
     { href: "/dashboard/treasurer", label: "Tableau de bord", icon: LayoutDashboard },
     { href: "/dashboard/treasurer/depenses", label: "Dépenses", icon: Receipt },
+    { href: "/dashboard/treasurer/dimes", label: "Dîme mensuelle", icon: Calendar },
     { href: "/dashboard/treasurer/rapports", label: "Rapports & Export", icon: FileText },
   ],
   PASTOR: [

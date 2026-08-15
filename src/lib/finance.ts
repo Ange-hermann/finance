@@ -82,16 +82,24 @@ export function calculerRepartition(
     ? { ...tauxParDefaut[categorie], ...tauxCustom[categorie] }
     : tauxParDefaut[categorie];
 
+  const montantEconomie = Math.round(montant * taux.economie);
+  const montantEpargne = Math.round(montant * taux.epargne);
+  const montantActionSociale = Math.round(montant * taux.actionSociale);
+  const montantDimeDeLaDime =
+    taux.dimeDeLaDime !== null
+      ? Math.round(montant * taux.dimeDeLaDime)
+      : null;
+  const montantFondsDedie = Math.round(montant * taux.fondsDedie);
+  const dimeVal = montantDimeDeLaDime ?? 0;
+  const montantCaisse = montant - montantEconomie - montantEpargne - montantActionSociale - dimeVal - montantFondsDedie;
+
   return {
-    montantEconomie: Math.round(montant * taux.economie * 100) / 100,
-    montantEpargne: Math.round(montant * taux.epargne * 100) / 100,
-    montantActionSociale: Math.round(montant * taux.actionSociale * 100) / 100,
-    montantDimeDeLaDime:
-      taux.dimeDeLaDime !== null
-        ? Math.round(montant * taux.dimeDeLaDime * 100) / 100
-        : null,
-    montantCaisse: Math.round(montant * taux.caisse * 100) / 100,
-    montantFondsDedie: Math.round(montant * taux.fondsDedie * 100) / 100,
+    montantEconomie,
+    montantEpargne,
+    montantActionSociale,
+    montantDimeDeLaDime,
+    montantCaisse,
+    montantFondsDedie,
   };
 }
 

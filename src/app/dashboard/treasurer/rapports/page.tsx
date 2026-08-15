@@ -11,7 +11,7 @@ export default async function RapportsPage() {
   const session = await getServerSession(authOptions);
   if (!session) return null;
 
-  const [transactions, repartitions, caisse] = await Promise.all([
+  const [transactions, repartitions, caisse, depensesNormales, depEconomie, depEpargne, depActionSociale, depConstruction] = await Promise.all([
     prisma.transaction.findMany({
       where: { statut: "VALIDE" },
       orderBy: { createdAt: "desc" },
@@ -21,15 +21,24 @@ export default async function RapportsPage() {
       where: { transaction: { statut: "VALIDE" } },
     }),
     prisma.caisse.findFirst(),
+    prisma.depense.aggregate({
+      where: { type: "DEPENSE_NORMALE", statut: "VALIDE" },
+      _sum: { montant: true },
+    }),
+    prisma.depense.aggregate({ where: { type: "DEPENSE_NORMALE", statut: "VALIDE", sourceFonds: "ECONOMIE" }, _sum: { montant: true } }),
+    prisma.depense.aggregate({ where: { type: "DEPENSE_NORMALE", statut: "VALIDE", sourceFonds: "EPARGNE" }, _sum: { montant: true } }),
+    prisma.depense.aggregate({ where: { type: "DEPENSE_NORMALE", statut: "VALIDE", sourceFonds: "ACTION_SOCIALE" }, _sum: { montant: true } }),
+    prisma.depense.aggregate({ where: { type: "DEPENSE_NORMALE", statut: "VALIDE", sourceFonds: "CONSTRUCTION" }, _sum: { montant: true } }),
   ]);
 
-  const grandTotalEconomie = repartitions.reduce((sum, r) => sum + Number(r.montantEconomie), 0);
-  const grandTotalEpargne = repartitions.reduce((sum, r) => sum + Number(r.montantEpargne), 0);
-  const grandTotalActionSociale = repartitions.reduce((sum, r) => sum + Number(r.montantActionSociale), 0);
+  const totalDepensesNormales = Number(depensesNormales._sum?.montant || 0);
+  const grandTotalEconomie = repartitions.reduce((sum, r) => sum + Number(r.montantEconomie), 0) - Number(depEconomie._sum?.montant || 0);
+  const grandTotalEpargne = repartitions.reduce((sum, r) => sum + Number(r.montantEpargne), 0) - Number(depEpargne._sum?.montant || 0);
+  const grandTotalActionSociale = repartitions.reduce((sum, r) => sum + Number(r.montantActionSociale), 0) - Number(depActionSociale._sum?.montant || 0);
   const grandTotalDimeDeLaDime = repartitions.reduce((sum, r) => sum + Number(r.montantDimeDeLaDime || 0), 0);
-  const grandTotalConstruction = repartitions.reduce((sum, r) => sum + Number(r.montantFondsDedie), 0);
-  const grandTotalCaisse = Number(caisse?.soldeActuel || 0);
-  const totalGeneral = grandTotalEconomie + grandTotalEpargne + grandTotalActionSociale + grandTotalDimeDeLaDime + grandTotalConstruction + grandTotalCaisse;
+  const grandTotalConstruction = repartitions.reduce((sum, r) => sum + Number(r.montantFondsDedie), 0) - Number(depConstruction._sum?.montant || 0);
+  const grandTotalCaisseRepartition = repartitions.reduce((sum, r) => sum + Number(r.montantCaisse), 0) - totalDepensesNormales;
+  const totalGeneral = Number(caisse?.soldeActuel || 0);
 
   const totals = [
     { label: "Grand total Économie", value: grandTotalEconomie },
@@ -37,8 +46,8 @@ export default async function RapportsPage() {
     { label: "Grand total Action sociale", value: grandTotalActionSociale },
     { label: "Grand total Dîme de la dîme", value: grandTotalDimeDeLaDime },
     { label: "Grand total Construction", value: grandTotalConstruction },
-    { label: "Grand total Caisse", value: grandTotalCaisse },
-    { label: "Total général", value: totalGeneral },
+    { label: "Grand total Caisse", value: grandTotalCaisseRepartition },
+    { label: "Total général (Grande caisse)", value: totalGeneral },
   ];
 
   const serializedTransactions = transactions.map((t) => ({
@@ -80,13 +89,13 @@ export default async function RapportsPage() {
             <div
               key={i}
               className={`flex items-center justify-between gap-2 p-3 rounded-xl ${
-                t.label === "Total général" ? "bg-or/10 border border-or/30" : "bg-noir-soft"
+                t.label.includes("Total général") ? "bg-or/10 border border-or/30" : "bg-noir-soft"
               }`}
             >
-              <span className={`text-sm min-w-0 truncate ${t.label === "Total général" ? "text-or font-medium" : "text-blanc/60"}`}>
+              <span className={`text-sm min-w-0 truncate ${t.label.includes("Total général") ? "text-or font-medium" : "text-blanc/60"}`}>
                 {t.label}
               </span>
-              <span className={`font-display text-sm sm:text-base whitespace-nowrap ${t.label === "Total général" ? "text-or sm:text-xl" : "text-blanc"}`}>
+              <span className={`font-display text-sm sm:text-base whitespace-nowrap ${t.label.includes("Total général") ? "text-or sm:text-xl" : "text-blanc"}`}>
                 {formatMontant(t.value)}
               </span>
             </div>

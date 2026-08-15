@@ -4,6 +4,7 @@
 -- ============================================================
 
 -- Drop existing tables and types (CASCADE pour les dépendances)
+DROP TABLE IF EXISTS "DimeMensuelle" CASCADE;
 DROP TABLE IF EXISTS "Depense" CASCADE;
 DROP TABLE IF EXISTS "AnnotationAudit" CASCADE;
 DROP TABLE IF EXISTS "LogAudit" CASCADE;
@@ -24,6 +25,8 @@ DROP TYPE IF EXISTS "ModePaiementPhysique" CASCADE;
 DROP TYPE IF EXISTS "TypeDepense" CASCADE;
 DROP TYPE IF EXISTS "CategorieDepense" CASCADE;
 DROP TYPE IF EXISTS "StatutDepense" CASCADE;
+DROP TYPE IF EXISTS "StatutDime" CASCADE;
+DROP TYPE IF EXISTS "SourceFonds" CASCADE;
 
 -- Create Enums
 CREATE TYPE "Role" AS ENUM ('COLLECTOR', 'TREASURER', 'PASTOR', 'AUDITOR', 'ADMIN');
@@ -38,9 +41,13 @@ CREATE TYPE "ModePaiementPhysique" AS ENUM ('ESPECES', 'CHEQUE');
 
 CREATE TYPE "TypeDepense" AS ENUM ('DEPENSE_CULTE', 'DEPENSE_NORMALE');
 
-CREATE TYPE "CategorieDepense" AS ENUM ('MUSICIEN', 'TRANSPORT', 'MATERIEL', 'ENTRETIEN', 'FACTURE', 'SALAIRE', 'DIME_MENSUELLE', 'AUTRE');
+CREATE TYPE "CategorieDepense" AS ENUM ('MUSICIEN', 'TRANSPORT', 'MATERIEL', 'ENTRETIEN', 'FACTURE', 'SALAIRE', 'AUTRE');
 
 CREATE TYPE "StatutDepense" AS ENUM ('EN_ATTENTE', 'VALIDE', 'ANNULE');
+
+CREATE TYPE "StatutDime" AS ENUM ('NON_VERSE', 'VERSE');
+
+CREATE TYPE "SourceFonds" AS ENUM ('CAISSE', 'ECONOMIE', 'EPARGNE', 'CONSTRUCTION', 'ACTION_SOCIALE');
 
 -- Create Tables
 
@@ -153,6 +160,7 @@ CREATE TABLE "Depense" (
     "id" TEXT NOT NULL,
     "type" "TypeDepense" NOT NULL,
     "categorie" "CategorieDepense" NOT NULL,
+    "sourceFonds" "SourceFonds" NOT NULL DEFAULT 'CAISSE',
     "description" TEXT NOT NULL,
     "montant" DECIMAL(12,2) NOT NULL,
     "transactionId" TEXT,
@@ -182,6 +190,22 @@ ALTER TABLE "AnnotationAudit" ADD CONSTRAINT "AnnotationAudit_transactionId_fkey
 ALTER TABLE "LogAudit" ADD CONSTRAINT "LogAudit_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 ALTER TABLE "Depense" ADD CONSTRAINT "Depense_transactionId_fkey" FOREIGN KEY ("transactionId") REFERENCES "Transaction"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 ALTER TABLE "Depense" ADD CONSTRAINT "Depense_agentId_fkey" FOREIGN KEY ("agentId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+CREATE TABLE "DimeMensuelle" (
+    "id" TEXT NOT NULL,
+    "mois" INTEGER NOT NULL,
+    "annee" INTEGER NOT NULL,
+    "montant" DECIMAL(12,2) NOT NULL,
+    "dateVersement" TIMESTAMP(3),
+    "statut" "StatutDime" NOT NULL DEFAULT 'NON_VERSE',
+    "agentId" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    CONSTRAINT "DimeMensuelle_pkey" PRIMARY KEY ("id")
+);
+
+CREATE UNIQUE INDEX "DimeMensuelle_mois_annee_key" ON "DimeMensuelle"("mois", "annee");
+ALTER TABLE "DimeMensuelle" ADD CONSTRAINT "DimeMensuelle_agentId_fkey" FOREIGN KEY ("agentId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- ============================================================
 -- Seed : Utilisateurs de test (mots de passe hashés avec bcrypt)

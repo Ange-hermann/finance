@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
+import fs from "fs";
+import path from "path";
 
 function sanitize(text: string): string {
   return text.replace(/[\u202F\u00A0\u2009]/g, " ");
@@ -40,33 +42,53 @@ export async function GET(
     const noir = rgb(0.04, 0.04, 0.04);
     const gris = rgb(0.5, 0.5, 0.5);
 
+    // Logo
+    const logoPath = path.join(process.cwd(), "public", "Logo.png");
+    let logoEmbed = null;
+    try {
+      const logoBytes = fs.readFileSync(logoPath);
+      logoEmbed = await pdfDoc.embedPng(logoBytes);
+    } catch {}
+
+    const logoSize = 60;
+    const logoX = 50;
+    const logoY = height - 75;
+    if (logoEmbed) {
+      page.drawImage(logoEmbed, {
+        x: logoX,
+        y: logoY,
+        width: logoSize,
+        height: logoSize,
+      });
+    }
+
     // Header
     page.drawText("RECU DE PAIEMENT", {
       x: width / 2 - 100,
-      y: height - 60,
+      y: height - 50,
       size: 22,
       font: fontBold,
       color: or,
     });
 
-    page.drawText("CTF Finance", {
-      x: width / 2 - 45,
-      y: height - 85,
-      size: 12,
+    page.drawText("Centre de Transformation des Familles", {
+      x: width / 2 - 110,
+      y: height - 75,
+      size: 10,
       font,
       color: gris,
     });
 
     // Line separator
     page.drawLine({
-      start: { x: 50, y: height - 100 },
-      end: { x: width - 50, y: height - 100 },
+      start: { x: 50, y: height - 95 },
+      end: { x: width - 50, y: height - 95 },
       thickness: 1,
       color: or,
     });
 
     // Reçu info
-    let y = height - 130;
+    let y = height - 125;
     page.drawText(`Recu N°: ${recu.id}`, { x: 50, y, size: 11, font, color: noir });
     page.drawText(`Date: ${sanitize(new Date(recu.createdAt).toLocaleDateString("fr-FR"))}`, {
       x: width - 200, y, size: 11, font, color: noir,
@@ -102,34 +124,6 @@ export async function GET(
       page.drawText(`Reference: ${sanitize(t.referencePaiement)}`, { x: 50, y, size: 11, font, color: noir });
     }
 
-    // Repartition
-    if (t.repartition) {
-      y -= 35;
-      page.drawText("Repartition:", { x: 50, y, size: 12, font: fontBold, color: or });
-      y -= 20;
-
-      const r = t.repartition;
-      const lignes = [
-        { label: "Economie", val: Number(r.montantEconomie) },
-        { label: "Epargne", val: Number(r.montantEpargne) },
-        { label: "Action sociale", val: Number(r.montantActionSociale) },
-        { label: "Dime de la dime", val: r.montantDimeDeLaDime ? Number(r.montantDimeDeLaDime) : null },
-        { label: "Caisse", val: Number(r.montantCaisse) },
-        { label: "Fonds dedie", val: Number(r.montantFondsDedie) },
-      ];
-
-      lignes.forEach((l) => {
-        if (l.val !== null && l.val > 0) {
-          page.drawText(sanitize(l.label), { x: 50, y, size: 10, font, color: noir });
-          page.drawText(
-            formatNum(l.val) + " FCFA",
-            { x: 250, y, size: 10, font, color: noir }
-          );
-          y -= 16;
-        }
-      });
-    }
-
     // Footer
     page.drawLine({
       start: { x: 50, y: 80 },
@@ -137,7 +131,7 @@ export async function GET(
       thickness: 0.5,
       color: gris,
     });
-    page.drawText("Ce recu a ete genere automatiquement par la plateforme CTF Finance.", {
+    page.drawText("Ce recu a ete genere automatiquement par la plateforme Centre de Transformation des Familles.", {
       x: 50, y: 60, size: 8, font, color: gris,
     });
 

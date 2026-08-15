@@ -61,7 +61,8 @@ export const ModelName = {
   AnnotationAudit: 'AnnotationAudit',
   LogAudit: 'LogAudit',
   LienPaiement: 'LienPaiement',
-  Depense: 'Depense'
+  Depense: 'Depense',
+  DimeMensuelle: 'DimeMensuelle'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -209,6 +210,7 @@ export const DepenseScalarFieldEnum = {
   id: 'id',
   type: 'type',
   categorie: 'categorie',
+  sourceFonds: 'sourceFonds',
   description: 'description',
   montant: 'montant',
   transactionId: 'transactionId',
@@ -221,6 +223,21 @@ export const DepenseScalarFieldEnum = {
 } as const
 
 export type DepenseScalarFieldEnum = (typeof DepenseScalarFieldEnum)[keyof typeof DepenseScalarFieldEnum]
+
+
+export const DimeMensuelleScalarFieldEnum = {
+  id: 'id',
+  mois: 'mois',
+  annee: 'annee',
+  montant: 'montant',
+  dateVersement: 'dateVersement',
+  statut: 'statut',
+  agentId: 'agentId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DimeMensuelleScalarFieldEnum = (typeof DimeMensuelleScalarFieldEnum)[keyof typeof DimeMensuelleScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { CategorieDepense, TypeDepense } from "@/generated/prisma";
+import { CategorieDepense, TypeDepense, SourceFonds } from "@/generated/prisma";
 
 export async function GET(req: NextRequest) {
   const session = await getServerSession(authOptions);
@@ -29,6 +29,45 @@ export async function GET(req: NextRequest) {
   return NextResponse.json(depenses);
 }
 
+async function getSoldeFonds(source: SourceFonds): Promise<number> {
+  const repartitions = await prisma.repartition.findMany({
+    where: { transaction: { statut: "VALIDE" } },
+  });
+
+  const totalDepensesFonds = await prisma.depense.aggregate({
+    where: { sourceFonds: source, statut: "VALIDE" },
+    _sum: { montant: true },
+  });
+  const totalDep = Number(totalDepensesFonds._sum?.montant || 0);
+
+  if (source === "CAISSE") {
+    const totalRepart = repartitions.reduce((s, r) => s + Number(r.montantCaisse), 0);
+    return totalRepart - totalDep;
+  }
+
+  if (source === "ECONOMIE") {
+    const totalRepart = repartitions.reduce((s, r) => s + Number(r.montantEconomie), 0);
+    return totalRepart - totalDep;
+  }
+
+  if (source === "CONSTRUCTION") {
+    const totalRepart = repartitions.reduce((s, r) => s + Number(r.montantFondsDedie), 0);
+    return totalRepart - totalDep;
+  }
+
+  if (source === "ACTION_SOCIALE") {
+    const totalRepart = repartitions.reduce((s, r) => s + Number(r.montantActionSociale), 0);
+    return totalRepart - totalDep;
+  }
+
+  if (source === "EPARGNE") {
+    const totalRepart = repartitions.reduce((s, r) => s + Number(r.montantEpargne), 0);
+    return totalRepart - totalDep;
+  }
+
+  return 0;
+}
+
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!session) {
@@ -41,18 +80,30 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json();
-  const { type, categorie, description, montant, transactionId, dateDepense } = body;
+  const { type, categorie, description, montant, transactionId, dateDepense, sourceFonds } = body;
 
   if (!type || !categorie || !description || !montant || montant <= 0) {
     return NextResponse.json({ error: "Champs requis manquants" }, { status: 400 });
   }
 
   const userId = (session.user as any)?.id;
+  const source = (sourceFonds as SourceFonds) || "CAISSE";
+
+  // Pour les dépenses normales : vérifier le solde du fonds choisi
+  if (type === "DEPENSE_NORMALE") {
+    const solde = await getSoldeFonds(source);
+    if (solde < parseFloat(montant)) {
+      return NextResponse.json({
+        error: `Solde insuffisant dans ${source}. Disponible: ${solde.toLocaleString("fr-FR")} FCFA`,
+      }, { status: 400 });
+    }
+  }
 
   const depense = await prisma.depense.create({
     data: {
       type: type as TypeDepense,
       categorie: categorie as CategorieDepense,
+      sourceFonds: source,
       description,
       montant: parseFloat(montant),
       transactionId: transactionId || null,
@@ -62,7 +113,7 @@ export async function POST(req: NextRequest) {
     },
   });
 
-  // Si dépense normale, déduire de la caisse
+  // Les dépenses normales font sortir l'argent physique → déduire de la grande caisse
   if (type === "DEPENSE_NORMALE") {
     const caisse = await prisma.caisse.findFirst();
     if (caisse) {
@@ -109,7 +160,7 @@ export async function POST(req: NextRequest) {
           },
         });
 
-        // Ajuster la caisse : rembourser l'excédent (la répartition initiale était sur le montant brut)
+        // Ajuster la caisse
         const diffCaisse = newRepartition.montantCaisse - Number(transaction.repartition.montantCaisse);
         const caisse = await prisma.caisse.findFirst();
         if (caisse && diffCaisse !== 0) {
@@ -127,7 +178,7 @@ export async function POST(req: NextRequest) {
       userId,
       action: "DEPENSE_CREEE",
       cible: `Dépense ${depense.id}`,
-      details: `${type} — ${categorie}: ${montant} FCFA (${description})`,
+      details: `${type} — ${categorie} — source: ${source}: ${montant} FCFA (${description})`,
     },
   });
 

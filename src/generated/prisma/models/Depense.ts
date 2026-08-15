@@ -38,6 +38,7 @@ export type DepenseMinAggregateOutputType = {
   id: string | null
   type: $Enums.TypeDepense | null
   categorie: $Enums.CategorieDepense | null
+  sourceFonds: $Enums.SourceFonds | null
   description: string | null
   montant: runtime.Decimal | null
   transactionId: string | null
@@ -53,6 +54,7 @@ export type DepenseMaxAggregateOutputType = {
   id: string | null
   type: $Enums.TypeDepense | null
   categorie: $Enums.CategorieDepense | null
+  sourceFonds: $Enums.SourceFonds | null
   description: string | null
   montant: runtime.Decimal | null
   transactionId: string | null
@@ -68,6 +70,7 @@ export type DepenseCountAggregateOutputType = {
   id: number
   type: number
   categorie: number
+  sourceFonds: number
   description: number
   montant: number
   transactionId: number
@@ -93,6 +96,7 @@ export type DepenseMinAggregateInputType = {
   id?: true
   type?: true
   categorie?: true
+  sourceFonds?: true
   description?: true
   montant?: true
   transactionId?: true
@@ -108,6 +112,7 @@ export type DepenseMaxAggregateInputType = {
   id?: true
   type?: true
   categorie?: true
+  sourceFonds?: true
   description?: true
   montant?: true
   transactionId?: true
@@ -123,6 +128,7 @@ export type DepenseCountAggregateInputType = {
   id?: true
   type?: true
   categorie?: true
+  sourceFonds?: true
   description?: true
   montant?: true
   transactionId?: true
@@ -225,6 +231,7 @@ export type DepenseGroupByOutputType = {
   id: string
   type: $Enums.TypeDepense
   categorie: $Enums.CategorieDepense
+  sourceFonds: $Enums.SourceFonds
   description: string
   montant: runtime.Decimal
   transactionId: string | null
@@ -263,6 +270,7 @@ export type DepenseWhereInput = {
   id?: Prisma.StringFilter<"Depense"> | string
   type?: Prisma.EnumTypeDepenseFilter<"Depense"> | $Enums.TypeDepense
   categorie?: Prisma.EnumCategorieDepenseFilter<"Depense"> | $Enums.CategorieDepense
+  sourceFonds?: Prisma.EnumSourceFondsFilter<"Depense"> | $Enums.SourceFonds
   description?: Prisma.StringFilter<"Depense"> | string
   montant?: Prisma.DecimalFilter<"Depense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   transactionId?: Prisma.StringNullableFilter<"Depense"> | string | null
@@ -280,6 +288,7 @@ export type DepenseOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   type?: Prisma.SortOrder
   categorie?: Prisma.SortOrder
+  sourceFonds?: Prisma.SortOrder
   description?: Prisma.SortOrder
   montant?: Prisma.SortOrder
   transactionId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -300,6 +309,7 @@ export type DepenseWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.DepenseWhereInput | Prisma.DepenseWhereInput[]
   type?: Prisma.EnumTypeDepenseFilter<"Depense"> | $Enums.TypeDepense
   categorie?: Prisma.EnumCategorieDepenseFilter<"Depense"> | $Enums.CategorieDepense
+  sourceFonds?: Prisma.EnumSourceFondsFilter<"Depense"> | $Enums.SourceFonds
   description?: Prisma.StringFilter<"Depense"> | string
   montant?: Prisma.DecimalFilter<"Depense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   transactionId?: Prisma.StringNullableFilter<"Depense"> | string | null
@@ -317,6 +327,7 @@ export type DepenseOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   type?: Prisma.SortOrder
   categorie?: Prisma.SortOrder
+  sourceFonds?: Prisma.SortOrder
   description?: Prisma.SortOrder
   montant?: Prisma.SortOrder
   transactionId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -340,6 +351,7 @@ export type DepenseScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Depense"> | string
   type?: Prisma.EnumTypeDepenseWithAggregatesFilter<"Depense"> | $Enums.TypeDepense
   categorie?: Prisma.EnumCategorieDepenseWithAggregatesFilter<"Depense"> | $Enums.CategorieDepense
+  sourceFonds?: Prisma.EnumSourceFondsWithAggregatesFilter<"Depense"> | $Enums.SourceFonds
   description?: Prisma.StringWithAggregatesFilter<"Depense"> | string
   montant?: Prisma.DecimalWithAggregatesFilter<"Depense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   transactionId?: Prisma.StringNullableWithAggregatesFilter<"Depense"> | string | null
@@ -355,6 +367,7 @@ export type DepenseCreateInput = {
   id?: string
   type: $Enums.TypeDepense
   categorie: $Enums.CategorieDepense
+  sourceFonds?: $Enums.SourceFonds
   description: string
   montant: runtime.Decimal | runtime.DecimalJsLike | number | string
   dateDepense?: Date | string
@@ -370,6 +383,7 @@ export type DepenseUncheckedCreateInput = {
   id?: string
   type: $Enums.TypeDepense
   categorie: $Enums.CategorieDepense
+  sourceFonds?: $Enums.SourceFonds
   description: string
   montant: runtime.Decimal | runtime.DecimalJsLike | number | string
   transactionId?: string | null
@@ -385,6 +399,7 @@ export type DepenseUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumTypeDepenseFieldUpdateOperationsInput | $Enums.TypeDepense
   categorie?: Prisma.EnumCategorieDepenseFieldUpdateOperationsInput | $Enums.CategorieDepense
+  sourceFonds?: Prisma.EnumSourceFondsFieldUpdateOperationsInput | $Enums.SourceFonds
   description?: Prisma.StringFieldUpdateOperationsInput | string
   montant?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   dateDepense?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -400,6 +415,7 @@ export type DepenseUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumTypeDepenseFieldUpdateOperationsInput | $Enums.TypeDepense
   categorie?: Prisma.EnumCategorieDepenseFieldUpdateOperationsInput | $Enums.CategorieDepense
+  sourceFonds?: Prisma.EnumSourceFondsFieldUpdateOperationsInput | $Enums.SourceFonds
   description?: Prisma.StringFieldUpdateOperationsInput | string
   montant?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   transactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -415,6 +431,7 @@ export type DepenseCreateManyInput = {
   id?: string
   type: $Enums.TypeDepense
   categorie: $Enums.CategorieDepense
+  sourceFonds?: $Enums.SourceFonds
   description: string
   montant: runtime.Decimal | runtime.DecimalJsLike | number | string
   transactionId?: string | null
@@ -430,6 +447,7 @@ export type DepenseUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumTypeDepenseFieldUpdateOperationsInput | $Enums.TypeDepense
   categorie?: Prisma.EnumCategorieDepenseFieldUpdateOperationsInput | $Enums.CategorieDepense
+  sourceFonds?: Prisma.EnumSourceFondsFieldUpdateOperationsInput | $Enums.SourceFonds
   description?: Prisma.StringFieldUpdateOperationsInput | string
   montant?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   dateDepense?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -443,6 +461,7 @@ export type DepenseUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumTypeDepenseFieldUpdateOperationsInput | $Enums.TypeDepense
   categorie?: Prisma.EnumCategorieDepenseFieldUpdateOperationsInput | $Enums.CategorieDepense
+  sourceFonds?: Prisma.EnumSourceFondsFieldUpdateOperationsInput | $Enums.SourceFonds
   description?: Prisma.StringFieldUpdateOperationsInput | string
   montant?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   transactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -468,6 +487,7 @@ export type DepenseCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   type?: Prisma.SortOrder
   categorie?: Prisma.SortOrder
+  sourceFonds?: Prisma.SortOrder
   description?: Prisma.SortOrder
   montant?: Prisma.SortOrder
   transactionId?: Prisma.SortOrder
@@ -487,6 +507,7 @@ export type DepenseMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   type?: Prisma.SortOrder
   categorie?: Prisma.SortOrder
+  sourceFonds?: Prisma.SortOrder
   description?: Prisma.SortOrder
   montant?: Prisma.SortOrder
   transactionId?: Prisma.SortOrder
@@ -502,6 +523,7 @@ export type DepenseMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   type?: Prisma.SortOrder
   categorie?: Prisma.SortOrder
+  sourceFonds?: Prisma.SortOrder
   description?: Prisma.SortOrder
   montant?: Prisma.SortOrder
   transactionId?: Prisma.SortOrder
@@ -609,6 +631,10 @@ export type EnumCategorieDepenseFieldUpdateOperationsInput = {
   set?: $Enums.CategorieDepense
 }
 
+export type EnumSourceFondsFieldUpdateOperationsInput = {
+  set?: $Enums.SourceFonds
+}
+
 export type EnumStatutDepenseFieldUpdateOperationsInput = {
   set?: $Enums.StatutDepense
 }
@@ -617,6 +643,7 @@ export type DepenseCreateWithoutAgentInput = {
   id?: string
   type: $Enums.TypeDepense
   categorie: $Enums.CategorieDepense
+  sourceFonds?: $Enums.SourceFonds
   description: string
   montant: runtime.Decimal | runtime.DecimalJsLike | number | string
   dateDepense?: Date | string
@@ -631,6 +658,7 @@ export type DepenseUncheckedCreateWithoutAgentInput = {
   id?: string
   type: $Enums.TypeDepense
   categorie: $Enums.CategorieDepense
+  sourceFonds?: $Enums.SourceFonds
   description: string
   montant: runtime.Decimal | runtime.DecimalJsLike | number | string
   transactionId?: string | null
@@ -674,6 +702,7 @@ export type DepenseScalarWhereInput = {
   id?: Prisma.StringFilter<"Depense"> | string
   type?: Prisma.EnumTypeDepenseFilter<"Depense"> | $Enums.TypeDepense
   categorie?: Prisma.EnumCategorieDepenseFilter<"Depense"> | $Enums.CategorieDepense
+  sourceFonds?: Prisma.EnumSourceFondsFilter<"Depense"> | $Enums.SourceFonds
   description?: Prisma.StringFilter<"Depense"> | string
   montant?: Prisma.DecimalFilter<"Depense"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   transactionId?: Prisma.StringNullableFilter<"Depense"> | string | null
@@ -689,6 +718,7 @@ export type DepenseCreateWithoutTransactionInput = {
   id?: string
   type: $Enums.TypeDepense
   categorie: $Enums.CategorieDepense
+  sourceFonds?: $Enums.SourceFonds
   description: string
   montant: runtime.Decimal | runtime.DecimalJsLike | number | string
   dateDepense?: Date | string
@@ -703,6 +733,7 @@ export type DepenseUncheckedCreateWithoutTransactionInput = {
   id?: string
   type: $Enums.TypeDepense
   categorie: $Enums.CategorieDepense
+  sourceFonds?: $Enums.SourceFonds
   description: string
   montant: runtime.Decimal | runtime.DecimalJsLike | number | string
   agentId?: string | null
@@ -743,6 +774,7 @@ export type DepenseCreateManyAgentInput = {
   id?: string
   type: $Enums.TypeDepense
   categorie: $Enums.CategorieDepense
+  sourceFonds?: $Enums.SourceFonds
   description: string
   montant: runtime.Decimal | runtime.DecimalJsLike | number | string
   transactionId?: string | null
@@ -757,6 +789,7 @@ export type DepenseUpdateWithoutAgentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumTypeDepenseFieldUpdateOperationsInput | $Enums.TypeDepense
   categorie?: Prisma.EnumCategorieDepenseFieldUpdateOperationsInput | $Enums.CategorieDepense
+  sourceFonds?: Prisma.EnumSourceFondsFieldUpdateOperationsInput | $Enums.SourceFonds
   description?: Prisma.StringFieldUpdateOperationsInput | string
   montant?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   dateDepense?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -771,6 +804,7 @@ export type DepenseUncheckedUpdateWithoutAgentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumTypeDepenseFieldUpdateOperationsInput | $Enums.TypeDepense
   categorie?: Prisma.EnumCategorieDepenseFieldUpdateOperationsInput | $Enums.CategorieDepense
+  sourceFonds?: Prisma.EnumSourceFondsFieldUpdateOperationsInput | $Enums.SourceFonds
   description?: Prisma.StringFieldUpdateOperationsInput | string
   montant?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   transactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -785,6 +819,7 @@ export type DepenseUncheckedUpdateManyWithoutAgentInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumTypeDepenseFieldUpdateOperationsInput | $Enums.TypeDepense
   categorie?: Prisma.EnumCategorieDepenseFieldUpdateOperationsInput | $Enums.CategorieDepense
+  sourceFonds?: Prisma.EnumSourceFondsFieldUpdateOperationsInput | $Enums.SourceFonds
   description?: Prisma.StringFieldUpdateOperationsInput | string
   montant?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   transactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -799,6 +834,7 @@ export type DepenseCreateManyTransactionInput = {
   id?: string
   type: $Enums.TypeDepense
   categorie: $Enums.CategorieDepense
+  sourceFonds?: $Enums.SourceFonds
   description: string
   montant: runtime.Decimal | runtime.DecimalJsLike | number | string
   agentId?: string | null
@@ -813,6 +849,7 @@ export type DepenseUpdateWithoutTransactionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumTypeDepenseFieldUpdateOperationsInput | $Enums.TypeDepense
   categorie?: Prisma.EnumCategorieDepenseFieldUpdateOperationsInput | $Enums.CategorieDepense
+  sourceFonds?: Prisma.EnumSourceFondsFieldUpdateOperationsInput | $Enums.SourceFonds
   description?: Prisma.StringFieldUpdateOperationsInput | string
   montant?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   dateDepense?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -827,6 +864,7 @@ export type DepenseUncheckedUpdateWithoutTransactionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumTypeDepenseFieldUpdateOperationsInput | $Enums.TypeDepense
   categorie?: Prisma.EnumCategorieDepenseFieldUpdateOperationsInput | $Enums.CategorieDepense
+  sourceFonds?: Prisma.EnumSourceFondsFieldUpdateOperationsInput | $Enums.SourceFonds
   description?: Prisma.StringFieldUpdateOperationsInput | string
   montant?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   agentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -841,6 +879,7 @@ export type DepenseUncheckedUpdateManyWithoutTransactionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumTypeDepenseFieldUpdateOperationsInput | $Enums.TypeDepense
   categorie?: Prisma.EnumCategorieDepenseFieldUpdateOperationsInput | $Enums.CategorieDepense
+  sourceFonds?: Prisma.EnumSourceFondsFieldUpdateOperationsInput | $Enums.SourceFonds
   description?: Prisma.StringFieldUpdateOperationsInput | string
   montant?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   agentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -857,6 +896,7 @@ export type DepenseSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   id?: boolean
   type?: boolean
   categorie?: boolean
+  sourceFonds?: boolean
   description?: boolean
   montant?: boolean
   transactionId?: boolean
@@ -874,6 +914,7 @@ export type DepenseSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   id?: boolean
   type?: boolean
   categorie?: boolean
+  sourceFonds?: boolean
   description?: boolean
   montant?: boolean
   transactionId?: boolean
@@ -891,6 +932,7 @@ export type DepenseSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   id?: boolean
   type?: boolean
   categorie?: boolean
+  sourceFonds?: boolean
   description?: boolean
   montant?: boolean
   transactionId?: boolean
@@ -908,6 +950,7 @@ export type DepenseSelectScalar = {
   id?: boolean
   type?: boolean
   categorie?: boolean
+  sourceFonds?: boolean
   description?: boolean
   montant?: boolean
   transactionId?: boolean
@@ -919,7 +962,7 @@ export type DepenseSelectScalar = {
   updatedAt?: boolean
 }
 
-export type DepenseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "type" | "categorie" | "description" | "montant" | "transactionId" | "agentId" | "dateDepense" | "justificatif" | "statut" | "createdAt" | "updatedAt", ExtArgs["result"]["depense"]>
+export type DepenseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "type" | "categorie" | "sourceFonds" | "description" | "montant" | "transactionId" | "agentId" | "dateDepense" | "justificatif" | "statut" | "createdAt" | "updatedAt", ExtArgs["result"]["depense"]>
 export type DepenseInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   transaction?: boolean | Prisma.Depense$transactionArgs<ExtArgs>
   agent?: boolean | Prisma.Depense$agentArgs<ExtArgs>
@@ -943,6 +986,7 @@ export type $DepensePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     id: string
     type: $Enums.TypeDepense
     categorie: $Enums.CategorieDepense
+    sourceFonds: $Enums.SourceFonds
     description: string
     montant: runtime.Decimal
     transactionId: string | null
@@ -1380,6 +1424,7 @@ export interface DepenseFieldRefs {
   readonly id: Prisma.FieldRef<"Depense", 'String'>
   readonly type: Prisma.FieldRef<"Depense", 'TypeDepense'>
   readonly categorie: Prisma.FieldRef<"Depense", 'CategorieDepense'>
+  readonly sourceFonds: Prisma.FieldRef<"Depense", 'SourceFonds'>
   readonly description: Prisma.FieldRef<"Depense", 'String'>
   readonly montant: Prisma.FieldRef<"Depense", 'Decimal'>
   readonly transactionId: Prisma.FieldRef<"Depense", 'String'>

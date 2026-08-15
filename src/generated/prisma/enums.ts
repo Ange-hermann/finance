@@ -72,7 +72,6 @@ export const CategorieDepense = {
   ENTRETIEN: 'ENTRETIEN',
   FACTURE: 'FACTURE',
   SALAIRE: 'SALAIRE',
-  DIME_MENSUELLE: 'DIME_MENSUELLE',
   AUTRE: 'AUTRE'
 } as const
 
@@ -86,3 +85,22 @@ export const StatutDepense = {
 } as const
 
 export type StatutDepense = (typeof StatutDepense)[keyof typeof StatutDepense]
+
+
+export const SourceFonds = {
+  CAISSE: 'CAISSE',
+  ECONOMIE: 'ECONOMIE',
+  EPARGNE: 'EPARGNE',
+  CONSTRUCTION: 'CONSTRUCTION',
+  ACTION_SOCIALE: 'ACTION_SOCIALE'
+} as const
+
+export type SourceFonds = (typeof SourceFonds)[keyof typeof SourceFonds]
+
+
+export const StatutDime = {
+  NON_VERSE: 'NON_VERSE',
+  VERSE: 'VERSE'
+} as const
+
+export type StatutDime = (typeof StatutDime)[keyof typeof StatutDime]

@@ -407,7 +407,8 @@ export const ModelName = {
   AnnotationAudit: 'AnnotationAudit',
   LogAudit: 'LogAudit',
   LienPaiement: 'LienPaiement',
-  Depense: 'Depense'
+  Depense: 'Depense',
+  DimeMensuelle: 'DimeMensuelle'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -423,7 +424,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "contributeur" | "transaction" | "repartition" | "tauxRepartition" | "caisse" | "recu" | "annotationAudit" | "logAudit" | "lienPaiement" | "depense"
+    modelProps: "user" | "contributeur" | "transaction" | "repartition" | "tauxRepartition" | "caisse" | "recu" | "annotationAudit" | "logAudit" | "lienPaiement" | "depense" | "dimeMensuelle"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1241,6 +1242,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    DimeMensuelle: {
+      payload: Prisma.$DimeMensuellePayload<ExtArgs>
+      fields: Prisma.DimeMensuelleFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DimeMensuelleFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DimeMensuellePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DimeMensuelleFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DimeMensuellePayload>
+        }
+        findFirst: {
+          args: Prisma.DimeMensuelleFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DimeMensuellePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DimeMensuelleFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DimeMensuellePayload>
+        }
+        findMany: {
+          args: Prisma.DimeMensuelleFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DimeMensuellePayload>[]
+        }
+        create: {
+          args: Prisma.DimeMensuelleCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DimeMensuellePayload>
+        }
+        createMany: {
+          args: Prisma.DimeMensuelleCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.DimeMensuelleCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DimeMensuellePayload>[]
+        }
+        delete: {
+          args: Prisma.DimeMensuelleDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DimeMensuellePayload>
+        }
+        update: {
+          args: Prisma.DimeMensuelleUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DimeMensuellePayload>
+        }
+        deleteMany: {
+          args: Prisma.DimeMensuelleDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DimeMensuelleUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.DimeMensuelleUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DimeMensuellePayload>[]
+        }
+        upsert: {
+          args: Prisma.DimeMensuelleUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DimeMensuellePayload>
+        }
+        aggregate: {
+          args: Prisma.DimeMensuelleAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDimeMensuelle>
+        }
+        groupBy: {
+          args: Prisma.DimeMensuelleGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DimeMensuelleGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DimeMensuelleCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DimeMensuelleCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1409,6 +1484,7 @@ export const DepenseScalarFieldEnum = {
   id: 'id',
   type: 'type',
   categorie: 'categorie',
+  sourceFonds: 'sourceFonds',
   description: 'description',
   montant: 'montant',
   transactionId: 'transactionId',
@@ -1421,6 +1497,21 @@ export const DepenseScalarFieldEnum = {
 } as const
 
 export type DepenseScalarFieldEnum = (typeof DepenseScalarFieldEnum)[keyof typeof DepenseScalarFieldEnum]
+
+
+export const DimeMensuelleScalarFieldEnum = {
+  id: 'id',
+  mois: 'mois',
+  annee: 'annee',
+  montant: 'montant',
+  dateVersement: 'dateVersement',
+  statut: 'statut',
+  agentId: 'agentId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DimeMensuelleScalarFieldEnum = (typeof DimeMensuelleScalarFieldEnum)[keyof typeof DimeMensuelleScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1601,6 +1692,20 @@ export type ListEnumCategorieDepenseFieldRefInput<$PrismaModel> = FieldRefInputT
 
 
 /**
+ * Reference to a field of type 'SourceFonds'
+ */
+export type EnumSourceFondsFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SourceFonds'>
+    
+
+
+/**
+ * Reference to a field of type 'SourceFonds[]'
+ */
+export type ListEnumSourceFondsFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SourceFonds[]'>
+    
+
+
+/**
  * Reference to a field of type 'StatutDepense'
  */
 export type EnumStatutDepenseFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StatutDepense'>
@@ -1625,6 +1730,34 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
+ * Reference to a field of type 'StatutDime'
+ */
+export type EnumStatutDimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StatutDime'>
+    
+
+
+/**
+ * Reference to a field of type 'StatutDime[]'
+ */
+export type ListEnumStatutDimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StatutDime[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Float'
+ */
+export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+/**
+ * Reference to a field of type 'Float[]'
+ */
+export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
 /**
@@ -1789,6 +1922,7 @@ export type GlobalOmitConfig = {
   logAudit?: Prisma.LogAuditOmit
   lienPaiement?: Prisma.LienPaiementOmit
   depense?: Prisma.DepenseOmit
+  dimeMensuelle?: Prisma.DimeMensuelleOmit
 }
 
 /* Types for Logging */

@@ -1,23 +1,54 @@
 import { prisma } from "@/lib/prisma";
 import { formatMontant } from "@/lib/utils";
 import Link from "next/link";
-import { Users, Settings, TrendingUp, Wallet } from "lucide-react";
+import { Users, Settings, TrendingUp, Wallet, Coins } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminDashboard() {
-  const [users, transactions, taux, caisse] = await Promise.all([
+  const [users, transactions, taux, caisse, repartitions, dimesVersees, depensesNormales, depEconomie, depEpargne, depActionSociale, depConstruction] = await Promise.all([
     prisma.user.count(),
     prisma.transaction.count({ where: { statut: "VALIDE" } }),
     prisma.tauxRepartition.count(),
     prisma.caisse.findFirst(),
+    prisma.repartition.findMany({
+      where: { transaction: { statut: "VALIDE" } },
+      include: { transaction: { select: { createdAt: true } } },
+    }),
+    prisma.dimeMensuelle.findMany({
+      where: { statut: "VERSE" },
+    }),
+    prisma.depense.aggregate({
+      where: { type: "DEPENSE_NORMALE", statut: "VALIDE" },
+      _sum: { montant: true },
+    }),
+    prisma.depense.aggregate({ where: { type: "DEPENSE_NORMALE", statut: "VALIDE", sourceFonds: "ECONOMIE" }, _sum: { montant: true } }),
+    prisma.depense.aggregate({ where: { type: "DEPENSE_NORMALE", statut: "VALIDE", sourceFonds: "EPARGNE" }, _sum: { montant: true } }),
+    prisma.depense.aggregate({ where: { type: "DEPENSE_NORMALE", statut: "VALIDE", sourceFonds: "ACTION_SOCIALE" }, _sum: { montant: true } }),
+    prisma.depense.aggregate({ where: { type: "DEPENSE_NORMALE", statut: "VALIDE", sourceFonds: "CONSTRUCTION" }, _sum: { montant: true } }),
   ]);
+
+  const totalDepensesNormales = Number(depensesNormales._sum?.montant || 0);
+  const grandTotalCaisseRepartition = repartitions.reduce((sum, r) => sum + Number(r.montantCaisse), 0) - totalDepensesNormales;
+  const grandTotalDimeDeLaDimeBrut = repartitions.reduce((sum, r) => sum + Number(r.montantDimeDeLaDime || 0), 0);
+
+  // Déduire les dîmes déjà versées
+  const dimesVerseesSet = new Set(dimesVersees.map((d) => `${d.annee}-${d.mois}`));
+  const montantDimeVersee = repartitions
+    .filter((r) => {
+      const d = new Date(r.transaction.createdAt);
+      return dimesVerseesSet.has(`${d.getFullYear()}-${d.getMonth() + 1}`);
+    })
+    .reduce((s, r) => s + Number(r.montantDimeDeLaDime || 0), 0);
+  const grandTotalDimeDeLaDime = grandTotalDimeDeLaDimeBrut - montantDimeVersee;
 
   const stats = [
     { label: "Utilisateurs", value: users.toString(), icon: Users, href: "/dashboard/admin/utilisateurs" },
     { label: "Transactions validées", value: transactions.toString(), icon: TrendingUp, href: "/dashboard/treasurer" },
     { label: "Taux configurés", value: taux.toString(), icon: Settings, href: "/dashboard/admin/taux" },
-    { label: "Solde caisse", value: formatMontant(Number(caisse?.soldeActuel || 0)), icon: Wallet, href: "/dashboard/treasurer" },
+    { label: "Grande caisse", value: formatMontant(Number(caisse?.soldeActuel || 0)), icon: Coins, href: "/dashboard/treasurer" },
+    { label: "Caisse", value: formatMontant(grandTotalCaisseRepartition), icon: Wallet, href: "/dashboard/treasurer" },
+    { label: "Dîme de la dîme", value: formatMontant(grandTotalDimeDeLaDime), icon: TrendingUp, href: "/dashboard/treasurer" },
   ];
 
   return (
@@ -27,7 +58,7 @@ export default async function AdminDashboard() {
         <p className="text-blanc/50 text-sm mt-1">Gestion des utilisateurs, rôles et taux de répartition</p>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         {stats.map((stat, i) => (
           <Link
             key={i}

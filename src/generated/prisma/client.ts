@@ -96,3 +96,8 @@ export type LienPaiement = Prisma.LienPaiementModel
  * 
  */
 export type Depense = Prisma.DepenseModel
+/**
+ * Model DimeMensuelle
+ * 
+ */
+export type DimeMensuelle = Prisma.DimeMensuelleModel
