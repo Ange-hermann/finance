@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { formatMontant } from "@/lib/utils";
 import { Coins, Wallet, PiggyBank, Heart, Building2, TrendingUp } from "lucide-react";
 import PastorCharts from "@/components/PastorCharts";
+import TransactionsParMois from "@/components/TransactionsParMois";
 
 export const dynamic = "force-dynamic";
 
@@ -15,7 +16,6 @@ export default async function PastorDashboard() {
     prisma.transaction.findMany({
       where: { statut: "VALIDE" },
       orderBy: { createdAt: "desc" },
-      take: 10,
       include: { contributeur: true },
     }),
     prisma.dimeMensuelle.findMany({
@@ -40,12 +40,15 @@ export default async function PastorDashboard() {
   const grandTotalDimeDeLaDimeBrut = repartitions.reduce((sum, r) => sum + Number(r.montantDimeDeLaDime || 0), 0);
   const grandTotalConstruction = repartitions.reduce((sum, r) => sum + Number(r.montantFondsDedie), 0) - Number(depConstruction._sum?.montant || 0);
 
-  // Déduire les dîmes déjà versées
-  const dimesVerseesSet = new Set(dimesVersees.map((d) => `${d.annee}-${d.mois}`));
+  // Déduire les dîmes déjà versées (uniquement celles reçues avant la date de versement)
+  const dimesVerseesMap = new Map(dimesVersees.map((d) => [`${d.annee}-${d.mois}`, d.dateVersement ? new Date(d.dateVersement) : null]));
   const montantDimeVersee = repartitions
     .filter((r) => {
       const d = new Date(r.transaction.createdAt);
-      return dimesVerseesSet.has(`${d.getFullYear()}-${d.getMonth() + 1}`);
+      const key = `${d.getFullYear()}-${d.getMonth() + 1}`;
+      const dateVersement = dimesVerseesMap.get(key);
+      if (!dateVersement) return false;
+      return d <= dateVersement;
     })
     .reduce((s, r) => s + Number(r.montantDimeDeLaDime || 0), 0);
   const grandTotalDimeDeLaDime = grandTotalDimeDeLaDimeBrut - montantDimeVersee;
@@ -107,37 +110,18 @@ export default async function PastorDashboard() {
 
       <PastorCharts chartData={chartData} pieData={pieData} />
 
-      <div className="card-noir">
-        <h3 className="font-display text-xl text-blanc mb-4">Dernières transactions (lecture seule)</h3>
-        {transactions.length === 0 ? (
-          <p className="text-blanc/40 text-sm text-center py-8">Aucune transaction pour le moment</p>
-        ) : (
-          <div className="overflow-x-auto scrollbar-thin">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="text-or/70 text-left border-b border-or/10">
-                  <th className="pb-3 pr-4 whitespace-nowrap">Date</th>
-                  <th className="pb-3 pr-4 whitespace-nowrap">Montant</th>
-                  <th className="pb-3 pr-4 whitespace-nowrap">Catégorie</th>
-                  <th className="pb-3 pr-4 whitespace-nowrap">Contributeur</th>
-                </tr>
-              </thead>
-              <tbody>
-                {transactions.map((t) => (
-                  <tr key={t.id} className="border-b border-or/5">
-                    <td className="py-3 pr-4 text-blanc/60 whitespace-nowrap">
-                      {new Date(t.createdAt).toLocaleDateString("fr-FR")}
-                    </td>
-                    <td className="py-3 pr-4 text-blanc font-medium whitespace-nowrap">{formatMontant(Number(t.montant))}</td>
-                    <td className="py-3 pr-4 text-blanc/60 whitespace-nowrap">{t.categorie}</td>
-                    <td className="py-3 pr-4 text-blanc/60 whitespace-nowrap">{t.contributeur?.nom || "Anonyme"}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
+      <TransactionsParMois
+        transactions={transactions.map((t) => ({
+          id: t.id,
+          montant: Number(t.montant),
+          categorie: t.categorie,
+          createdAt: t.createdAt.toISOString(),
+          statut: t.statut,
+          contributeur: t.contributeur ? { nom: t.contributeur.nom } : null,
+        }))}
+        showStatut={false}
+        title="Transactions (lecture seule)"
+      />
     </div>
   );
 }

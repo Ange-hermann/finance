@@ -299,64 +299,100 @@ export default function DepenseManager({
       ) : depenses.length === 0 ? (
         <p className="text-blanc/40 text-sm text-center py-8">Aucune dépense enregistrée</p>
       ) : (
-        <div className="space-y-3">
-          {depenses.map((d) => (
-            <div
-              key={d.id}
-              className={`border rounded-xl p-4 ${
-                d.statut === "ANNULE"
-                  ? "border-red-500/20 bg-red-500/5 opacity-60"
-                  : d.type === "DEPENSE_CULTE"
-                  ? "border-or/20 bg-or/5"
-                  : "border-or/10 bg-noir-soft"
-              }`}
-            >
-              <div className="flex items-start justify-between gap-3">
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className={`text-xs px-2 py-1 rounded-lg whitespace-nowrap ${
-                      d.type === "DEPENSE_CULTE" ? "bg-or/10 text-or" : "bg-blue-500/10 text-blue-400"
-                    }`}>
-                      {d.type === "DEPENSE_CULTE" ? "Après culte" : "Normale"}
-                    </span>
-                    <span className="text-xs px-2 py-1 rounded-lg bg-blanc/5 text-blanc/60 whitespace-nowrap">
-                      {LABELS[d.categorie] || d.categorie}
-                    </span>
-                    {d.type === "DEPENSE_NORMALE" && d.sourceFonds && (
-                      <span className="text-xs px-2 py-1 rounded-lg bg-purple-500/10 text-purple-400 whitespace-nowrap">
-                        {SOURCE_LABELS[d.sourceFonds] || d.sourceFonds}
-                      </span>
-                    )}
-                    {d.statut === "VALIDE" && (
-                      <span className="text-xs px-2 py-1 rounded-lg bg-green-500/10 text-green-400 whitespace-nowrap">
-                        Validée
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-blanc font-medium mt-2 break-words">{d.description}</p>
-                  <p className="text-blanc/40 text-xs mt-1">
-                    {new Date(d.dateDepense).toLocaleDateString("fr-FR")}
-                    {d.agent && ` • ${d.agent.nom}`}
-                    {d.transaction && ` • Liée à: ${d.transaction.categorie}`}
+        <div className="space-y-6">
+          {(() => {
+            // Grouper par mois/année
+            const MOIS_NOMS = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+            const groupes: Record<string, { mois: number; annee: number; depenses: Depense[]; total: number }> = {};
+
+            for (const d of depenses) {
+              const date = new Date(d.dateDepense);
+              const mois = date.getMonth();
+              const annee = date.getFullYear();
+              const key = `${annee}-${mois}`;
+              if (!groupes[key]) {
+                groupes[key] = { mois, annee, depenses: [], total: 0 };
+              }
+              groupes[key].depenses.push(d);
+              if (d.statut === "VALIDE") {
+                groupes[key].total += Number(d.montant);
+              }
+            }
+
+            const groupesTriees = Object.values(groupes).sort((a, b) => b.annee - a.annee || b.mois - a.mois);
+
+            return groupesTriees.map((g) => (
+              <div key={`${g.annee}-${g.mois}`} className="card-noir">
+                <div className="flex items-center justify-between mb-3 pb-3 border-b border-or/10">
+                  <h4 className="font-display text-lg text-or">
+                    {MOIS_NOMS[g.mois]} {g.annee}
+                  </h4>
+                  <p className="font-display text-sm text-blanc whitespace-nowrap">
+                    Total : <span className="text-or">{g.total.toLocaleString("fr-FR")} FCFA</span>
                   </p>
                 </div>
-                <div className="text-right shrink-0">
-                  <p className="font-display text-lg text-blanc whitespace-nowrap">
-                    {Number(d.montant).toLocaleString("fr-FR")}
-                    <span className="text-blanc/40 text-xs ml-1">FCFA</span>
-                  </p>
-                  {d.statut === "VALIDE" && (
-                    <button
-                      onClick={() => handleStatutChange(d.id, "ANNULE")}
-                      className="text-xs text-red-400 hover:text-red-300 mt-1 whitespace-nowrap"
+                <div className="space-y-3">
+                  {g.depenses.map((d) => (
+                    <div
+                      key={d.id}
+                      className={`border rounded-xl p-4 ${
+                        d.statut === "ANNULE"
+                          ? "border-red-500/20 bg-red-500/5 opacity-60"
+                          : d.type === "DEPENSE_CULTE"
+                          ? "border-or/20 bg-or/5"
+                          : "border-or/10 bg-noir-soft"
+                      }`}
                     >
-                      Annuler
-                    </button>
-                  )}
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className={`text-xs px-2 py-1 rounded-lg whitespace-nowrap ${
+                              d.type === "DEPENSE_CULTE" ? "bg-or/10 text-or" : "bg-blue-500/10 text-blue-400"
+                            }`}>
+                              {d.type === "DEPENSE_CULTE" ? "Après culte" : "Normale"}
+                            </span>
+                            <span className="text-xs px-2 py-1 rounded-lg bg-blanc/5 text-blanc/60 whitespace-nowrap">
+                              {LABELS[d.categorie] || d.categorie}
+                            </span>
+                            {d.type === "DEPENSE_NORMALE" && d.sourceFonds && (
+                              <span className="text-xs px-2 py-1 rounded-lg bg-purple-500/10 text-purple-400 whitespace-nowrap">
+                                {SOURCE_LABELS[d.sourceFonds] || d.sourceFonds}
+                              </span>
+                            )}
+                            {d.statut === "VALIDE" && (
+                              <span className="text-xs px-2 py-1 rounded-lg bg-green-500/10 text-green-400 whitespace-nowrap">
+                                Validée
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-blanc font-medium mt-2 break-words">{d.description}</p>
+                          <p className="text-blanc/40 text-xs mt-1">
+                            {new Date(d.dateDepense).toLocaleDateString("fr-FR")}
+                            {d.agent && ` • ${d.agent.nom}`}
+                            {d.transaction && ` • Liée à: ${d.transaction.categorie}`}
+                          </p>
+                        </div>
+                        <div className="text-right shrink-0">
+                          <p className="font-display text-lg text-blanc whitespace-nowrap">
+                            {Number(d.montant).toLocaleString("fr-FR")}
+                            <span className="text-blanc/40 text-xs ml-1">FCFA</span>
+                          </p>
+                          {d.statut === "VALIDE" && (
+                            <button
+                              onClick={() => handleStatutChange(d.id, "ANNULE")}
+                              className="text-xs text-red-400 hover:text-red-300 mt-1 whitespace-nowrap"
+                            >
+                              Annuler
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
-            </div>
-          ))}
+            ));
+          })()}
         </div>
       )}
     </div>

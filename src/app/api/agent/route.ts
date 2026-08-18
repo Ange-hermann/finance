@@ -46,6 +46,8 @@ function correctPronunciation(text: string): string {
   return text
     .replace(/\bDorcas\b/g, "Dorquasse")
     .replace(/\bDorca\b/g, "Dorquasse")
+    .replace(/\bKabasele\b/g, "Kabassélé")
+    .replace(/\bkabasele\b/g, "kabassélé")
     .replace(/\bFCFA\b/g, "francs CFA")
     .replace(/\bXOF\b/g, "francs CFA");
 }
@@ -127,12 +129,15 @@ async function getDashboardStats(): Promise<DashboardStats> {
   const construction = repartitions.reduce((s, r) => s + Number(r.montantFondsDedie), 0) - Number(depConstruction._sum?.montant || 0);
   const actionSociale = repartitions.reduce((s, r) => s + Number(r.montantActionSociale), 0) - Number(depActionSociale._sum?.montant || 0);
   const totalDepenses = Number(depenses._sum?.montant || 0);
-  const dimesVerseesSet = new Set(dimesVersees.map((d) => `${d.annee}-${d.mois}`));
+  const dimesVerseesMap = new Map(dimesVersees.map((d) => [`${d.annee}-${d.mois}`, d.dateVersement ? new Date(d.dateVersement) : null]));
   const totalDime = repartitions.reduce((s, r) => s + Number(r.montantDimeDeLaDime || 0), 0);
   const dimeVersee = repartitions
     .filter((r) => {
       const d = new Date(r.transaction.createdAt);
-      return dimesVerseesSet.has(`${d.getFullYear()}-${d.getMonth() + 1}`);
+      const key = `${d.getFullYear()}-${d.getMonth() + 1}`;
+      const dateVersement = dimesVerseesMap.get(key);
+      if (!dateVersement) return false;
+      return d <= dateVersement;
     })
     .reduce((s, r) => s + Number(r.montantDimeDeLaDime || 0), 0);
 
@@ -205,12 +210,15 @@ async function getInitialGreeting(userName: string, role: string, userId: string
   const totalDepensesNormales = Number(depensesNormales._sum?.montant || 0);
   const caisseRepart = repartitions.reduce((s, r) => s + Number(r.montantCaisse), 0) - totalDepensesNormales;
   const totalDepenses = Number(depenses._sum?.montant || 0);
-  const dimesVerseesSet = new Set(dimesVersees.map((d) => `${d.annee}-${d.mois}`));
+  const dimesVerseesMap = new Map(dimesVersees.map((d) => [`${d.annee}-${d.mois}`, d.dateVersement ? new Date(d.dateVersement) : null]));
   const totalDime = repartitions.reduce((s, r) => s + Number(r.montantDimeDeLaDime || 0), 0);
   const dimeVersee = repartitions
     .filter((r) => {
       const d = new Date(r.transaction.createdAt);
-      return dimesVerseesSet.has(`${d.getFullYear()}-${d.getMonth() + 1}`);
+      const key = `${d.getFullYear()}-${d.getMonth() + 1}`;
+      const dateVersement = dimesVerseesMap.get(key);
+      if (!dateVersement) return false;
+      return d <= dateVersement;
     })
     .reduce((s, r) => s + Number(r.montantDimeDeLaDime || 0), 0);
 
@@ -227,7 +235,12 @@ async function getInitialGreeting(userName: string, role: string, userId: string
   const displayName = title ? `${title} ${userName}` : userName;
 
   if (role === "PASTOR") {
-    message = `${greeting} ${displayName} ! Nous sommes le ${dateStr}. La grande caisse contient ${formatNum(grandCaisse)} FCFA, la caisse de répartition ${formatNum(caisseRepart)} FCFA, et il y a ${formatTransactionsValidees(transactions)}. Comment puis-je vous aider ?`;
+    const isJustin = normalize(userName).includes("justin") || normalize(userName).includes("kabasele");
+    if (isJustin) {
+      message = `${greeting} Pasteur ${userName} ! Nous sommes le ${dateStr}. La grande caisse contient ${formatNum(grandCaisse)} FCFA, la caisse de répartition ${formatNum(caisseRepart)} FCFA, et il y a ${formatTransactionsValidees(transactions)}. Comment puis-je vous aider ?`;
+    } else {
+      message = `${greeting} ${displayName} ! Nous sommes le ${dateStr}. La grande caisse contient ${formatNum(grandCaisse)} FCFA, la caisse de répartition ${formatNum(caisseRepart)} FCFA, et il y a ${formatTransactionsValidees(transactions)}. Comment puis-je vous aider ?`;
+    }
   } else if (role === "TREASURER") {
     message = `${greeting} ${displayName} ! Voici le résumé : grande caisse ${formatNum(grandCaisse)} FCFA, caisse ${formatNum(caisseRepart)} FCFA, dépenses ${formatNum(totalDepenses)} FCFA, et il reste ${formatNum(totalDime - dimeVersee)} FCFA de dîme à verser. Que souhaitez-vous faire ?`;
   } else if (role === "AUDITOR") {

@@ -3,6 +3,7 @@ import { formatMontant, formatDate } from "@/lib/utils";
 import Link from "next/link";
 import { TrendingUp, Wallet, PiggyBank, Heart, Building2, Coins, Receipt, Calendar, Clock, Globe } from "lucide-react";
 import TreasurerCharts from "@/components/TreasurerCharts";
+import TransactionsParMois from "@/components/TransactionsParMois";
 
 export default async function TreasurerDashboard() {
   const now = new Date();
@@ -11,7 +12,6 @@ export default async function TreasurerDashboard() {
     prisma.transaction.findMany({
       where: { statut: "VALIDE" },
       orderBy: { createdAt: "desc" },
-      take: 20,
       include: { contributeur: true, agent: true, repartition: true },
     }),
     prisma.repartition.findMany({
@@ -55,7 +55,14 @@ export default async function TreasurerDashboard() {
     .filter((d) => d.type === "DEPENSE_NORMALE" && estCeMois(new Date(d.dateDepense)))
     .reduce((s, d) => s + Number(d.montant), 0);
   const repartitionsMois = repartitions.filter((r) => estCeMois(new Date(r.transaction.createdAt)));
-  const dimeMoisActuel = repartitionsMois.reduce((s, r) => s + Number(r.montantDimeDeLaDime || 0), 0);
+  const dimeMoisTotal = repartitionsMois.reduce((s, r) => s + Number(r.montantDimeDeLaDime || 0), 0);
+  // Si la dîme du mois a été versée, ne montrer que le restant (dîmes reçues après la date de versement)
+  const dateVersementMois = dimeMoisStatut?.dateVersement ?? null;
+  const dimeMoisActuel = dimeMoisStatut?.statut === "VERSE" && dateVersementMois !== null
+    ? repartitionsMois
+        .filter((r) => new Date(r.transaction.createdAt) > new Date(dateVersementMois))
+        .reduce((s, r) => s + Number(r.montantDimeDeLaDime || 0), 0)
+    : dimeMoisTotal;
   const nbTransactionsMois = txMoisActuel.length;
 
   // === MOIS PASSÉS (par mois) ===
@@ -112,12 +119,16 @@ export default async function TreasurerDashboard() {
   const grandTotalActionSociale = repartitions.reduce((sum, r) => sum + Number(r.montantActionSociale), 0) - depParSource("ACTION_SOCIALE");
   const grandTotalDimeDeLaDimeBrut = repartitions.reduce((sum, r) => sum + Number(r.montantDimeDeLaDime || 0), 0);
 
-  // Déduire les dîmes déjà versées
-  const dimesVerseesSet = new Set(dimesVersees.map((d) => `${d.annee}-${d.mois}`));
+  // Déduire les dîmes déjà versées (uniquement celles reçues avant la date de versement)
+  const dimesVerseesMap = new Map(dimesVersees.map((d) => [`${d.annee}-${d.mois}`, d.dateVersement ? new Date(d.dateVersement) : null]));
   const montantDimeVersee = repartitions
     .filter((r) => {
       const d = new Date(r.transaction.createdAt);
-      return dimesVerseesSet.has(`${d.getFullYear()}-${d.getMonth() + 1}`);
+      const key = `${d.getFullYear()}-${d.getMonth() + 1}`;
+      const dateVersement = dimesVerseesMap.get(key);
+      if (!dateVersement) return false;
+      // Ne compter que les dîmes reçues avant la date de versement
+      return d <= dateVersement;
     })
     .reduce((s, r) => s + Number(r.montantDimeDeLaDime || 0), 0);
   const grandTotalDimeDeLaDime = grandTotalDimeDeLaDimeBrut - montantDimeVersee;
@@ -297,50 +308,23 @@ export default async function TreasurerDashboard() {
       {/* Charts */}
       <TreasurerCharts chartData={chartData} pieData={pieData} />
 
-      {/* Transactions table */}
-      <div className="card-noir">
-        <h3 className="font-display text-xl text-blanc mb-4">Dernières transactions</h3>
-        {transactions.length === 0 ? (
-          <p className="text-blanc/40 text-sm text-center py-8">Aucune transaction pour le moment</p>
-        ) : (
-          <div className="overflow-x-auto scrollbar-thin">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="text-or/70 text-left border-b border-or/10">
-                  <th className="pb-3 pr-4 whitespace-nowrap">Date</th>
-                  <th className="pb-3 pr-4 whitespace-nowrap">Montant</th>
-                  <th className="pb-3 pr-4 whitespace-nowrap">Catégorie</th>
-                  <th className="pb-3 pr-4 whitespace-nowrap">Mode</th>
-                  <th className="pb-3 pr-4 whitespace-nowrap">Agent</th>
-                  <th className="pb-3 pr-4 whitespace-nowrap">Contributeur</th>
-                  <th className="pb-3 whitespace-nowrap">Statut</th>
-                </tr>
-              </thead>
-              <tbody>
-                {transactions.map((t) => (
-                  <tr key={t.id} className="border-b border-or/5 hover:bg-or/5">
-                    <td className="py-3 pr-4 text-blanc/60 whitespace-nowrap">{formatDate(t.createdAt)}</td>
-                    <td className="py-3 pr-4 text-blanc font-medium whitespace-nowrap">{formatMontant(Number(t.montant))}</td>
-                    <td className="py-3 pr-4 text-blanc/60 whitespace-nowrap">{t.categorie}</td>
-                    <td className="py-3 pr-4 text-blanc/60 whitespace-nowrap">{t.mode}</td>
-                    <td className="py-3 pr-4 text-blanc/60 whitespace-nowrap">{t.agent?.nom || "—"}</td>
-                    <td className="py-3 pr-4 text-blanc/60 whitespace-nowrap">{t.contributeur?.nom || "Anonyme"}</td>
-                    <td className="py-3">
-                      <span className={`px-2 py-1 rounded-lg text-xs ${
-                        t.statut === "VALIDE" ? "bg-green-500/10 text-green-400" :
-                        t.statut === "EN_ATTENTE" ? "bg-or/10 text-or" :
-                        "bg-red-500/10 text-red-400"
-                      }`}>
-                        {t.statut}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
+      {/* Transactions par mois */}
+      <TransactionsParMois
+        transactions={transactions.map((t) => ({
+          id: t.id,
+          montant: Number(t.montant),
+          categorie: t.categorie,
+          mode: t.mode,
+          createdAt: t.createdAt.toISOString(),
+          statut: t.statut,
+          contributeur: t.contributeur ? { nom: t.contributeur.nom } : null,
+          agent: t.agent ? { nom: t.agent.nom } : null,
+        }))}
+        showMode
+        showAgent
+        showStatut
+        title="Transactions par mois"
+      />
     </div>
   );
 }

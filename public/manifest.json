@@ -1,0 +1,56 @@
+{
+  "name": "CTF Finance — Gestion Financière",
+  "short_name": "CTF Finance",
+  "description": "Plateforme de gestion financière CTF — offrandes, dîmes, dons et répartition automatique",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0A0A0A",
+  "theme_color": "#C9A227",
+  "scope": "/",
+  "lang": "fr",
+  "categories": ["finance", "business", "productivity"],
+  "icons": [
+    {
+      "src": "/Logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/Logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/Logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/Logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Tableau de bord",
+      "url": "/dashboard/treasurer",
+      "description": "Accéder au tableau de bord"
+    },
+    {
+      "name": "Dîme mensuelle",
+      "url": "/dashboard/treasurer/dimes",
+      "description": "Gérer la dîme"
+    },
+    {
+      "name": "Dépenses",
+      "url": "/dashboard/treasurer/depenses",
+      "description": "Gérer les dépenses"
+    }
+  ]
+}

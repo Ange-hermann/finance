@@ -26,23 +26,7 @@ export async function GET() {
     },
   });
 
-  // Grouper par mois/année
-  const dimesParMois: Record<string, { mois: number; annee: number; montantTotal: number }> = {};
-
-  for (const r of repartitions) {
-    if (!r.montantDimeDeLaDime) continue;
-    const date = r.transaction.createdAt;
-    const mois = date.getMonth() + 1;
-    const annee = date.getFullYear();
-    const key = `${annee}-${mois}`;
-
-    if (!dimesParMois[key]) {
-      dimesParMois[key] = { mois, annee, montantTotal: 0 };
-    }
-    dimesParMois[key].montantTotal += Number(r.montantDimeDeLaDime);
-  }
-
-  // Récupérer les statuts enregistrés
+  // Récupérer les statuts enregistrés (avant la boucle pour pouvoir séparer avant/après versement)
   const dimesEnregistrees = await prisma.dimeMensuelle.findMany();
   const statutMap: Record<string, { id: string; statut: string; dateVersement: string | null }> = {};
 
@@ -55,6 +39,33 @@ export async function GET() {
     };
   }
 
+  // Grouper par mois/année, en séparant avant/après date de versement
+  const dimesParMois: Record<string, { mois: number; annee: number; montantTotal: number; montantAvantVersement: number; montantApresVersement: number }> = {};
+
+  for (const r of repartitions) {
+    if (!r.montantDimeDeLaDime) continue;
+    const date = r.transaction.createdAt;
+    const mois = date.getMonth() + 1;
+    const annee = date.getFullYear();
+    const key = `${annee}-${mois}`;
+
+    if (!dimesParMois[key]) {
+      dimesParMois[key] = { mois, annee, montantTotal: 0, montantAvantVersement: 0, montantApresVersement: 0 };
+    }
+    const montant = Number(r.montantDimeDeLaDime);
+    dimesParMois[key].montantTotal += montant;
+
+    const enregistree = statutMap[key];
+    if (enregistree?.statut === "VERSE" && enregistree.dateVersement) {
+      const dateVersement = new Date(enregistree.dateVersement);
+      if (date <= dateVersement) {
+        dimesParMois[key].montantAvantVersement += montant;
+      } else {
+        dimesParMois[key].montantApresVersement += montant;
+      }
+    }
+  }
+
   // Construire la liste
   const now = new Date();
   const moisActuel = now.getMonth() + 1;
@@ -65,12 +76,15 @@ export async function GET() {
       const key = `${d.annee}-${d.mois}`;
       const enregistree = statutMap[key];
       const statut = (enregistree?.statut as "VERSE" | "NON_VERSE") || "NON_VERSE";
+      const montantAffiche = statut === "VERSE" ? d.montantApresVersement : d.montantTotal;
       return {
         id: enregistree?.id || key,
         mois: d.mois,
         moisNom: MOIS_NOMS[d.mois - 1],
         annee: d.annee,
-        montant: Math.round(d.montantTotal * 100) / 100,
+        montant: Math.round(montantAffiche * 100) / 100,
+        montantTotal: Math.round(d.montantTotal * 100) / 100,
+        montantVersee: Math.round(d.montantAvantVersement * 100) / 100,
         statut,
         dateVersement: enregistree?.dateVersement || null,
         estMoisActuel: d.mois === moisActuel && d.annee === anneeActuelle,
@@ -80,8 +94,8 @@ export async function GET() {
     .sort((a, b) => b.annee - a.annee || b.mois - a.mois);
 
   // Calculer les totaux
-  const totalVerse = dimes.filter((d) => d.statut === "VERSE").reduce((s, d) => s + d.montant, 0);
-  const totalRestant = dimes.filter((d) => d.statut === "NON_VERSE").reduce((s, d) => s + d.montant, 0);
+  const totalVerse = dimes.reduce((s, d) => s + (d.statut === "VERSE" ? d.montantVersee : 0), 0);
+  const totalRestant = dimes.reduce((s, d) => s + d.montant, 0);
   const moisActuelData = dimes.find((d) => d.estMoisActuel);
   const moisPasses = dimes.filter((d) => d.estPasse);
 

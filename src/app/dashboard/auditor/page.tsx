@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { formatMontant, formatDate } from "@/lib/utils";
 import { Eye, FileText, Coins, Wallet, PiggyBank, Heart, Building2, TrendingUp } from "lucide-react";
 import AnnotationForm from "@/components/AnnotationForm";
+import AuditorTransactions from "@/components/AuditorTransactions";
 
 export const dynamic = "force-dynamic";
 
@@ -9,7 +10,6 @@ export default async function AuditorDashboard() {
   const [transactions, logs, caisse, repartitions, dimesVersees, depensesNormales, depEconomie, depEpargne, depActionSociale, depConstruction] = await Promise.all([
     prisma.transaction.findMany({
       orderBy: { createdAt: "desc" },
-      take: 30,
       include: {
         contributeur: true,
         agent: true,
@@ -49,12 +49,15 @@ export default async function AuditorDashboard() {
   const grandTotalDimeDeLaDimeBrut = repartitions.reduce((sum, r) => sum + Number(r.montantDimeDeLaDime || 0), 0);
   const grandTotalConstruction = repartitions.reduce((sum, r) => sum + Number(r.montantFondsDedie), 0) - Number(depConstruction._sum?.montant || 0);
 
-  // Déduire les dîmes déjà versées
-  const dimesVerseesSet = new Set(dimesVersees.map((d) => `${d.annee}-${d.mois}`));
+  // Déduire les dîmes déjà versées (uniquement celles reçues avant la date de versement)
+  const dimesVerseesMap = new Map(dimesVersees.map((d) => [`${d.annee}-${d.mois}`, d.dateVersement ? new Date(d.dateVersement) : null]));
   const montantDimeVersee = repartitions
     .filter((r) => {
       const d = new Date(r.transaction.createdAt);
-      return dimesVerseesSet.has(`${d.getFullYear()}-${d.getMonth() + 1}`);
+      const key = `${d.getFullYear()}-${d.getMonth() + 1}`;
+      const dateVersement = dimesVerseesMap.get(key);
+      if (!dateVersement) return false;
+      return d <= dateVersement;
     })
     .reduce((s, r) => s + Number(r.montantDimeDeLaDime || 0), 0);
   const grandTotalDimeDeLaDime = grandTotalDimeDeLaDimeBrut - montantDimeVersee;
@@ -90,59 +93,31 @@ export default async function AuditorDashboard() {
         ))}
       </div>
 
-      <div className="card-noir">
-        <div className="flex items-center gap-3 mb-4">
-          <Eye className="w-6 h-6 text-or" />
-          <h3 className="font-display text-xl text-blanc">Transactions à auditer</h3>
-        </div>
-        {transactions.length === 0 ? (
-          <p className="text-blanc/40 text-sm text-center py-8">Aucune transaction pour le moment</p>
-        ) : (
-          <div className="space-y-4">
-            {transactions.map((t) => (
-              <div key={t.id} className="border border-or/10 rounded-xl p-4">
-                <div className="flex items-start justify-between mb-3">
-                  <div>
-                    <p className="text-blanc font-medium">{formatMontant(Number(t.montant))} — {t.categorie}</p>
-                    <p className="text-blanc/40 text-xs mt-1">
-                      {formatDate(t.createdAt)} • Mode: {t.mode} • Agent: {t.agent?.nom || "N/A"}
-                    </p>
-                  </div>
-                  <span className={`px-2 py-1 rounded-lg text-xs ${
-                    t.statut === "VALIDE" ? "bg-green-500/10 text-green-400" :
-                    t.statut === "EN_ATTENTE" ? "bg-or/10 text-or" :
-                    "bg-red-500/10 text-red-400"
-                  }`}>
-                    {t.statut}
-                  </span>
-                </div>
-
-                {t.repartition && (
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs mt-2">
-                    <div className="text-blanc/50">Économie: <span className="text-blanc">{formatMontant(Number(t.repartition.montantEconomie))}</span></div>
-                    <div className="text-blanc/50">Épargne: <span className="text-blanc">{formatMontant(Number(t.repartition.montantEpargne))}</span></div>
-                    <div className="text-blanc/50">Action sociale: <span className="text-blanc">{formatMontant(Number(t.repartition.montantActionSociale))}</span></div>
-                    <div className="text-blanc/50">Caisse: <span className="text-blanc">{formatMontant(Number(t.repartition.montantCaisse))}</span></div>
-                  </div>
-                )}
-
-                {t.annotations.length > 0 && (
-                  <div className="mt-3 space-y-2">
-                    {t.annotations.map((ann) => (
-                      <div key={ann.id} className="bg-or/5 rounded-lg p-3 text-sm">
-                        <p className="text-blanc/70">{ann.commentaire}</p>
-                        <p className="text-blanc/30 text-xs mt-1">— {ann.auteur.nom}, {formatDate(ann.createdAt)}</p>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                <AnnotationForm transactionId={t.id} />
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+      <AuditorTransactions
+        transactions={transactions.map((t) => ({
+          id: t.id,
+          montant: Number(t.montant),
+          categorie: t.categorie,
+          mode: t.mode,
+          createdAt: t.createdAt.toISOString(),
+          statut: t.statut,
+          agent: t.agent ? { nom: t.agent.nom } : null,
+          contributeur: t.contributeur ? { nom: t.contributeur.nom } : null,
+          repartition: t.repartition ? {
+            montantEconomie: Number(t.repartition.montantEconomie),
+            montantEpargne: Number(t.repartition.montantEpargne),
+            montantActionSociale: Number(t.repartition.montantActionSociale),
+            montantCaisse: Number(t.repartition.montantCaisse),
+          } : null,
+          annotations: t.annotations.map((ann) => ({
+            id: ann.id,
+            commentaire: ann.commentaire,
+            createdAt: ann.createdAt.toISOString(),
+            auteur: { nom: ann.auteur.nom },
+          })),
+        }))}
+        renderAnnotationForm={(transactionId) => <AnnotationForm transactionId={transactionId} />}
+      />
 
       <div className="card-noir">
         <div className="flex items-center gap-3 mb-4">

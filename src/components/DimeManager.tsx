@@ -10,6 +10,8 @@ interface Dime {
   moisNom: string;
   annee: number;
   montant: number;
+  montantTotal: number;
+  montantVersee: number;
   dateVersement: string | null;
   statut: "NON_VERSE" | "VERSE";
   estMoisActuel: boolean;
@@ -32,6 +34,8 @@ export default function DimeManager() {
   const [data, setData] = useState<{ dimes: Dime[]; resume: Resume } | null>(null);
   const [loading, setLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const [selectedMois, setSelectedMois] = useState<number | null>(null);
+  const [selectedAnnee, setSelectedAnnee] = useState<number | null>(null);
 
   const fetchDimes = async () => {
     setLoading(true);
@@ -80,27 +84,72 @@ export default function DimeManager() {
 
   const { resume } = data;
 
+  // Construire la liste des mois disponibles (tous les mois qui ont des dîmes, jusqu'au mois actuel)
+  const now = new Date();
+  const moisActuelNum = now.getMonth() + 1;
+  const anneeActuelle = now.getFullYear();
+
+  // Tous les mois disponibles dans les données, triés du plus récent au plus ancien
+  const moisDisponibles = data.dimes
+    .filter((d) => d.annee < anneeActuelle || (d.annee === anneeActuelle && d.mois <= moisActuelNum))
+    .sort((a, b) => b.annee - a.annee || b.mois - a.mois);
+
+  // Mois sélectionné (par défaut le mois actuel)
+  const dimeSelectionnee = selectedMois && selectedAnnee
+    ? data.dimes.find((d) => d.mois === selectedMois && d.annee === selectedAnnee)
+    : resume.moisActuel;
+
   return (
     <div className="space-y-6">
-      {/* Vue d'ensemble : 3 cartes */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {/* Mois en cours */}
+      {/* Sélecteur de mois */}
+      <div className="flex items-center gap-3">
+        <Calendar className="w-5 h-5 text-or" />
+        <select
+          value={selectedMois && selectedAnnee ? `${selectedAnnee}-${selectedMois}` : ""}
+          onChange={(e) => {
+            if (e.target.value === "") {
+              setSelectedMois(null);
+              setSelectedAnnee(null);
+            } else {
+              const [a, m] = e.target.value.split("-").map(Number);
+              setSelectedMois(m);
+              setSelectedAnnee(a);
+            }
+          }}
+          className="input-noir flex-1 max-w-xs"
+        >
+          <option value="">Mois actuel ({MOIS_NOMS[moisActuelNum - 1]} {anneeActuelle})</option>
+          {moisDisponibles.map((d) => (
+            <option key={`${d.annee}-${d.mois}`} value={`${d.annee}-${d.mois}`}>
+              {d.moisNom} {d.annee}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Vue d'ensemble : 4 cartes */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Mois sélectionné - Total */}
         <div className="card-noir border-or/30">
           <div className="flex items-center gap-2 mb-2">
             <Calendar className="w-5 h-5 text-or" />
-            <p className="text-blanc/50 text-xs">Ce mois-ci</p>
+            <p className="text-blanc/50 text-xs">Total du mois</p>
           </div>
-          {resume.moisActuel ? (
+          {dimeSelectionnee ? (
             <>
               <p className="font-display text-lg text-blanc">
-                {resume.moisActuel.moisNom} {resume.moisActuel.annee}
+                {dimeSelectionnee.moisNom} {dimeSelectionnee.annee}
               </p>
               <p className="font-display text-xl text-or mt-1 whitespace-nowrap">
-                {resume.moisActuel.montant.toLocaleString("fr-FR")}
+                {dimeSelectionnee.montantTotal.toLocaleString("fr-FR")}
                 <span className="text-blanc/40 text-xs ml-1">FCFA</span>
               </p>
               <div className="mt-2">
-                {resume.moisActuel.statut === "VERSE" ? (
+                {dimeSelectionnee.statut === "VERSE" && dimeSelectionnee.montant > 0 ? (
+                  <span className="text-xs px-2 py-1 rounded-lg bg-or/10 text-or">
+                    Partiellement donnée
+                  </span>
+                ) : dimeSelectionnee.statut === "VERSE" ? (
                   <span className="text-xs px-2 py-1 rounded-lg bg-green-500/10 text-green-400">
                     ✓ Donnée
                   </span>
@@ -113,6 +162,38 @@ export default function DimeManager() {
             </>
           ) : (
             <p className="text-blanc/40 text-sm py-4">Aucune dîme ce mois</p>
+          )}
+        </div>
+
+        {/* Mois sélectionné - Restant */}
+        <div className="card-noir border-or/20">
+          <div className="flex items-center gap-2 mb-2">
+            <Clock className="w-5 h-5 text-or" />
+            <p className="text-blanc/50 text-xs">Restant du mois</p>
+          </div>
+          {dimeSelectionnee ? (
+            <>
+              <p className="font-display text-lg text-blanc">
+                {dimeSelectionnee.moisNom} {dimeSelectionnee.annee}
+              </p>
+              <p className="font-display text-xl text-or mt-1 whitespace-nowrap">
+                {dimeSelectionnee.montant.toLocaleString("fr-FR")}
+                <span className="text-blanc/40 text-xs ml-1">FCFA</span>
+              </p>
+              <div className="mt-2">
+                {dimeSelectionnee.montant > 0 ? (
+                  <span className="text-xs px-2 py-1 rounded-lg bg-or/10 text-or">
+                    À donner
+                  </span>
+                ) : (
+                  <span className="text-xs px-2 py-1 rounded-lg bg-green-500/10 text-green-400">
+                    ✓ Rien à donner
+                  </span>
+                )}
+              </div>
+            </>
+          ) : (
+            <p className="text-blanc/40 text-sm py-4">—</p>
           )}
         </div>
 
@@ -179,39 +260,59 @@ function DimeRow({
   onUpdate: (dime: Dime, statut: "VERSE" | "NON_VERSE") => void;
   updating: boolean;
 }) {
+  const estPartiellementDonnee = dime.statut === "VERSE" && dime.montant > 0;
+  const estDonnee = dime.statut === "VERSE" && dime.montant === 0;
+
   return (
     <div
       className={`border rounded-xl p-4 flex items-center justify-between gap-3 ${
-        dime.statut === "VERSE"
+        estDonnee
           ? "border-green-500/20 bg-green-500/5"
-          : "border-or/20 bg-or/5"
+          : estPartiellementDonnee
+          ? "border-or/30 bg-or/5"
+          : "border-red-500/20 bg-red-500/5"
       }`}
     >
       <div className="min-w-0 flex-1">
         <p className="text-blanc font-medium">
           {dime.moisNom} {dime.annee}
         </p>
-        <p className="text-blanc/40 text-xs mt-1">
-          {dime.dateVersement
-            ? `Donnée le ${new Date(dime.dateVersement).toLocaleDateString("fr-FR")}`
-            : "Pas encore donnée"}
-        </p>
+        <div className="flex flex-wrap items-center gap-2 mt-1">
+          {estDonnee ? (
+            <span className="text-xs px-2 py-0.5 rounded-lg bg-green-500/10 text-green-400">
+              ✓ Donnée {dime.dateVersement ? `le ${new Date(dime.dateVersement).toLocaleDateString("fr-FR")}` : ""}
+            </span>
+          ) : estPartiellementDonnee ? (
+            <>
+              <span className="text-xs px-2 py-0.5 rounded-lg bg-green-500/10 text-green-400">
+                Donné : {dime.montantVersee.toLocaleString("fr-FR")} FCFA
+              </span>
+              <span className="text-xs px-2 py-0.5 rounded-lg bg-or/10 text-or">
+                Reste : {dime.montant.toLocaleString("fr-FR")} FCFA
+              </span>
+            </>
+          ) : (
+            <span className="text-xs px-2 py-0.5 rounded-lg bg-red-500/10 text-red-400">
+              Non donnée
+            </span>
+          )}
+        </div>
       </div>
       <div className="text-right shrink-0">
         <p className="font-display text-lg text-blanc whitespace-nowrap">
-          {dime.montant.toLocaleString("fr-FR")}
+          {dime.montantTotal.toLocaleString("fr-FR")}
           <span className="text-blanc/40 text-xs ml-1">FCFA</span>
         </p>
         <button
-          onClick={() => onUpdate(dime, dime.statut === "VERSE" ? "NON_VERSE" : "VERSE")}
+          onClick={() => onUpdate(dime, estDonnee ? "NON_VERSE" : "VERSE")}
           disabled={updating}
           className={`text-xs mt-1 whitespace-nowrap ${
-            dime.statut === "VERSE"
+            estDonnee
               ? "text-red-400 hover:text-red-300"
               : "text-green-400 hover:text-green-300"
           }`}
         >
-          {updating ? "..." : dime.statut === "VERSE" ? "Marquer non donnée" : "Marquer donnée"}
+          {updating ? "..." : estDonnee ? "Marquer non donnée" : "Marquer donnée"}
         </button>
       </div>
     </div>

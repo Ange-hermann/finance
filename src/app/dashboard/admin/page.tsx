@@ -32,12 +32,15 @@ export default async function AdminDashboard() {
   const grandTotalCaisseRepartition = repartitions.reduce((sum, r) => sum + Number(r.montantCaisse), 0) - totalDepensesNormales;
   const grandTotalDimeDeLaDimeBrut = repartitions.reduce((sum, r) => sum + Number(r.montantDimeDeLaDime || 0), 0);
 
-  // Déduire les dîmes déjà versées
-  const dimesVerseesSet = new Set(dimesVersees.map((d) => `${d.annee}-${d.mois}`));
+  // Déduire les dîmes déjà versées (uniquement celles reçues avant la date de versement)
+  const dimesVerseesMap = new Map(dimesVersees.map((d) => [`${d.annee}-${d.mois}`, d.dateVersement ? new Date(d.dateVersement) : null]));
   const montantDimeVersee = repartitions
     .filter((r) => {
       const d = new Date(r.transaction.createdAt);
-      return dimesVerseesSet.has(`${d.getFullYear()}-${d.getMonth() + 1}`);
+      const key = `${d.getFullYear()}-${d.getMonth() + 1}`;
+      const dateVersement = dimesVerseesMap.get(key);
+      if (!dateVersement) return false;
+      return d <= dateVersement;
     })
     .reduce((s, r) => s + Number(r.montantDimeDeLaDime || 0), 0);
   const grandTotalDimeDeLaDime = grandTotalDimeDeLaDimeBrut - montantDimeVersee;
