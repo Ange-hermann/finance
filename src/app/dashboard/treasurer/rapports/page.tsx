@@ -73,7 +73,7 @@ export default async function RapportsPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-display text-2xl sm:text-3xl font-bold text-blanc">Rapports & Export</h1>
+          <h1 className="font-aeonik text-2xl sm:text-3xl font-bold text-blanc">Rapports & Export</h1>
           <p className="text-blanc/50 text-sm mt-1">Génération de rapports PDF et Excel</p>
         </div>
         <ExportButtons transactions={serializedTransactions} totals={totals} />
@@ -82,7 +82,7 @@ export default async function RapportsPage() {
       <div className="card-noir">
         <div className="flex items-center gap-3 mb-4">
           <FileText className="w-6 h-6 text-or" />
-          <h3 className="font-display text-xl text-blanc">Grands totaux</h3>
+          <h3 className="font-aeonik text-xl text-blanc">Grands totaux</h3>
         </div>
         <div className="space-y-3">
           {totals.map((t, i) => (
@@ -95,7 +95,7 @@ export default async function RapportsPage() {
               <span className={`text-sm min-w-0 truncate ${t.label.includes("Total général") ? "text-or font-medium" : "text-blanc/60"}`}>
                 {t.label}
               </span>
-              <span className={`font-display text-sm sm:text-base whitespace-nowrap ${t.label.includes("Total général") ? "text-or sm:text-xl" : "text-blanc"}`}>
+              <span className={`font-aeonik text-sm sm:text-base whitespace-nowrap ${t.label.includes("Total général") ? "text-or sm:text-xl" : "text-blanc"}`}>
                 {formatMontant(t.value)}
               </span>
             </div>
@@ -104,7 +104,7 @@ export default async function RapportsPage() {
       </div>
 
       <div className="card-noir">
-        <h3 className="font-display text-xl text-blanc mb-4">Toutes les transactions validées</h3>
+        <h3 className="font-aeonik text-xl text-blanc mb-4">Toutes les transactions validées</h3>
         {transactions.length === 0 ? (
           <p className="text-blanc/40 text-sm text-center py-8">Aucune transaction</p>
         ) : (

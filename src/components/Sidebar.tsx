@@ -77,7 +77,7 @@ export default function Sidebar() {
       <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-noir-soft border-b border-or/20 flex items-center justify-between px-4 h-14">
         <Link href="/dashboard" className="flex items-center gap-2">
           <Image src="/Logo.png" alt="Logo" width={40} height={40} className="rounded-lg" style={{ width: "auto", height: "auto" }} />
-          <span className="font-display text-base font-bold text-blanc">
+          <span className="font-aeonik text-base font-bold text-blanc">
             CTF <span className="text-or">Finance</span>
           </span>
         </Link>
@@ -100,67 +100,74 @@ export default function Sidebar() {
 
       <aside
         className={cn(
-          "w-64 min-h-screen bg-noir-soft border-r border-or/20 flex flex-col fixed left-0 top-0 z-50 transition-transform duration-300",
+          "w-64 min-h-screen bg-noir border-r border-or/20 flex flex-col fixed left-0 top-0 z-50 transition-transform duration-300",
           mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         )}
       >
-        <div className="p-6 border-b border-or/20 flex items-center justify-between">
-          <Link href="/dashboard" className="flex items-center gap-3" onClick={() => setMobileOpen(false)}>
-            <Image src="/Logo.png" alt="Logo" width={48} height={48} className="rounded-lg" style={{ width: "auto", height: "auto" }} />
-            <span className="font-display text-lg font-bold text-blanc">
-              CTF <span className="text-or">Finance</span>
-            </span>
+        {/* Grand cadre noir avec logo */}
+        <div className="p-8 border-b border-or/20 flex flex-col items-center justify-center h-64">
+          <Link href="/dashboard" className="flex flex-col items-center gap-4" onClick={() => setMobileOpen(false)}>
+            <Image src="/Logo.png" alt="Logo" width={220} height={220} className="rounded-lg" style={{ width: "auto", height: "auto" }} />
           </Link>
           <button
             onClick={() => setMobileOpen(false)}
-            className="md:hidden text-blanc/60 hover:text-or"
+            className="md:hidden absolute top-4 right-4 text-blanc/60 hover:text-or"
             aria-label="Fermer le menu"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-      <div className="px-6 py-4 border-b border-or/10">
-        <div className="flex items-center gap-2 text-or/80 text-xs">
-          <ShieldCheck className="w-4 h-4" />
-          <span>{roleLabel}</span>
+        {/* Petit cadre or avec FINANCE */}
+        <div className="p-4 border-b border-or/20 bg-or">
+          <div className="text-center">
+            <span className="font-aeonik text-2xl font-bold text-noir tracking-wider">FINANCE</span>
+          </div>
         </div>
-        <p className="text-blanc/50 text-sm mt-1 truncate">
-          {session?.user?.name || session?.user?.email}
-        </p>
-      </div>
 
-      <nav className="flex-1 p-4 space-y-1 overflow-y-auto scrollbar-thin">
-        {menus.map((item) => {
-          const isActive = pathname === item.href;
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={() => setMobileOpen(false)}
-              className={cn(
-                "flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all",
-                isActive
-                  ? "bg-or/10 text-or border border-or/30"
-                  : "text-blanc/60 hover:text-blanc hover:bg-noir-card"
-              )}
-            >
-              <item.icon className="w-5 h-5" />
-              <span>{item.label}</span>
-            </Link>
-          );
-        })}
-      </nav>
+        {/* Menu de navigation */}
+        <nav className="flex-1 p-4 space-y-1 overflow-y-auto scrollbar-thin">
+          <div className="px-6 py-4 border-b border-or/10">
+            <div className="flex items-center gap-2 text-or/80 text-xs">
+              <ShieldCheck className="w-4 h-4" />
+              <span>{roleLabel}</span>
+            </div>
+            <p className="text-blanc/50 text-sm mt-1 truncate">
+              {session?.user?.name || session?.user?.email}
+            </p>
+          </div>
+          
+          {menus.map((item) => {
+            const isActive = pathname === item.href;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setMobileOpen(false)}
+                className={cn(
+                  "flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all",
+                  isActive
+                    ? "bg-or/10 text-or border border-or/30"
+                    : "text-blanc/60 hover:text-blanc hover:bg-noir-card"
+                )}
+              >
+                <item.icon className="w-5 h-5" />
+                <span>{item.label}</span>
+              </Link>
+            );
+          })}
+        </nav>
 
-      <div className="p-4 border-t border-or/20">
-        <button
-          onClick={handleLogout}
-          className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-blanc/60 hover:text-red-400 hover:bg-red-500/10 transition-all w-full"
-        >
-          <LogOut className="w-5 h-5" />
-          <span>Déconnexion</span>
-        </button>
-      </div>
+        {/* Bouton de déconnexion */}
+        <div className="p-4 border-t border-or/20">
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-blanc/60 hover:text-red-400 hover:bg-red-500/10 transition-all w-full"
+          >
+            <LogOut className="w-5 h-5" />
+            <span>Déconnexion</span>
+          </button>
+        </div>
     </aside>
     </>
   );

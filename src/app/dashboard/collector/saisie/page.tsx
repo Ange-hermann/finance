@@ -96,7 +96,7 @@ export default function SaisieManuellePage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-display text-2xl sm:text-3xl font-bold text-blanc">Saisie manuelle</h1>
+        <h1 className="font-aeonik text-2xl sm:text-3xl font-bold text-blanc">Saisie manuelle</h1>
         <p className="text-blanc/50 text-sm mt-1">Enregistrer un paiement reçu en main propre</p>
       </div>
 
@@ -170,12 +170,12 @@ export default function SaisieManuellePage() {
 
         {/* Preview repartition */}
         <div className="card-noir">
-          <h3 className="font-display text-xl text-blanc mb-4">Aperçu de la répartition</h3>
+          <h3 className="font-aeonik text-xl text-blanc mb-4">Aperçu de la répartition</h3>
           {preview ? (
             <div className="space-y-3">
               <div className="flex justify-between items-center pb-3 border-b border-or/10">
                 <span className="text-blanc/60 text-sm">Montant total</span>
-                <span className="font-display text-2xl text-or">{formatMontant(parseFloat(montant))}</span>
+                <span className="font-aeonik text-2xl text-or">{formatMontant(parseFloat(montant))}</span>
               </div>
               {preview.fondsDedie > 0 ? (
                 <div className="flex justify-between p-3 rounded-xl bg-or/5">

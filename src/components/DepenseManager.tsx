@@ -144,7 +144,7 @@ export default function DepenseManager({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <Receipt className="w-6 h-6 text-or" />
-          <h3 className="font-display text-xl text-blanc">Gestion des dépenses</h3>
+          <h3 className="font-aeonik text-xl text-blanc">Gestion des dépenses</h3>
         </div>
         <button
           onClick={() => setShowForm(!showForm)}
@@ -324,10 +324,10 @@ export default function DepenseManager({
             return groupesTriees.map((g) => (
               <div key={`${g.annee}-${g.mois}`} className="card-noir">
                 <div className="flex items-center justify-between mb-3 pb-3 border-b border-or/10">
-                  <h4 className="font-display text-lg text-or">
+                  <h4 className="font-aeonik text-lg text-or">
                     {MOIS_NOMS[g.mois]} {g.annee}
                   </h4>
-                  <p className="font-display text-sm text-blanc whitespace-nowrap">
+                  <p className="font-aeonik text-sm text-blanc whitespace-nowrap">
                     Total : <span className="text-or">{g.total.toLocaleString("fr-FR")} FCFA</span>
                   </p>
                 </div>
@@ -373,7 +373,7 @@ export default function DepenseManager({
                           </p>
                         </div>
                         <div className="text-right shrink-0">
-                          <p className="font-display text-lg text-blanc whitespace-nowrap">
+                          <p className="font-aeonik text-lg text-blanc whitespace-nowrap">
                             {Number(d.montant).toLocaleString("fr-FR")}
                             <span className="text-blanc/40 text-xs ml-1">FCFA</span>
                           </p>

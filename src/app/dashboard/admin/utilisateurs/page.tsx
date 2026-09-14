@@ -22,7 +22,7 @@ export default async function UtilisateursPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-display text-2xl sm:text-3xl font-bold text-blanc">Gestion des utilisateurs</h1>
+        <h1 className="font-aeonik text-2xl sm:text-3xl font-bold text-blanc">Gestion des utilisateurs</h1>
         <p className="text-blanc/50 text-sm mt-1">Créer, modifier, désactiver des comptes et assigner des rôles</p>
       </div>
 
@@ -31,7 +31,7 @@ export default async function UtilisateursPage() {
       <div className="card-noir">
         <div className="flex items-center gap-3 mb-4">
           <Users className="w-6 h-6 text-or" />
-          <h3 className="font-display text-xl text-blanc">Liste des utilisateurs</h3>
+          <h3 className="font-aeonik text-xl text-blanc">Liste des utilisateurs</h3>
         </div>
         <div className="overflow-x-auto scrollbar-thin">
           <table className="w-full text-sm">

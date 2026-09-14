@@ -169,7 +169,7 @@ export default async function TreasurerDashboard() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-display text-2xl sm:text-3xl font-bold text-blanc">Tableau de bord — Trésorière</h1>
+          <h1 className="font-aeonik text-2xl sm:text-3xl font-bold text-blanc">Tableau de bord — Trésorière</h1>
           <p className="text-blanc/50 text-sm mt-1">Vue complète : mois en cours, mois passés et global</p>
         </div>
         <div className="flex gap-2">
@@ -186,7 +186,7 @@ export default async function TreasurerDashboard() {
 
       {/* === CE MOIS-CI === */}
       <div className="card-noir border-or/30">
-        <h2 className="font-display text-xl text-or mb-4 flex items-center gap-2">
+        <h2 className="font-aeonik text-xl text-or mb-4 flex items-center gap-2">
           <Calendar className="w-5 h-5" />
           Ce mois-ci — {MOIS_NOMS[moisActuel]} {anneeActuelle}
         </h2>
@@ -194,22 +194,22 @@ export default async function TreasurerDashboard() {
           <div className="bg-noir-soft rounded-xl p-3">
             <TrendingUp className="w-5 h-5 text-green-400 mb-1" />
             <p className="text-blanc/50 text-xs">Recettes</p>
-            <p className="font-display text-sm text-blanc mt-1 whitespace-nowrap">{formatMontant(recettesMoisActuel)}</p>
+            <p className="font-aeonik text-sm text-blanc mt-1 whitespace-nowrap">{formatMontant(recettesMoisActuel)}</p>
           </div>
           <div className="bg-noir-soft rounded-xl p-3">
             <Receipt className="w-5 h-5 text-or mb-1" />
             <p className="text-blanc/50 text-xs">Dépenses culte</p>
-            <p className="font-display text-sm text-blanc mt-1 whitespace-nowrap">{formatMontant(depensesCulteMois)}</p>
+            <p className="font-aeonik text-sm text-blanc mt-1 whitespace-nowrap">{formatMontant(depensesCulteMois)}</p>
           </div>
           <div className="bg-noir-soft rounded-xl p-3">
             <Receipt className="w-5 h-5 text-red-400 mb-1" />
             <p className="text-blanc/50 text-xs">Dépenses normales</p>
-            <p className="font-display text-sm text-blanc mt-1 whitespace-nowrap">{formatMontant(depensesNormalesMois)}</p>
+            <p className="font-aeonik text-sm text-blanc mt-1 whitespace-nowrap">{formatMontant(depensesNormalesMois)}</p>
           </div>
           <div className="bg-noir-soft rounded-xl p-3">
             <Coins className="w-5 h-5 text-or mb-1" />
             <p className="text-blanc/50 text-xs">Dîme à donner</p>
-            <p className="font-display text-sm text-blanc mt-1 whitespace-nowrap">{formatMontant(dimeMoisActuel)}</p>
+            <p className="font-aeonik text-sm text-blanc mt-1 whitespace-nowrap">{formatMontant(dimeMoisActuel)}</p>
             {dimeMoisActuel > 0 && (
               <span className={`text-xs px-2 py-0.5 rounded-lg mt-1 inline-block ${
                 dimeMoisStatut?.statut === "VERSE"
@@ -223,7 +223,7 @@ export default async function TreasurerDashboard() {
           <div className="bg-noir-soft rounded-xl p-3">
             <Wallet className="w-5 h-5 text-blanc/60 mb-1" />
             <p className="text-blanc/50 text-xs">Transactions</p>
-            <p className="font-display text-sm text-blanc mt-1">{nbTransactionsMois}</p>
+            <p className="font-aeonik text-sm text-blanc mt-1">{nbTransactionsMois}</p>
           </div>
         </div>
       </div>
@@ -231,7 +231,7 @@ export default async function TreasurerDashboard() {
       {/* === MOIS PASSÉS === */}
       {moisPasses.length > 0 && (
         <div className="card-noir">
-          <h2 className="font-display text-xl text-blanc mb-4 flex items-center gap-2">
+          <h2 className="font-aeonik text-xl text-blanc mb-4 flex items-center gap-2">
             <Clock className="w-5 h-5 text-or" />
             Mois passés
           </h2>
@@ -273,7 +273,7 @@ export default async function TreasurerDashboard() {
 
       {/* === VUE GLOBALE === */}
       <div className="card-noir border-or/30">
-        <h2 className="font-display text-xl text-or mb-4 flex items-center gap-2">
+        <h2 className="font-aeonik text-xl text-or mb-4 flex items-center gap-2">
           <Globe className="w-5 h-5" />
           Vue globale — à ce jour
         </h2>
@@ -281,17 +281,17 @@ export default async function TreasurerDashboard() {
           <div className="bg-noir-soft rounded-xl p-3">
             <TrendingUp className="w-5 h-5 text-green-400 mb-1" />
             <p className="text-blanc/50 text-xs">Total recettes</p>
-            <p className="font-display text-sm text-blanc mt-1 whitespace-nowrap">{formatMontant(totalRecettes)}</p>
+            <p className="font-aeonik text-sm text-blanc mt-1 whitespace-nowrap">{formatMontant(totalRecettes)}</p>
           </div>
           <div className="bg-noir-soft rounded-xl p-3">
             <Receipt className="w-5 h-5 text-red-400 mb-1" />
             <p className="text-blanc/50 text-xs">Total dépenses</p>
-            <p className="font-display text-sm text-blanc mt-1 whitespace-nowrap">{formatMontant(totalDepensesCulte + totalDepensesNormales)}</p>
+            <p className="font-aeonik text-sm text-blanc mt-1 whitespace-nowrap">{formatMontant(totalDepensesCulte + totalDepensesNormales)}</p>
           </div>
           <div className="bg-noir-soft rounded-xl p-3 border-or/20">
             <Coins className="w-5 h-5 text-or mb-1" />
             <p className="text-blanc/50 text-xs">Grande caisse (solde général)</p>
-            <p className="font-display text-sm text-or mt-1 whitespace-nowrap">{formatMontant(grandTotalCaisse)}</p>
+            <p className="font-aeonik text-sm text-or mt-1 whitespace-nowrap">{formatMontant(grandTotalCaisse)}</p>
           </div>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
@@ -299,7 +299,7 @@ export default async function TreasurerDashboard() {
             <div key={i} className="bg-noir-soft rounded-xl p-3">
               <kpi.icon className="w-5 h-5 text-or mb-1" />
               <p className="text-blanc/50 text-xs truncate">{kpi.label}</p>
-              <p className="font-display text-sm text-blanc mt-1 whitespace-nowrap">{formatMontant(kpi.value)}</p>
+              <p className="font-aeonik text-sm text-blanc mt-1 whitespace-nowrap">{formatMontant(kpi.value)}</p>
             </div>
           ))}
         </div>

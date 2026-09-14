@@ -25,8 +25,7 @@ const config: Config = {
         },
       },
       fontFamily: {
-        display: ["var(--font-playfair)", "serif"],
-        sans: ["var(--font-inter)", "sans-serif"],
+        aeonik: ["Aeonik", "sans-serif"],
       },
       borderRadius: {
         "2xl": "1rem",

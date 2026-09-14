@@ -90,7 +90,7 @@ export default async function PastorDashboard() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-display text-2xl sm:text-3xl font-bold text-blanc">Vue globale — Pasteur</h1>
+        <h1 className="font-aeonik text-2xl sm:text-3xl font-bold text-blanc">Vue globale — Pasteur</h1>
         <p className="text-blanc/50 text-sm mt-1">Lecture seule — grands totaux et graphiques</p>
       </div>
 
@@ -103,7 +103,7 @@ export default async function PastorDashboard() {
           >
             <kpi.icon className="w-6 h-6 sm:w-7 sm:h-7 text-or mb-2" />
             <p className="text-blanc/50 text-xs truncate">{kpi.label}</p>
-            <p className="font-display text-base sm:text-lg text-blanc mt-1">{formatMontant(kpi.value)}</p>
+            <p className="font-aeonik text-base sm:text-lg text-blanc mt-1">{formatMontant(kpi.value)}</p>
           </div>
         ))}
       </div>

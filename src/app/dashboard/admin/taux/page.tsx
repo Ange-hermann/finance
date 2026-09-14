@@ -19,7 +19,7 @@ export default async function TauxPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-display text-2xl sm:text-3xl font-bold text-blanc">Taux de répartition</h1>
+        <h1 className="font-aeonik text-2xl sm:text-3xl font-bold text-blanc">Taux de répartition</h1>
         <p className="text-blanc/50 text-sm mt-1">Configuration des pourcentages de ventilation par catégorie</p>
       </div>
 
@@ -28,7 +28,7 @@ export default async function TauxPage() {
       <div className="card-noir">
         <div className="flex items-center gap-3 mb-4">
           <Settings className="w-6 h-6 text-or" />
-          <h3 className="font-display text-xl text-blanc">Historique des taux</h3>
+          <h3 className="font-aeonik text-xl text-blanc">Historique des taux</h3>
         </div>
         {taux.length === 0 ? (
           <p className="text-blanc/40 text-sm text-center py-8">

@@ -38,7 +38,7 @@ export default function TreasurerCharts({
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       {/* Line chart */}
       <div className="card-noir">
-        <h3 className="font-display text-xl text-blanc mb-4">
+        <h3 className="font-aeonik text-xl text-blanc mb-4">
           Évolution des recettes (Offrandes vs Dîmes)
         </h3>
         {chartData.length === 0 ? (
@@ -81,7 +81,7 @@ export default function TreasurerCharts({
 
       {/* Pie chart */}
       <div className="card-noir">
-        <h3 className="font-display text-xl text-blanc mb-4">Répartition par catégorie</h3>
+        <h3 className="font-aeonik text-xl text-blanc mb-4">Répartition par catégorie</h3>
         {pieData.length === 0 ? (
           <p className="text-blanc/40 text-sm text-center py-12">Aucune donnée disponible</p>
         ) : (

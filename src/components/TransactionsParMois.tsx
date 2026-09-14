@@ -58,7 +58,7 @@ export default function TransactionsParMois({
   if (transactions.length === 0) {
     return (
       <div className="card-noir">
-        <h3 className="font-display text-xl text-blanc mb-4">{title}</h3>
+        <h3 className="font-aeonik text-xl text-blanc mb-4">{title}</h3>
         <p className="text-blanc/40 text-sm text-center py-8">{emptyMessage}</p>
       </div>
     );
@@ -67,7 +67,7 @@ export default function TransactionsParMois({
   return (
     <div className="card-noir">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
-        <h3 className="font-display text-xl text-blanc">{title}</h3>
+        <h3 className="font-aeonik text-xl text-blanc">{title}</h3>
         <select
           value={selectedKey}
           onChange={(e) => setSelectedKey(e.target.value)}
@@ -84,10 +84,10 @@ export default function TransactionsParMois({
       {selectedGroup ? (
         <div>
           <div className="flex items-center justify-between mb-3 pb-2 border-b border-or/10">
-            <h4 className="font-display text-lg text-or">
+            <h4 className="font-aeonik text-lg text-or">
               {MOIS_NOMS[selectedGroup.mois]} {selectedGroup.annee}
             </h4>
-            <p className="font-display text-sm text-blanc whitespace-nowrap">
+            <p className="font-aeonik text-sm text-blanc whitespace-nowrap">
               Total : <span className="text-or">{formatMontant(selectedGroup.total)}</span>
               <span className="text-blanc/40 text-xs ml-2">({selectedGroup.items.length} transactions)</span>
             </p>

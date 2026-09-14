@@ -80,7 +80,7 @@ export default function PWAInstallPrompt() {
               <img src="/Logo.png" alt="CTF Finance" className="w-full h-full object-contain" />
             </div>
             <div>
-              <p className="font-display text-sm text-blanc font-medium">Installer CTF Finance</p>
+              <p className="font-aeonik text-sm text-blanc font-medium">Installer CTF Finance</p>
               <p className="text-blanc/40 text-xs">Accédez-y comme une app</p>
             </div>
           </div>

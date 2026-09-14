@@ -68,7 +68,7 @@ export default function SplashScreen() {
       {/* Texte "CTF" */}
       <div className="mt-8 h-14 flex items-center overflow-hidden">
         <span
-          className="font-display text-3xl sm:text-4xl font-bold text-blanc"
+          className="font-aeonik text-3xl sm:text-4xl font-bold text-blanc"
           style={{
             animation: "splashTextIn 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) 0.8s forwards",
             opacity: 0,

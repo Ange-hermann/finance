@@ -106,7 +106,7 @@ export default function TauxManager({ grouped }: { grouped: Record<string, TauxI
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {Object.entries(grouped).map(([cat, tauxList]) => (
           <div key={cat} className="card-noir">
-            <h4 className="text-or font-display text-lg mb-3">{cat}</h4>
+            <h4 className="text-or font-aeonik text-lg mb-3">{cat}</h4>
             <div className="space-y-2">
               {tauxList.map((t) => (
                 <div key={t.id} className="flex justify-between text-sm">

@@ -10,7 +10,7 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: var(--font-inter), sans-serif;
+  font-family: Aeonik, sans-serif;
 }
 
 @layer base {
@@ -18,7 +18,7 @@ body {
     border-color: rgba(201, 162, 39, 0.15);
   }
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-playfair), serif;
+    font-family: Aeonik, sans-serif;
   }
 }
 

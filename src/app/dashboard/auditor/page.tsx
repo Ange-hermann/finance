@@ -75,7 +75,7 @@ export default async function AuditorDashboard() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-display text-2xl sm:text-3xl font-bold text-blanc">Audit — Commissaire aux comptes</h1>
+        <h1 className="font-aeonik text-2xl sm:text-3xl font-bold text-blanc">Audit — Commissaire aux comptes</h1>
         <p className="text-blanc/50 text-sm mt-1">Lecture seule + annotations d'audit</p>
       </div>
 
@@ -88,7 +88,7 @@ export default async function AuditorDashboard() {
           >
             <kpi.icon className="w-6 h-6 sm:w-7 sm:h-7 text-or mb-2" />
             <p className="text-blanc/50 text-xs truncate">{kpi.label}</p>
-            <p className="font-display text-base sm:text-lg text-blanc mt-1">{formatMontant(kpi.value)}</p>
+            <p className="font-aeonik text-base sm:text-lg text-blanc mt-1">{formatMontant(kpi.value)}</p>
           </div>
         ))}
       </div>
@@ -122,7 +122,7 @@ export default async function AuditorDashboard() {
       <div className="card-noir">
         <div className="flex items-center gap-3 mb-4">
           <FileText className="w-6 h-6 text-or" />
-          <h3 className="font-display text-xl text-blanc">Journal d'audit (non modifiable)</h3>
+          <h3 className="font-aeonik text-xl text-blanc">Journal d'audit (non modifiable)</h3>
         </div>
         {logs.length === 0 ? (
           <p className="text-blanc/40 text-sm text-center py-8">Aucun log pour le moment</p>

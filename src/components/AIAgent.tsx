@@ -257,7 +257,7 @@ export default function AIAgent() {
           <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse shadow-lg shadow-or/30 overflow-hidden">
             <img src={LOGO} alt="Logo" className="w-full h-full object-contain p-1" />
           </div>
-          <h2 className="font-display text-2xl text-blanc font-bold mb-2">Assistant CTF</h2>
+          <h2 className="font-aeonik text-2xl text-blanc font-bold mb-2">Assistant CTF</h2>
           <p className="text-blanc/50 text-sm mb-6">
             Bonjour ! Je suis votre assistant intelligent. Cliquez pour activer la voix et commencer.
           </p>

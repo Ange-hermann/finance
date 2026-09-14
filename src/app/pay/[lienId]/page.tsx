@@ -87,7 +87,7 @@ export default function PayPage() {
       <div className="w-full max-w-lg">
         <div className="text-center mb-8">
           <Image src="/Logo.png" alt="Logo" width={56} height={56} className="rounded-xl mx-auto mb-4" style={{ width: "auto", height: "auto" }} />
-          <h1 className="font-display text-2xl sm:text-3xl font-bold text-blanc">
+          <h1 className="font-aeonik text-2xl sm:text-3xl font-bold text-blanc">
             Faire un <span className="text-or">don</span>
           </h1>
           <p className="text-blanc/50 text-sm mt-2">
@@ -114,7 +114,7 @@ export default function PayPage() {
         {/* Step: Categorie */}
         {step === "categorie" && (
           <div className="card-noir space-y-3 animate-fade-in">
-            <h2 className="font-display text-xl text-blanc mb-4">Choisissez une catégorie</h2>
+            <h2 className="font-aeonik text-xl text-blanc mb-4">Choisissez une catégorie</h2>
             {categories.map((cat) => (
               <button
                 key={cat.value}
@@ -149,7 +149,7 @@ export default function PayPage() {
                 onChange={(e) => setMontant(e.target.value)}
                 placeholder="10000"
                 min="1"
-                className="input-noir w-full text-2xl font-display"
+                className="input-noir w-full text-2xl font-aeonik"
               />
               {montant && parseFloat(montant) > 0 && (
                 <p className="text-or/70 text-sm mt-2">{formatMontant(parseFloat(montant))}</p>
@@ -176,7 +176,7 @@ export default function PayPage() {
             className="card-noir space-y-5 animate-fade-in"
           >
             <div>
-              <h2 className="font-display text-xl text-blanc mb-1">Informations (optionnelles)</h2>
+              <h2 className="font-aeonik text-xl text-blanc mb-1">Informations (optionnelles)</h2>
               <p className="text-blanc/40 text-sm">
                 Renseignez vos infos pour recevoir un reçu. Vous pouvez aussi rester anonyme.
               </p>
@@ -227,7 +227,7 @@ export default function PayPage() {
           <form onSubmit={handlePaiement} className="card-noir space-y-5 animate-fade-in">
             <div className="text-center py-4">
               <Wallet className="w-12 h-12 text-or mx-auto mb-4" />
-              <h2 className="font-display text-2xl text-blanc mb-2">
+              <h2 className="font-aeonik text-2xl text-blanc mb-2">
                 {formatMontant(parseFloat(montant))}
               </h2>
               <p className="text-blanc/50 text-sm">{selectedCat?.label}</p>
@@ -255,7 +255,7 @@ export default function PayPage() {
         {step === "succes" && (
           <div className="card-noir text-center space-y-4 animate-fade-in">
             <CheckCircle className="w-16 h-16 text-or mx-auto" />
-            <h2 className="font-display text-2xl text-blanc">Paiement réussi !</h2>
+            <h2 className="font-aeonik text-2xl text-blanc">Paiement réussi !</h2>
             <p className="text-blanc/60">
               Merci pour votre contribution de {formatMontant(parseFloat(montant))}.
               <br />

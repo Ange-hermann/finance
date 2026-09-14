@@ -137,10 +137,10 @@ export default function DimeManager() {
           </div>
           {dimeSelectionnee ? (
             <>
-              <p className="font-display text-lg text-blanc">
+              <p className="font-aeonik text-lg text-blanc">
                 {dimeSelectionnee.moisNom} {dimeSelectionnee.annee}
               </p>
-              <p className="font-display text-xl text-or mt-1 whitespace-nowrap">
+              <p className="font-aeonik text-xl text-or mt-1 whitespace-nowrap">
                 {dimeSelectionnee.montantTotal.toLocaleString("fr-FR")}
                 <span className="text-blanc/40 text-xs ml-1">FCFA</span>
               </p>
@@ -173,10 +173,10 @@ export default function DimeManager() {
           </div>
           {dimeSelectionnee ? (
             <>
-              <p className="font-display text-lg text-blanc">
+              <p className="font-aeonik text-lg text-blanc">
                 {dimeSelectionnee.moisNom} {dimeSelectionnee.annee}
               </p>
-              <p className="font-display text-xl text-or mt-1 whitespace-nowrap">
+              <p className="font-aeonik text-xl text-or mt-1 whitespace-nowrap">
                 {dimeSelectionnee.montant.toLocaleString("fr-FR")}
                 <span className="text-blanc/40 text-xs ml-1">FCFA</span>
               </p>
@@ -203,7 +203,7 @@ export default function DimeManager() {
             <Check className="w-5 h-5 text-green-400" />
             <p className="text-blanc/50 text-xs">Total donné (à ce jour)</p>
           </div>
-          <p className="font-display text-xl text-green-400 mt-1 whitespace-nowrap">
+          <p className="font-aeonik text-xl text-green-400 mt-1 whitespace-nowrap">
             {resume.totalVerse.toLocaleString("fr-FR")}
             <span className="text-blanc/40 text-xs ml-1">FCFA</span>
           </p>
@@ -215,7 +215,7 @@ export default function DimeManager() {
             <AlertCircle className="w-5 h-5 text-red-400" />
             <p className="text-blanc/50 text-xs">Total restant (à ce jour)</p>
           </div>
-          <p className="font-display text-xl text-red-400 mt-1 whitespace-nowrap">
+          <p className="font-aeonik text-xl text-red-400 mt-1 whitespace-nowrap">
             {resume.totalRestant.toLocaleString("fr-FR")}
             <span className="text-blanc/40 text-xs ml-1">FCFA</span>
           </p>
@@ -225,7 +225,7 @@ export default function DimeManager() {
       {/* Mois en cours - détail */}
       {resume.moisActuel && (
         <div className="card-noir">
-          <h3 className="font-display text-lg text-blanc mb-3 flex items-center gap-2">
+          <h3 className="font-aeonik text-lg text-blanc mb-3 flex items-center gap-2">
             <Calendar className="w-5 h-5 text-or" />
             Mois en cours
           </h3>
@@ -236,7 +236,7 @@ export default function DimeManager() {
       {/* Mois passés */}
       {resume.totalMoisPasses.length > 0 && (
         <div className="card-noir">
-          <h3 className="font-display text-lg text-blanc mb-3 flex items-center gap-2">
+          <h3 className="font-aeonik text-lg text-blanc mb-3 flex items-center gap-2">
             <Clock className="w-5 h-5 text-or" />
             Mois passés
           </h3>
@@ -299,7 +299,7 @@ function DimeRow({
         </div>
       </div>
       <div className="text-right shrink-0">
-        <p className="font-display text-lg text-blanc whitespace-nowrap">
+        <p className="font-aeonik text-lg text-blanc whitespace-nowrap">
           {dime.montantTotal.toLocaleString("fr-FR")}
           <span className="text-blanc/40 text-xs ml-1">FCFA</span>
         </p>

@@ -67,7 +67,7 @@ export default async function DepensesPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-display text-2xl sm:text-3xl font-bold text-blanc">Dépenses</h1>
+          <h1 className="font-aeonik text-2xl sm:text-3xl font-bold text-blanc">Dépenses</h1>
           <p className="text-blanc/50 text-sm mt-1">
             Dépenses après culte (avant répartition) et dépenses normales (caisse)
           </p>
@@ -84,7 +84,7 @@ export default async function DepensesPage() {
           >
             <stat.icon className="w-6 h-6 sm:w-7 sm:h-7 text-or mb-2" />
             <p className="text-blanc/50 text-xs truncate">{stat.label}</p>
-            <p className="font-display text-sm sm:text-base text-blanc mt-1 whitespace-nowrap">{stat.value}</p>
+            <p className="font-aeonik text-sm sm:text-base text-blanc mt-1 whitespace-nowrap">{stat.value}</p>
           </div>
         ))}
       </div>

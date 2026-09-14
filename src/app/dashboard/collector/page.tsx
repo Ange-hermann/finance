@@ -31,7 +31,7 @@ export default async function CollectorDashboard() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-display text-2xl sm:text-3xl font-bold text-blanc">Espace Agent</h1>
+        <h1 className="font-aeonik text-2xl sm:text-3xl font-bold text-blanc">Espace Agent</h1>
         <p className="text-blanc/50 text-sm mt-1">Saisie manuelle et scan des paiements</p>
       </div>
 
@@ -39,12 +39,12 @@ export default async function CollectorDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Link href="/dashboard/collector/saisie" className="card-noir hover:shadow-gold transition-all group">
           <Wallet className="w-10 h-10 text-or mb-3" />
-          <h3 className="font-display text-xl text-blanc mb-1">Saisie manuelle</h3>
+          <h3 className="font-aeonik text-xl text-blanc mb-1">Saisie manuelle</h3>
           <p className="text-blanc/50 text-sm">Enregistrer un paiement reçu en main propre</p>
         </Link>
         <Link href="/dashboard/collector/scan" className="card-noir hover:shadow-gold transition-all group">
           <ScanLine className="w-10 h-10 text-or mb-3" />
-          <h3 className="font-display text-xl text-blanc mb-1">Scanner un QR code</h3>
+          <h3 className="font-aeonik text-xl text-blanc mb-1">Scanner un QR code</h3>
           <p className="text-blanc/50 text-sm">Rapprocher un paiement via scan</p>
         </Link>
       </div>
@@ -54,12 +54,12 @@ export default async function CollectorDashboard() {
         <div className="card-noir">
           <TrendingUp className="w-8 h-8 text-or mb-2" />
           <p className="text-blanc/50 text-sm">Total saisi</p>
-          <p className="font-display text-2xl text-blanc">{formatMontant(Number(stats._sum.montant || 0))}</p>
+          <p className="font-aeonik text-2xl text-blanc">{formatMontant(Number(stats._sum.montant || 0))}</p>
         </div>
         <div className="card-noir">
           <Wallet className="w-8 h-8 text-or mb-2" />
           <p className="text-blanc/50 text-sm">Transactions saisies</p>
-          <p className="font-display text-2xl text-blanc">{stats._count}</p>
+          <p className="font-aeonik text-2xl text-blanc">{stats._count}</p>
         </div>
         <div className="card-noir">
           <Link2 className="w-8 h-8 text-or mb-2" />
@@ -70,7 +70,7 @@ export default async function CollectorDashboard() {
 
       {/* QR Code partageable */}
       <div className="card-noir">
-        <h3 className="font-display text-xl text-blanc mb-4">QR Code de paiement à partager</h3>
+        <h3 className="font-aeonik text-xl text-blanc mb-4">QR Code de paiement à partager</h3>
         <div className="flex flex-col md:flex-row items-center gap-6">
           <div className="bg-blanc-pur p-3 sm:p-4 rounded-xl shrink-0">
             <QRCodeSVG value={lienPaiement} size={160} />
