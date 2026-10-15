@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import Link from "next/link";
 
 export default function PaymentErrorPage() {
   return (
@@ -11,12 +11,9 @@ export default function PaymentErrorPage() {
         </div>
         <h1 className="font-aeonik text-2xl text-blanc mb-2">Paiement échoué</h1>
         <p className="text-blanc/60 mb-6">Une erreur s'est produite lors du traitement de votre paiement.</p>
-        <button
-          onClick={() => redirect("/dashboard")}
-          className="btn-or"
-        >
+        <Link href="/dashboard" className="btn-or inline-block">
           Retour au tableau de bord
-        </button>
+        </Link>
       </div>
     </div>
   );
