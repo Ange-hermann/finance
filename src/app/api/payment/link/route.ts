@@ -61,8 +61,8 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("Erreur lors de la création du lien de paiement:", error);
     return NextResponse.json(
-      { error: "Erreur lors de la création du lien de paiement" },
-      { status: 500 }
+      { error: error instanceof Error ? error.message : "Erreur lors de la création du lien de paiement" },
+      { status: 400 }
     );
   }
 }

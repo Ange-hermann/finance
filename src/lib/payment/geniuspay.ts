@@ -39,19 +39,27 @@ export class GeniusPayProvider implements PaymentProvider {
 
     console.log("Réponse Genius Pay:", data);
 
-    if (!response.ok) {
-      throw new Error(data.message || "Erreur lors de la création du paiement Genius Pay");
+    if (!response.ok || data.success === false) {
+      throw new Error(
+        data.error?.message || data.message || "Erreur lors de la création du paiement Genius Pay"
+      );
     }
 
     // Genius Pay retourne { success: true, data: { ... } }
     const paymentData = data.data || data;
+    const paymentUrl = paymentData.payment_url || paymentData.checkout_url || paymentData.url;
+
+    if (!paymentUrl) {
+      console.error("Réponse Genius Pay sans URL de paiement:", data);
+      throw new Error("Genius Pay n'a pas retourné d'URL de paiement");
+    }
 
     return {
       id: paymentData.reference,
       sessionId: paymentData.reference,
       amount,
       currency: "XOF",
-      paymentUrl: paymentData.payment_url || paymentData.checkout_url || paymentData.url,
+      paymentUrl,
       expiresAt: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
     };
   }

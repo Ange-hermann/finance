@@ -128,8 +128,8 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error("Erreur init paiement:", error);
     return NextResponse.json(
-      { error: "Erreur lors de l'initialisation du paiement" },
-      { status: 500 }
+      { error: error instanceof Error ? error.message : "Erreur lors de l'initialisation du paiement" },
+      { status: 400 }
     );
   }
 }
