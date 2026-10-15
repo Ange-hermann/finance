@@ -4,9 +4,9 @@
 
 [build.environment]
   NEXTAUTH_SECRET = "RN6lghBwznCRBwgCQBOlSrA0JW9XjT6rOrKHPhBMSjE="
-  NEXTAUTH_URL = "https://ctf-finance.netlify.app"
-  PAYMENT_PROVIDER = "mock"
-  APP_URL = "https://ctf-finance.netlify.app"
+  NEXTAUTH_URL = "https://ctf-finace.netlify.app"
+  PAYMENT_PROVIDER = "geniuspay"
+  APP_URL = "https://ctf-finace.netlify.app"
   APP_NAME = "CTF Finance"
   EMAIL_FROM = "ctf@example.com"
   DATABASE_URL = "postgresql://postgres.zdmslxmjwgomqyiebskx:zdF%2AE%3DhpV6AQQw%2B@aws-0-eu-central-1.pooler.supabase.com:6543/postgres?schema=public"

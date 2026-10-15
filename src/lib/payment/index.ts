@@ -13,7 +13,8 @@ let providerInstance: PaymentProvider | null = null;
 export function getPaymentProvider(): PaymentProvider {
   if (providerInstance) return providerInstance;
 
-  const providerName = process.env.PAYMENT_PROVIDER || "mock";
+  // Par défaut : geniuspay si la clé est configurée (prod), mock sinon (dev)
+  const providerName = process.env.PAYMENT_PROVIDER || (process.env.GENIUSPAY_API_KEY ? "geniuspay" : "mock");
 
   switch (providerName) {
     case "geniuspay":
