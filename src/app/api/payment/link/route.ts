@@ -50,11 +50,16 @@ export async function POST(request: NextRequest) {
       data: { referencePaiement: session.sessionId },
     });
 
+    const paymentUrl = session.paymentUrl || session.url || session.checkoutUrl;
+    if (!paymentUrl) {
+      return NextResponse.json({ error: "Le provider n'a pas retourné d'URL de paiement" }, { status: 400 });
+    }
+
     return NextResponse.json({
       success: true,
-      payment_url: session.paymentUrl,
-      checkout_url: session.paymentUrl,
-      url: session.paymentUrl,
+      payment_url: paymentUrl,
+      checkout_url: paymentUrl,
+      url: paymentUrl,
       reference: session.id,
       amount: session.amount,
       currency: session.currency,

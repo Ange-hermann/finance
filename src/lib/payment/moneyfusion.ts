@@ -53,7 +53,7 @@ export class MoneyFusionProvider implements PaymentProvider {
     const token = data.tokenPay || data.token || data.sessionId;
     const url = data.url || data.payment_url || `https://www.pay.moneyfusion.net/paiement/${token}`;
 
-    return { url, sessionId: token, amount, currency: "XAF" };
+    return { url, paymentUrl: url, sessionId: token, amount, currency: "XOF" };
   }
 
   async verifyPayment(sessionId: string): Promise<PaymentVerification> {

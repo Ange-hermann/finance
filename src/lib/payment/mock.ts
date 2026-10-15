@@ -9,7 +9,7 @@ export class MockPaymentProvider implements PaymentProvider {
     const sessionId = `mock_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
     const url = `/pay/mock-checkout?session=${sessionId}&amount=${amount}&description=${encodeURIComponent(description)}`;
 
-    return { url, sessionId, amount, currency: "XAF" };
+    return { url, paymentUrl: url, sessionId, amount, currency: "XOF" };
   }
 
   async verifyPayment(sessionId: string): Promise<PaymentVerification> {
