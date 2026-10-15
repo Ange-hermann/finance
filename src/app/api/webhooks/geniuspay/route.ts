@@ -2,42 +2,62 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { sendPushNotificationToRole } from "@/lib/notifications";
 import { depenseImputableAuSolde, marquerDepensePayee } from "@/lib/depenses";
+import { finaliserPaiementEnLigne, devinerCategorieDepuisDescription } from "@/lib/paiements";
 import crypto from "crypto";
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    const rawBody = await request.text();
+    const body = JSON.parse(rawBody);
     const { event, data } = body;
 
-    // Vérifier le webhook secret
-    const signature = request.headers.get("x-geniuspay-signature");
+    // Vérification de la signature Genius Pay :
+    // X-Webhook-Signature = HMAC-SHA256(timestamp + "." + payload, whsec)
     const webhookSecret = process.env.GENIUSPAY_WEBHOOK_SECRET || "";
+    const signature =
+      request.headers.get("x-webhook-signature") ||
+      request.headers.get("x-geniuspay-signature");
+    const timestamp = request.headers.get("x-webhook-timestamp") || "";
 
-    if (signature) {
+    if (signature && webhookSecret) {
       const expectedSignature = crypto
         .createHmac("sha256", webhookSecret)
-        .update(JSON.stringify(body))
+        .update(`${timestamp}.${rawBody}`)
         .digest("hex");
 
-      if (signature !== expectedSignature) {
+      const sigBuf = Buffer.from(signature);
+      const expBuf = Buffer.from(expectedSignature);
+      if (sigBuf.length !== expBuf.length || !crypto.timingSafeEqual(sigBuf, expBuf)) {
         return NextResponse.json({ error: "Signature invalide" }, { status: 401 });
       }
+
+      // Protection anti-rejeu (fenêtre de 5 minutes)
+      const ts = parseInt(timestamp, 10);
+      if (!isNaN(ts) && Math.abs(Date.now() / 1000 - ts) > 300) {
+        return NextResponse.json({ error: "Timestamp trop ancien" }, { status: 400 });
+      }
+    } else {
+      console.warn("Webhook Genius Pay sans signature — traitement non vérifié");
     }
 
-    console.log("Webhook Genius Pay reçu:", event, data);
+    console.log("Webhook Genius Pay reçu:", event, JSON.stringify(data).slice(0, 500));
 
-    // Événements de paiement sortant (payout vers un bénéficiaire)
-    if (event === "payout.completed" || event === "payout.failed") {
+    // ─── Événements de paiement sortant (payout/cashout vers bénéficiaire) ───
+    if (
+      event === "payout.completed" || event === "payout.failed" ||
+      event === "cashout.completed" || event === "cashout.failed"
+    ) {
       const payout = data?.payout || data;
       const reference = payout?.reference;
       const depenseId = payout?.metadata?.depenseId;
+      const succeeded = event === "payout.completed" || event === "cashout.completed";
 
       const depense = depenseId
         ? await prisma.depense.findUnique({ where: { id: depenseId } })
         : await prisma.depense.findFirst({ where: { referencePaiement: reference } });
 
       if (depense) {
-        if (event === "payout.completed") {
+        if (succeeded) {
           await marquerDepensePayee(depense);
         } else {
           await prisma.depense.update({
@@ -48,7 +68,7 @@ export async function POST(request: NextRequest) {
 
         await prisma.logAudit.create({
           data: {
-            action: event === "payout.completed" ? "PAIEMENT_DEPENSE_SORTANT" : "PAIEMENT_DEPENSE_ECHOUE",
+            action: succeeded ? "PAIEMENT_DEPENSE_SORTANT" : "PAIEMENT_DEPENSE_ECHOUE",
             cible: `Dépense ${depense.id}`,
             details: `Payout ${reference} - ${depense.montant} FCFA - ${depense.sourceFonds}`,
           },
@@ -58,7 +78,7 @@ export async function POST(request: NextRequest) {
           await sendPushNotificationToRole(
             "TREASURER",
             {
-              title: event === "payout.completed" ? "Dépense payée" : "Paiement échoué",
+              title: succeeded ? "Dépense payée" : "Paiement échoué",
               body: `${depense.montant} FCFA - ${depense.description}`,
               data: { depenseId: depense.id },
             },
@@ -72,11 +92,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: true });
     }
 
-    // Traiter les événements de paiement
-    if (event === "payment.completed" || event === "payment.success") {
-      const { reference, amount, currency, customer, description } = data;
+    // ─── Paiement entrant réussi ───
+    if (event === "payment.success" || event === "payment.completed") {
+      const { reference, amount, customer, description } = data;
 
-      // Vérifier si c'est un paiement de dépense sortant (référence EXP-)
+      // Ancien flux : référence EXP- = dépense (checkout legacy)
       if (reference?.startsWith("EXP-")) {
         const depense = await prisma.depense.findFirst({
           where: { referencePaiement: reference },
@@ -88,10 +108,6 @@ export async function POST(request: NextRequest) {
             data: { statutPaiement: "PAYE", datePaiement: new Date() },
           });
 
-          // Déduire de la caisse physique (fonds CAISSE uniquement — les
-          // autres fonds sont des fonds par répartition, pas de l'argent
-          // physique, et les dépenses culte liées passent par le recalcul
-          // de la répartition)
           const caisse = await prisma.caisse.findFirst();
           if (caisse && depense.sourceFonds === "CAISSE" && depenseImputableAuSolde(depense)) {
             await prisma.caisse.update({
@@ -100,7 +116,6 @@ export async function POST(request: NextRequest) {
             });
           }
 
-          // Log d'audit
           await prisma.logAudit.create({
             data: {
               action: "PAIEMENT_DEPENSE_SORTANT",
@@ -108,198 +123,59 @@ export async function POST(request: NextRequest) {
               details: `Paiement Genius Pay de ${amount} FCFA - ${depense.sourceFonds}`,
             },
           });
-
-          // Notification au pasteur et trésorière
-          try {
-            await sendPushNotificationToRole(
-              "PASTOR",
-              {
-                title: "Dépense payée",
-                body: `${amount} FCFA payés - ${depense.description}`,
-                data: { depenseId: depense.id },
-              },
-              prisma
-            );
-          } catch (error) {
-            console.error("Erreur envoi notification:", error);
-          }
-
-          try {
-            await sendPushNotificationToRole(
-              "TREASURER",
-              {
-                title: "Dépense payée",
-                body: `${amount} FCFA payés - ${depense.description}`,
-                data: { depenseId: depense.id },
-              },
-              prisma
-            );
-          } catch (error) {
-            console.error("Erreur envoi notification:", error);
-          }
         }
 
         return NextResponse.json({ success: true });
       }
 
-      // Chercher la transaction existante par référence (paiement entrant)
-      const existingTransaction = await prisma.transaction.findFirst({
+      // Paiement entrant : retrouver la transaction par sa référence
+      let transaction = await prisma.transaction.findFirst({
         where: { referencePaiement: reference },
         include: { contributeur: true },
       });
 
-      if (existingTransaction && existingTransaction.statut === "EN_ATTENTE") {
-        // Valider la transaction existante
-        await prisma.transaction.update({
-          where: { id: existingTransaction.id },
-          data: { statut: "VALIDE" },
-        });
-
-        const categorie = existingTransaction.categorie;
-
-        // Répartition automatique SEULEMENT pour les offrandes et dons
-        // Les dîmes sont gérées par le pasteur (pas de répartition automatique)
-        if (categorie !== "DIME") {
-          const { calculerRepartition } = await import("@/lib/finance");
-          const repartition = calculerRepartition(
-            Number(amount),
-            categorie as any
-          );
-
-          await prisma.repartition.create({
-            data: {
-              transactionId: existingTransaction.id,
-              montantCaisse: repartition.montantCaisse,
-              montantEconomie: repartition.montantEconomie,
-              montantEpargne: repartition.montantEpargne,
-              montantActionSociale: repartition.montantActionSociale,
-              montantDimeDeLaDime: repartition.montantDimeDeLaDime,
-              montantFondsDedie: repartition.montantFondsDedie,
-            },
-          });
-
-          // Ajuster la caisse
-          const caisse = await prisma.caisse.findFirst();
-          if (caisse) {
-            await prisma.caisse.update({
-              where: { id: caisse.id },
-              data: { soldeActuel: { increment: repartition.montantCaisse } },
-            });
-          }
-        }
-
-        // Créer un reçu
-        await prisma.recu.create({
-          data: { transactionId: existingTransaction.id },
-        });
-
-        // Log d'audit
-        await prisma.logAudit.create({
-          data: {
-            action: "PAIEMENT_EN_LIGNE",
-            cible: `Transaction ${existingTransaction.id}`,
-            details: `Paiement en ligne de ${amount} FCFA pour ${categorie}`,
-          },
-        });
-
-        // Envoyer notification push au pasteur pour toutes les transactions
-        try {
-          await sendPushNotificationToRole(
-            "PASTOR",
-            {
-              title: `Nouveau paiement: ${categorie}`,
-              body: `${amount} FCFA - ${existingTransaction.contributeur?.nom || "Anonyme"}`,
-              data: { transactionId: existingTransaction.id },
-            },
-            prisma
-          );
-        } catch (error) {
-          console.error("Erreur envoi notification:", error);
-        }
-      } else if (!existingTransaction) {
-        // Fallback si la transaction n'existe pas (ancien workflow)
-        const categorie = description?.toLowerCase().includes("dîme") || description?.toLowerCase().includes("dime")
-          ? "DIME"
-          : description?.toLowerCase().includes("construction")
-          ? "CONSTRUCTION"
-          : description?.toLowerCase().includes("don")
-          ? "DON_SPECIAL"
-          : description?.toLowerCase().includes("projet")
-          ? "PROJET"
-          : description?.toLowerCase().includes("autre")
-          ? "AUTRE"
-          : "OFFRANDE";
-
-        const transaction = await prisma.transaction.create({
+      if (!transaction) {
+        // Fallback : la transaction n'a pas été retrouvée — on la crée
+        const categorie = devinerCategorieDepuisDescription(description);
+        transaction = await prisma.transaction.create({
           data: {
             montant: Number(amount),
             categorie: categorie as any,
             mode: "EN_LIGNE",
-            statut: "VALIDE",
+            statut: "EN_ATTENTE",
             referencePaiement: reference,
             agentId: null,
             contributeurId: null,
           },
+          include: { contributeur: true },
         });
+      }
 
-        if (categorie !== "DIME") {
-          const { calculerRepartition } = await import("@/lib/finance");
-          const repartition = calculerRepartition(
-            Number(amount),
-            categorie as any
-          );
+      await finaliserPaiementEnLigne(
+        { ...transaction, montant: Number(transaction.montant) },
+        Number(amount)
+      );
+    }
 
-          await prisma.repartition.create({
-            data: {
-              transactionId: transaction.id,
-              montantCaisse: repartition.montantCaisse,
-              montantEconomie: repartition.montantEconomie,
-              montantEpargne: repartition.montantEpargne,
-              montantActionSociale: repartition.montantActionSociale,
-              montantDimeDeLaDime: repartition.montantDimeDeLaDime,
-              montantFondsDedie: repartition.montantFondsDedie,
-            },
-          });
-
-          const caisse = await prisma.caisse.findFirst();
-          if (caisse) {
-            await prisma.caisse.update({
-              where: { id: caisse.id },
-              data: { soldeActuel: { increment: repartition.montantCaisse } },
-            });
-          }
-        }
-
-        await prisma.recu.create({
-          data: { transactionId: transaction.id },
+    // ─── Paiement entrant échoué/annulé/expiré ───
+    if (
+      event === "payment.failed" ||
+      event === "payment.cancelled" ||
+      event === "payment.expired"
+    ) {
+      const { reference } = data;
+      const transaction = await prisma.transaction.findFirst({
+        where: { referencePaiement: reference },
+      });
+      if (transaction && transaction.statut === "EN_ATTENTE") {
+        await prisma.transaction.update({
+          where: { id: transaction.id },
+          data: { statut: "ANNULE" },
         });
-
-        await prisma.logAudit.create({
-          data: {
-            action: "PAIEMENT_EN_LIGNE",
-            cible: `Transaction ${transaction.id}`,
-            details: `Paiement en ligne de ${amount} FCFA pour ${categorie}`,
-          },
-        });
-
-        try {
-          await sendPushNotificationToRole(
-            "PASTOR",
-            {
-              title: `Nouveau paiement: ${categorie}`,
-              body: `${amount} FCFA - ${customer?.name || "Anonyme"}`,
-              data: { transactionId: transaction.id },
-            },
-            prisma
-          );
-        } catch (error) {
-          console.error("Erreur envoi notification:", error);
-        }
       }
     }
 
     return NextResponse.json({ success: true });
-
   } catch (error) {
     console.error("Erreur webhook Genius Pay:", error);
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
