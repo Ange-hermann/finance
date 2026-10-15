@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Link as LinkIcon, Copy, Check, Download, Share2 } from "lucide-react";
 import { toast } from "sonner";
 import { QRCodeSVG } from "qrcode.react";
@@ -9,6 +9,7 @@ export default function PaymentLinkPage() {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || (typeof window !== "undefined" ? window.location.origin : "");
   const paymentLink = `${appUrl}/pay`;
   const [copied, setCopied] = useState(false);
+  const qrRef = useRef<HTMLDivElement>(null);
 
   const copyLink = () => {
     navigator.clipboard.writeText(paymentLink);
@@ -34,26 +35,45 @@ export default function PaymentLinkPage() {
   };
 
   const downloadQR = () => {
-    const svg = document.querySelector("svg");
-    if (svg) {
-      const svgData = new XMLSerializer().serializeToString(svg);
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
-      const img = new Image();
-
-      img.onload = () => {
-        canvas.width = 200;
-        canvas.height = 200;
-        ctx?.drawImage(img, 0, 0);
-        const link = document.createElement("a");
-        link.download = `ctf-finance-payment-qr.png`;
-        link.href = canvas.toDataURL("image/png");
-        link.click();
-        toast.success("Code QR téléchargé");
-      };
-
-      img.src = "data:image/svg+xml;base64," + btoa(svgData);
+    const svg = qrRef.current?.querySelector("svg");
+    if (!svg) {
+      toast.error("QR code introuvable");
+      return;
     }
+
+    const svgData = new XMLSerializer().serializeToString(svg);
+    const blob = new Blob([svgData], { type: "image/svg+xml;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const img = new Image();
+
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = svg.clientWidth || 200;
+      canvas.height = svg.clientHeight || 200;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) {
+        URL.revokeObjectURL(url);
+        toast.error("Erreur lors de la génération de l'image");
+        return;
+      }
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      URL.revokeObjectURL(url);
+
+      const link = document.createElement("a");
+      link.download = `ctf-finance-payment-qr.png`;
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+      toast.success("Code QR téléchargé");
+    };
+
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      toast.error("Erreur lors de la génération de l'image");
+    };
+
+    img.src = url;
   };
 
   return (
@@ -77,8 +97,8 @@ export default function PaymentLinkPage() {
         </div>
 
         <div className="flex justify-center">
-          <div className="bg-white p-4 rounded-xl">
-            <QRCodeSVG value={paymentLink} size={200} />
+          <div ref={qrRef} className="bg-white p-4 rounded-xl">
+            <QRCodeSVG value={paymentLink} size={200} includeMargin />
           </div>
         </div>
 
