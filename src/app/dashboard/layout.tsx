@@ -23,7 +23,7 @@ export default async function DashboardLayout({
     <Providers>
       <div className="min-h-screen bg-noir overflow-x-hidden">
         <Sidebar />
-        <div className="md:ml-64 pt-16 md:pt-8 p-4 md:p-8">
+        <div className="md:ml-64 pt-[calc(4rem+env(safe-area-inset-top))] md:pt-8 p-4 md:p-8">
           <div className="max-w-7xl mx-auto">{children}</div>
         </div>
         {showAI && <AIAgent />}

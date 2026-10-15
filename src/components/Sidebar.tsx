@@ -81,9 +81,9 @@ export default function Sidebar() {
   return (
     <>
       {/* Mobile top bar */}
-      <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-noir-soft border-b border-or/20 flex items-center justify-between px-4 h-14">
+      <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-noir-soft border-b border-or/20 flex items-center justify-between px-4 h-[calc(3.5rem+env(safe-area-inset-top))] pt-[env(safe-area-inset-top)]">
         <Link href="/dashboard" className="flex items-center gap-2">
-          <Image src="/ctf.png" alt="CTF Logo" width={40} height={40} className="rounded-lg" style={{ width: "auto", height: "auto" }} />
+          <Image src="/ctf.png" alt="CTF Logo" width={40} height={40} className="w-10 h-10 rounded-lg" />
           <span className="font-aeonik text-base font-bold text-blanc">
             CTF <span className="text-or">Finance</span>
           </span>
@@ -107,7 +107,7 @@ export default function Sidebar() {
 
       <aside
         className={cn(
-          "w-64 h-screen bg-noir border-r border-or/20 flex flex-col fixed left-0 top-0 z-50 transition-transform duration-300",
+          "w-64 h-screen bg-noir border-r border-or/20 flex flex-col fixed left-0 top-0 z-50 transition-transform duration-300 pt-[env(safe-area-inset-top)]",
           mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         )}
       >
