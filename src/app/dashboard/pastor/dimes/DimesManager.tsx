@@ -199,13 +199,17 @@ export default function DimesManager({
                       <p className="text-blanc font-aeonik text-lg capitalize">{mois.nomMois}</p>
                       <p className="text-blanc/50 text-sm">
                         {mois.dimes.length} dîme{mois.dimes.length > 1 ? 's' : ''} reçue{mois.dimes.length > 1 ? 's' : ''}
+                        {mois.partDons > 0 && ` + ${formatMontant(mois.partDons)} sur les dons`}
                       </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
                     <div className="text-right">
                       <p className="text-blanc font-aeonik">{formatMontant(mois.total)}</p>
-                      <p className="text-or text-sm">→ Dîme de la dîme: {formatMontant(mois.dimeDeLaDime)}</p>
+                      <p className="text-or text-sm">
+                        → Dîme de la dîme: {formatMontant(mois.dimeDeLaDime)}
+                        {mois.remis > 0 && ` (remis: ${formatMontant(mois.remis)})`}
+                      </p>
                     </div>
                     {estDistribue ? (
                       <span title="Remise"><CheckCircle className="w-6 h-6 text-green-400" /></span>
@@ -226,14 +230,24 @@ export default function DimesManager({
                     {/* Résumé du mois */}
                     <div className="bg-noir-card p-4 rounded-lg border border-or/10">
                       <h4 className="font-aeonik text-blanc mb-3">Résumé du mois</h4>
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                         <div>
-                          <p className="text-blanc/50 text-xs">Total dîmes reçues</p>
-                          <p className="text-blanc font-aeonik text-lg">{formatMontant(mois.total)}</p>
+                          <p className="text-blanc/50 text-xs">Dîmes reçues</p>
+                          <p className="text-blanc font-aeonik text-lg">
+                            {formatMontant(mois.dimes.reduce((s: number, d: any) => s + Number(d.montant), 0))}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-blanc/50 text-xs">Part sur les dons</p>
+                          <p className="text-blanc font-aeonik text-lg">{formatMontant(mois.partDons)}</p>
                         </div>
                         <div>
                           <p className="text-blanc/50 text-xs">Dîme de la dîme (10%)</p>
                           <p className="text-or font-aeonik text-lg">{formatMontant(mois.dimeDeLaDime)}</p>
+                        </div>
+                        <div>
+                          <p className="text-blanc/50 text-xs">Remis</p>
+                          <p className="text-green-400 font-aeonik text-lg">{formatMontant(mois.remis)}</p>
                         </div>
                       </div>
                       <div className="mt-3 pt-3 border-t border-or/10 flex items-center justify-between">

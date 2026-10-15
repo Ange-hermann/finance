@@ -21,6 +21,7 @@ const STATUT_LABELS: Record<string, { label: string; cls: string }> = {
 
 export default function RetraitPasteurPage() {
   const [solde, setSolde] = useState<number | null>(null);
+  const [soldeDime, setSoldeDime] = useState<number | null>(null);
   const [retraits, setRetraits] = useState<any[]>([]);
   const [dimeDeLaDimeDue, setDimeDeLaDimeDue] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -32,7 +33,8 @@ export default function RetraitPasteurPage() {
     try {
       const res = await fetch("/api/retraits");
       const data = await res.json();
-      setSolde(data.solde);
+      setSolde(data.soldeNormal ?? data.solde);
+      setSoldeDime(data.soldeDimeDeLaDime ?? 0);
       setRetraits(data.retraits || []);
       setDimeDeLaDimeDue(data.dimeDeLaDimeDue || 0);
     } catch {
@@ -94,25 +96,29 @@ export default function RetraitPasteurPage() {
         </p>
       </div>
 
-      {/* Solde + dîme de la dîme */}
+      {/* Deux caisses séparées */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="card-noir p-6">
+        <div className={`card-noir p-6 ${!form.pourDimeDeLaDime ? "border-or/50" : ""}`}>
           <div className="flex items-center gap-4">
             <Wallet className="w-10 h-10 text-or" />
             <div>
-              <p className="text-blanc/50 text-sm">Votre solde disponible</p>
+              <p className="text-blanc/50 text-sm">Caisse normale (90%)</p>
               <p className="font-aeonik text-3xl text-blanc">
                 {solde !== null ? formatMontant(solde) : "…"}
               </p>
+              <p className="text-blanc/40 text-xs mt-1">Vos retraits libres</p>
             </div>
           </div>
         </div>
-        <div className="card-noir p-6">
+        <div className={`card-noir p-6 ${form.pourDimeDeLaDime ? "border-or/50" : ""}`}>
           <div className="flex items-center gap-4">
             <ArrowDownToLine className="w-10 h-10 text-or" />
             <div>
-              <p className="text-blanc/50 text-sm">Dîme de la dîme à remettre (10%)</p>
-              <p className="font-aeonik text-3xl text-blanc">{formatMontant(dimeDeLaDimeDue)}</p>
+              <p className="text-blanc/50 text-sm">Caisse dîme de la dîme (10%)</p>
+              <p className="font-aeonik text-3xl text-blanc">
+                {soldeDime !== null ? formatMontant(soldeDime) : "…"}
+              </p>
+              <p className="text-blanc/40 text-xs mt-1">À remettre — retirable ici</p>
             </div>
           </div>
           {dimeDeLaDimeDue > 0 && (
@@ -120,7 +126,7 @@ export default function RetraitPasteurPage() {
               onClick={() => setForm({ ...form, montant: String(dimeDeLaDimeDue), pourDimeDeLaDime: true })}
               className="text-or text-sm mt-3 hover:underline"
             >
-              → Remplir le formulaire avec ce montant
+              → Retirer la dîme de la dîme ({formatMontant(dimeDeLaDimeDue)})
             </button>
           )}
         </div>

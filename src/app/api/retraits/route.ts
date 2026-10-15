@@ -2,25 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { getSoldeFonds, initierPayoutDepense } from "@/lib/depenses";
+import { initierPayoutDepense } from "@/lib/depenses";
 
 const PROVIDERS_PAYOUT = ["WAVE", "ORANGE_MOMO", "MTN_MOMO", "MOOV_MOMO"];
 
-// Solde et historique des retraits du pasteur
-export async function GET() {
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
-  }
-
-  const [solde, retraits, totalDimes, partDons, dejaRemis] = await Promise.all([
-    getSoldeFonds("PASTEUR"),
-    prisma.depense.findMany({
-      where: { sourceFonds: "PASTEUR" },
-      include: { beneficiaire: true },
-      orderBy: { dateDepense: "desc" },
-      take: 30,
-    }),
+// Solde et historique des retraits du pasteur.
+// Deux caisses séparées : caisse normale (90% des reçus) et caisse
+// "dîme de la dîme" (10% à remettre).
+async function getSoldesPasteur() {
+  const [totalDimes, partDons, titheDepenses, autresRetraits] = await Promise.all([
     prisma.transaction.aggregate({
       _sum: { montant: true },
       where: { categorie: "DIME", statut: "VALIDE" },
@@ -37,16 +27,51 @@ export async function GET() {
         description: { contains: "dîme de la dîme", mode: "insensitive" },
       },
     }),
+    prisma.depense.aggregate({
+      _sum: { montant: true },
+      where: {
+        sourceFonds: "PASTEUR",
+        statut: { not: "ANNULE" },
+        NOT: { description: { contains: "dîme de la dîme", mode: "insensitive" } },
+      },
+    }),
   ]);
 
   const totalRecu =
     Number(totalDimes._sum.montant || 0) + Number(partDons._sum.montantDimeDeLaDime || 0);
-  const dimeDeLaDimeDue = Math.max(
-    0,
-    Math.round(totalRecu * 0.10) - Number(dejaRemis._sum.montant || 0)
-  );
+  const partDimeDeLaDime = Math.round(totalRecu * 0.10);
+  const partNormale = totalRecu - partDimeDeLaDime;
 
-  return NextResponse.json({ solde, retraits, dimeDeLaDimeDue });
+  return {
+    soldeNormal: partNormale - Number(autresRetraits._sum.montant || 0),
+    soldeDimeDeLaDime: partDimeDeLaDime - Number(titheDepenses._sum.montant || 0),
+    totalRecu,
+  };
+}
+
+export async function GET() {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
+  }
+
+  const [soldes, retraits] = await Promise.all([
+    getSoldesPasteur(),
+    prisma.depense.findMany({
+      where: { sourceFonds: "PASTEUR" },
+      include: { beneficiaire: true },
+      orderBy: { dateDepense: "desc" },
+      take: 30,
+    }),
+  ]);
+
+  return NextResponse.json({
+    solde: soldes.soldeNormal + soldes.soldeDimeDeLaDime,
+    soldeNormal: soldes.soldeNormal,
+    soldeDimeDeLaDime: Math.max(0, soldes.soldeDimeDeLaDime),
+    dimeDeLaDimeDue: Math.max(0, soldes.soldeDimeDeLaDime),
+    retraits,
+  });
 }
 
 // Le pasteur retire un montant de son solde (dîmes + part des dons)
@@ -81,10 +106,17 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Provider de retrait invalide" }, { status: 400 });
     }
 
-    const solde = await getSoldeFonds("PASTEUR");
-    if (solde < montant) {
+    // Deux caisses séparées : un retrait normal puise dans la caisse
+    // normale, un retrait "dîme de la dîme" dans sa caisse dédiée.
+    const soldes = await getSoldesPasteur();
+    const estDimeDeLaDime = !!body.pourDimeDeLaDime;
+    const soldeDisponible = estDimeDeLaDime ? soldes.soldeDimeDeLaDime : soldes.soldeNormal;
+
+    if (soldeDisponible < montant) {
       return NextResponse.json(
-        { error: `Solde insuffisant. Disponible: ${solde.toLocaleString("fr-FR")} FCFA` },
+        {
+          error: `Solde insuffisant dans la caisse ${estDimeDeLaDime ? "dîme de la dîme" : "normale"}. Disponible: ${Math.max(0, soldeDisponible).toLocaleString("fr-FR")} FCFA`,
+        },
         { status: 400 }
       );
     }
