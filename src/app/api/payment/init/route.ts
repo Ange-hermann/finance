@@ -123,7 +123,8 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    return NextResponse.json({ url: session.url, sessionId: session.sessionId });
+    const paymentUrl = session.url || session.paymentUrl || session.checkoutUrl;
+    return NextResponse.json({ url: paymentUrl, sessionId: session.sessionId });
   } catch (error) {
     console.error("Erreur init paiement:", error);
     return NextResponse.json(

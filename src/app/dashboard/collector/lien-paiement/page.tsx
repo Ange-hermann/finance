@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { QRCodeSVG } from "qrcode.react";
 
 export default function PaymentLinkPage() {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || (typeof window !== "undefined" ? window.location.origin : "");
   const paymentLink = `${appUrl}/pay`;
   const [copied, setCopied] = useState(false);
 
