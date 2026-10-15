@@ -54,6 +54,7 @@ const SOURCE_LABELS: Record<string, string> = {
   EPARGNE: "Épargne",
   CONSTRUCTION: "Construction",
   ACTION_SOCIALE: "Action sociale",
+  PASTEUR: "Pasteur",
 };
 
 const SOURCES = ["CAISSE", "ECONOMIE", "EPARGNE", "CONSTRUCTION", "ACTION_SOCIALE"];

@@ -21,6 +21,7 @@ import {
   Receipt,
   Calendar,
   Link as LinkIcon,
+  ArrowDownToLine,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -42,6 +43,7 @@ const roleMenus: Record<string, { href: string; label: string; icon: any }[]> = 
   PASTOR: [
     { href: "/dashboard/pastor", label: "Vue globale", icon: BarChart3 },
     { href: "/dashboard/pastor/dimes", label: "Gestion Dîmes", icon: Wallet },
+    { href: "/dashboard/pastor/retrait", label: "Retrait", icon: ArrowDownToLine },
     { href: "/dashboard/pastor/autorisations", label: "Autorisations", icon: ShieldCheck },
   ],
   AUDITOR: [

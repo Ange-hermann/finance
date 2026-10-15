@@ -152,7 +152,7 @@ export default function DimesManager({
       <div className="card-noir p-6">
         <h3 className="font-aeonik text-xl text-blanc mb-4">Marquer la dîme de la dîme comme remise</h3>
         <p className="text-blanc/60 text-sm mb-4">
-          La dîme de la dîme représente 10% du total des dîmes reçues. Cliquez sur le bouton pour marquer qu'elle a été remise — les 10% sont automatiquement reversés à la caisse de l'église.
+          La dîme de la dîme représente 10% du total des dîmes reçues. Ce montant fait partie de votre solde retirable — utilisez la page <a href="/dashboard/pastor/retrait" className="text-or hover:underline">Retrait</a> pour le verser sur votre mobile money, puis marquez ici qu'elle a été remise.
         </p>
         <button
           onClick={marquerDimeDeLaDimeRemise}

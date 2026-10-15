@@ -76,6 +76,7 @@ enum SourceFonds {
   EPARGNE
   CONSTRUCTION
   ACTION_SOCIALE
+  PASTEUR
 }
 
 // ========================

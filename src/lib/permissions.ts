@@ -18,6 +18,7 @@ const PERMISSIONS: Record<string, Record<string, Acces>> = {
     EPARGNE: LIBRE,
     CONSTRUCTION: LIBRE,
     ACTION_SOCIALE: LIBRE,
+    PASTEUR: LIBRE,
   },
   AUDITOR: {
     CAISSE: LIBRE,
@@ -25,6 +26,7 @@ const PERMISSIONS: Record<string, Record<string, Acces>> = {
     EPARGNE: LIBRE,
     CONSTRUCTION: LIBRE,
     ACTION_SOCIALE: LIBRE,
+    PASTEUR: LIBRE,
   },
   ADMIN: {
     CAISSE: LIBRE,
@@ -32,6 +34,7 @@ const PERMISSIONS: Record<string, Record<string, Acces>> = {
     EPARGNE: LIBRE,
     CONSTRUCTION: LIBRE,
     ACTION_SOCIALE: LIBRE,
+    PASTEUR: LIBRE,
   },
   COLLECTOR: {
     CAISSE: RESTREINT,

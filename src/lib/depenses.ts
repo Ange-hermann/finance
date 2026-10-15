@@ -48,7 +48,7 @@ export function rembourseCaissePhysique(depense: DepenseLike): boolean {
 }
 
 export async function getSoldesFonds(): Promise<Record<SourceFonds, number>> {
-  const [repartitions, depenses] = await Promise.all([
+  const [repartitions, depenses, dimes, partsPasteur] = await Promise.all([
     prisma.repartition.findMany({
       where: { transaction: { statut: "VALIDE" } },
     }),
@@ -61,6 +61,16 @@ export async function getSoldesFonds(): Promise<Record<SourceFonds, number>> {
         ],
       },
     }),
+    // Les dîmes vont intégralement au pasteur (pas de répartition auto)
+    prisma.transaction.aggregate({
+      _sum: { montant: true },
+      where: { categorie: "DIME", statut: "VALIDE" },
+    }),
+    // Part du pasteur (10%) prélevée sur les autres catégories
+    prisma.repartition.aggregate({
+      _sum: { montantDimeDeLaDime: true },
+      where: { transaction: { categorie: { not: "DIME" }, statut: "VALIDE" } },
+    }),
   ]);
 
   const soldes: Record<SourceFonds, number> = {
@@ -69,6 +79,9 @@ export async function getSoldesFonds(): Promise<Record<SourceFonds, number>> {
     EPARGNE: repartitions.reduce((s, r) => s + Number(r.montantEpargne), 0),
     CONSTRUCTION: repartitions.reduce((s, r) => s + Number(r.montantFondsDedie), 0),
     ACTION_SOCIALE: repartitions.reduce((s, r) => s + Number(r.montantActionSociale), 0),
+    PASTEUR:
+      Number(dimes._sum.montant || 0) +
+      Number(partsPasteur._sum.montantDimeDeLaDime || 0),
   };
 
   for (const d of depenses) {
@@ -243,4 +256,76 @@ export async function annulerDepense(depense: DepenseLike & { referencePaiement?
   if (depense.type === "DEPENSE_CULTE" && depense.transactionId) {
     await recalculerRepartitionCulte(depense.transactionId);
   }
+}
+
+// Initie le versement sortant (payout) d'une dépense validée vers le
+// mobile money du bénéficiaire via le provider configuré.
+// Retourne { payout, depense } ou lève une erreur avec message lisible.
+export async function initierPayoutDepense(depenseId: string) {
+  const depense = await prisma.depense.findUnique({
+    where: { id: depenseId },
+    include: { beneficiaire: true },
+  });
+
+  if (!depense) throw new Error("Dépense non trouvée");
+  if (depense.modePaiement !== "GENIUS_PAY") {
+    throw new Error("Cette dépense n'utilise pas Genius Pay");
+  }
+  if (depense.statut !== "VALIDE") {
+    throw new Error("La dépense doit être validée avant le paiement");
+  }
+  if (depense.statutPaiement === "PAYE") throw new Error("Dépense déjà payée");
+  if (depense.statutPaiement === "EN_COURS") {
+    throw new Error("Un paiement est déjà en cours pour cette dépense");
+  }
+  if (!depense.beneficiaire) throw new Error("Bénéficiaire manquant");
+
+  const { getPaymentProvider, PAYOUT_PROVIDER_PAR_MODE } = await import("@/lib/payment");
+
+  const provider = PAYOUT_PROVIDER_PAR_MODE[depense.beneficiaire.modePaiement];
+  if (!provider) {
+    throw new Error(
+      `Le mode ${depense.beneficiaire.modePaiement} n'est pas payable en ligne — utilisez un paiement manuel`
+    );
+  }
+
+  const paymentProvider = getPaymentProvider();
+  if (!paymentProvider.createPayout) {
+    throw new Error("Le provider de paiement configuré ne supporte pas les versements sortants");
+  }
+
+  // Paiement sortant : l'argent quitte le wallet marchand vers le
+  // mobile money du bénéficiaire (et non l'inverse)
+  const payout = await paymentProvider.createPayout(
+    Number(depense.montant),
+    `Paiement dépense ${depense.id} - ${depense.description}`,
+    {
+      nom: depense.beneficiaire.nom,
+      telephone: depense.beneficiaire.telephone,
+      email: depense.beneficiaire.email || undefined,
+      provider,
+    },
+    {
+      type: "expense",
+      depenseId: depense.id,
+      reference: depense.referencePaiement,
+    }
+  );
+
+  // On mémorise la référence du payout pour le suivi webhook
+  const updated = await prisma.depense.update({
+    where: { id: depense.id },
+    data: {
+      referencePaiement: payout.reference,
+      statutPaiement:
+        payout.status === "completed" ? "PAYE" : payout.status === "failed" ? "ECHOUE" : "EN_COURS",
+    },
+  });
+
+  // Certains providers (mock) terminent immédiatement
+  if (updated.statutPaiement === "PAYE") {
+    await marquerDepensePayee(depense);
+  }
+
+  return { payout, depense: updated };
 }

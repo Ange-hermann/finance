@@ -8,6 +8,7 @@ export const PAYOUT_PROVIDER_PAR_MODE: Record<string, string> = {
   WAVE: "wave",
   ORANGE_MOMO: "orange_money",
   MTN_MOMO: "mtn_momo",
+  MOOV_MOMO: "moov_money",
 };
 
 export class GeniusPayProvider implements PaymentProvider {

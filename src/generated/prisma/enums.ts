@@ -100,7 +100,8 @@ export const SourceFonds = {
   ECONOMIE: 'ECONOMIE',
   EPARGNE: 'EPARGNE',
   CONSTRUCTION: 'CONSTRUCTION',
-  ACTION_SOCIALE: 'ACTION_SOCIALE'
+  ACTION_SOCIALE: 'ACTION_SOCIALE',
+  PASTEUR: 'PASTEUR'
 } as const
 
 export type SourceFonds = (typeof SourceFonds)[keyof typeof SourceFonds]

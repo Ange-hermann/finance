@@ -66,6 +66,14 @@ export async function POST(req: NextRequest) {
   const userId = (session.user as any)?.id;
   const source = (sourceFonds as SourceFonds) || "CAISSE";
 
+  // Le fonds PASTEUR est réservé aux retraits du pasteur (/api/retraits)
+  if (source === "PASTEUR") {
+    return NextResponse.json(
+      { error: "Le fonds Pasteur n'est utilisable que via l'option Retrait du pasteur" },
+      { status: 400 }
+    );
+  }
+
   // Une approbation est nécessaire si le rôle n'a pas un accès LIBRE sur le fonds
   const needsApproval = !getPermission(userRole, source).authorized;
 
