@@ -56,9 +56,36 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Calculer le total des dîmes et la dîme de la dîme
+    // Calculer le total des dîmes et la dîme de la dîme DUE :
+    // 10% de TOUT ce que le pasteur reçoit (dîmes + part des dons)
     const totalDimes = dimesNonMarquees.reduce((sum, d) => sum + Number(d.montant), 0);
-    const dimeDeLaDime = Math.round(totalDimes * 0.10);
+
+    const [totalDimesGlobal, partPasteurDons, dejaRemis] = await Promise.all([
+      prisma.transaction.aggregate({
+        _sum: { montant: true },
+        where: { categorie: "DIME", statut: "VALIDE" },
+      }),
+      prisma.repartition.aggregate({
+        _sum: { montantDimeDeLaDime: true },
+        where: { transaction: { categorie: { not: "DIME" }, statut: "VALIDE" } },
+      }),
+      prisma.depense.aggregate({
+        _sum: { montant: true },
+        where: {
+          sourceFonds: "PASTEUR",
+          statut: { not: "ANNULE" },
+          description: { contains: "dîme de la dîme", mode: "insensitive" },
+        },
+      }),
+    ]);
+
+    const totalRecu =
+      Number(totalDimesGlobal._sum.montant || 0) +
+      Number(partPasteurDons._sum.montantDimeDeLaDime || 0);
+    const dimeDeLaDime = Math.max(
+      0,
+      Math.round(totalRecu * 0.10) - Number(dejaRemis._sum.montant || 0)
+    );
 
     // Marquer chaque dîme comme remise : enregistre la dîme de la dîme
     // (10% de ce que le pasteur a reçu). Cet argent n'entre PAS en caisse —
@@ -75,6 +102,27 @@ export async function POST(request: NextRequest) {
           montantActionSociale: 0,
           montantDimeDeLaDime: montantDimeDeLaDime,
           montantFondsDedie: 0,
+        },
+      });
+    }
+
+    // La dîme de la dîme est déduite du solde du pasteur : dépense
+    // sur le fonds PASTEUR (remise physique au pasteur / à l'église mère).
+    if (dimeDeLaDime > 0) {
+      await prisma.depense.create({
+        data: {
+          type: "DEPENSE_NORMALE",
+          categorie: "AUTRE",
+          montant: dimeDeLaDime,
+          description: moisKey
+            ? `Dîme de la dîme remise — ${moisKey}`
+            : "Dîme de la dîme remise",
+          sourceFonds: "PASTEUR",
+          modePaiement: "MANUEL",
+          statut: "VALIDE",
+          statutPaiement: "PAYE",
+          datePaiement: new Date(),
+          agentId: (session?.user as any)?.id,
         },
       });
     }

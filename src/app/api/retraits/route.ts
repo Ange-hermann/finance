@@ -13,15 +13,40 @@ export async function GET() {
     return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
   }
 
-  const solde = await getSoldeFonds("PASTEUR");
-  const retraits = await prisma.depense.findMany({
-    where: { sourceFonds: "PASTEUR" },
-    include: { beneficiaire: true },
-    orderBy: { dateDepense: "desc" },
-    take: 30,
-  });
+  const [solde, retraits, totalDimes, partDons, dejaRemis] = await Promise.all([
+    getSoldeFonds("PASTEUR"),
+    prisma.depense.findMany({
+      where: { sourceFonds: "PASTEUR" },
+      include: { beneficiaire: true },
+      orderBy: { dateDepense: "desc" },
+      take: 30,
+    }),
+    prisma.transaction.aggregate({
+      _sum: { montant: true },
+      where: { categorie: "DIME", statut: "VALIDE" },
+    }),
+    prisma.repartition.aggregate({
+      _sum: { montantDimeDeLaDime: true },
+      where: { transaction: { categorie: { not: "DIME" }, statut: "VALIDE" } },
+    }),
+    prisma.depense.aggregate({
+      _sum: { montant: true },
+      where: {
+        sourceFonds: "PASTEUR",
+        statut: { not: "ANNULE" },
+        description: { contains: "dîme de la dîme", mode: "insensitive" },
+      },
+    }),
+  ]);
 
-  return NextResponse.json({ solde, retraits });
+  const totalRecu =
+    Number(totalDimes._sum.montant || 0) + Number(partDons._sum.montantDimeDeLaDime || 0);
+  const dimeDeLaDimeDue = Math.max(
+    0,
+    Math.round(totalRecu * 0.10) - Number(dejaRemis._sum.montant || 0)
+  );
+
+  return NextResponse.json({ solde, retraits, dimeDeLaDimeDue });
 }
 
 // Le pasteur retire un montant de son solde (dîmes + part des dons)
@@ -78,7 +103,9 @@ export async function POST(request: NextRequest) {
         type: "DEPENSE_NORMALE",
         categorie: "SALAIRE",
         sourceFonds: "PASTEUR",
-        description: body.description || "Retrait pasteur",
+        description: body.pourDimeDeLaDime
+          ? "Dîme de la dîme — retrait"
+          : body.description || "Retrait pasteur",
         montant,
         agentId: user.id,
         statut: "VALIDE",

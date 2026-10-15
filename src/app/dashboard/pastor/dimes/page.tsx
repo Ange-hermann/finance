@@ -41,9 +41,8 @@ export default async function PastorDimesPage() {
     return acc;
   }, {} as Record<string, any>);
 
-  // Calculer le total global
+  // Calculer le total global des dîmes
   const totalDimes = dimes.reduce((sum, d) => sum + Number(d.montant), 0);
-  const dimeDeLaDime = Math.round(totalDimes * 0.10);
 
   // Récupérer les dîmes qui ont déjà été distribuées
   const dimesDistribuees = await prisma.repartition.count({
@@ -63,6 +62,22 @@ export default async function PastorDimesPage() {
   });
   const partPasteurDons = Number(partPasteurDonsAgg._sum.montantDimeDeLaDime || 0);
 
+  // Total reçu par le pasteur : dîmes + part sur les dons.
+  // La dîme de la dîme = 10% de ce total.
+  const totalRecu = totalDimes + partPasteurDons;
+  const dimeDeLaDimeDue = Math.round(totalRecu * 0.10);
+
+  // Déjà remis (dépenses PASTEUR taguées "dîme de la dîme")
+  const dejaRemisAgg = await prisma.depense.aggregate({
+    _sum: { montant: true },
+    where: {
+      sourceFonds: "PASTEUR",
+      statut: { not: "ANNULE" },
+      description: { contains: "dîme de la dîme", mode: "insensitive" },
+    },
+  });
+  const dimeDeLaDimeRestante = Math.max(0, dimeDeLaDimeDue - Number(dejaRemisAgg._sum.montant || 0));
+
   // Dîmes non distribuées
   const dimesNonDistribuees = dimes.filter(d => !d.repartition);
 
@@ -75,7 +90,8 @@ export default async function PastorDimesPage() {
     <DimesManager
       dimes={dimes}
       totalDimes={totalDimes}
-      dimeDeLaDime={dimeDeLaDime}
+      totalRecu={totalRecu}
+      dimeDeLaDime={dimeDeLaDimeRestante}
       partPasteurDons={partPasteurDons}
       dimesDistribuees={dimesDistribuees}
       dimesNonDistribuees={dimesNonDistribuees}

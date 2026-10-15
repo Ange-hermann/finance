@@ -8,6 +8,7 @@ import { toast } from "sonner";
 interface DimesManagerProps {
   dimes: any[];
   totalDimes: number;
+  totalRecu: number;
   dimeDeLaDime: number;
   partPasteurDons: number;
   dimesDistribuees: number;
@@ -18,6 +19,7 @@ interface DimesManagerProps {
 export default function DimesManager({
   dimes,
   totalDimes,
+  totalRecu,
   dimeDeLaDime,
   partPasteurDons,
   dimesDistribuees,
@@ -105,17 +107,17 @@ export default function DimesManager({
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card-noir">
           <Wallet className="w-8 h-8 text-or mb-2" />
-          <p className="text-blanc/50 text-sm">Total dîmes reçues</p>
-          <p className="font-aeonik text-2xl text-blanc">{formatMontant(totalDimes)}</p>
+          <p className="text-blanc/50 text-sm">Total reçu (dîmes + dons)</p>
+          <p className="font-aeonik text-2xl text-blanc">{formatMontant(totalRecu)}</p>
         </div>
         <div className="card-noir">
           <Wallet className="w-8 h-8 text-or mb-2" />
-          <p className="text-blanc/50 text-sm">Votre part sur les dons (10%)</p>
+          <p className="text-blanc/50 text-sm">dont part sur les dons (10%)</p>
           <p className="font-aeonik text-2xl text-blanc">{formatMontant(partPasteurDons)}</p>
         </div>
         <div className="card-noir">
           <TrendingUp className="w-8 h-8 text-or mb-2" />
-          <p className="text-blanc/50 text-sm">Dîme de la dîme (10%)</p>
+          <p className="text-blanc/50 text-sm">Dîme de la dîme à remettre (10%)</p>
           <p className="font-aeonik text-2xl text-blanc">{formatMontant(dimeDeLaDime)}</p>
         </div>
         <div className="card-noir">

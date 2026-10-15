@@ -22,9 +22,10 @@ const STATUT_LABELS: Record<string, { label: string; cls: string }> = {
 export default function RetraitPasteurPage() {
   const [solde, setSolde] = useState<number | null>(null);
   const [retraits, setRetraits] = useState<any[]>([]);
+  const [dimeDeLaDimeDue, setDimeDeLaDimeDue] = useState(0);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  const [form, setForm] = useState({ montant: "", telephone: "", provider: "WAVE" });
+  const [form, setForm] = useState({ montant: "", telephone: "", provider: "WAVE", pourDimeDeLaDime: false });
 
   const fetchData = async () => {
     setLoading(true);
@@ -33,6 +34,7 @@ export default function RetraitPasteurPage() {
       const data = await res.json();
       setSolde(data.solde);
       setRetraits(data.retraits || []);
+      setDimeDeLaDimeDue(data.dimeDeLaDimeDue || 0);
     } catch {
       toast.error("Erreur de chargement");
     }
@@ -56,6 +58,7 @@ export default function RetraitPasteurPage() {
           montant: parseFloat(form.montant),
           telephone: form.telephone,
           provider: form.provider,
+          pourDimeDeLaDime: form.pourDimeDeLaDime,
         }),
       });
       const data = await res.json();
@@ -67,7 +70,7 @@ export default function RetraitPasteurPage() {
             ? `Retrait effectué${frais}`
             : `Versement en cours vers votre mobile money${frais}`
         );
-        setForm({ montant: "", telephone: "", provider: "WAVE" });
+        setForm({ montant: "", telephone: "", provider: "WAVE", pourDimeDeLaDime: false });
         fetchData();
       } else {
         toast.error(data.error || "Erreur lors du retrait");
@@ -91,16 +94,35 @@ export default function RetraitPasteurPage() {
         </p>
       </div>
 
-      {/* Solde */}
-      <div className="card-noir p-6">
-        <div className="flex items-center gap-4">
-          <Wallet className="w-10 h-10 text-or" />
-          <div>
-            <p className="text-blanc/50 text-sm">Votre solde disponible</p>
-            <p className="font-aeonik text-3xl text-blanc">
-              {solde !== null ? formatMontant(solde) : "…"}
-            </p>
+      {/* Solde + dîme de la dîme */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="card-noir p-6">
+          <div className="flex items-center gap-4">
+            <Wallet className="w-10 h-10 text-or" />
+            <div>
+              <p className="text-blanc/50 text-sm">Votre solde disponible</p>
+              <p className="font-aeonik text-3xl text-blanc">
+                {solde !== null ? formatMontant(solde) : "…"}
+              </p>
+            </div>
           </div>
+        </div>
+        <div className="card-noir p-6">
+          <div className="flex items-center gap-4">
+            <ArrowDownToLine className="w-10 h-10 text-or" />
+            <div>
+              <p className="text-blanc/50 text-sm">Dîme de la dîme à remettre (10%)</p>
+              <p className="font-aeonik text-3xl text-blanc">{formatMontant(dimeDeLaDimeDue)}</p>
+            </div>
+          </div>
+          {dimeDeLaDimeDue > 0 && (
+            <button
+              onClick={() => setForm({ ...form, montant: String(dimeDeLaDimeDue), pourDimeDeLaDime: true })}
+              className="text-or text-sm mt-3 hover:underline"
+            >
+              → Remplir le formulaire avec ce montant
+            </button>
+          )}
         </div>
       </div>
 
@@ -155,6 +177,15 @@ export default function RetraitPasteurPage() {
               ))}
             </div>
           </div>
+          <label className="flex items-center gap-2 text-blanc/60 text-sm cursor-pointer">
+            <input
+              type="checkbox"
+              checked={form.pourDimeDeLaDime}
+              onChange={(e) => setForm({ ...form, pourDimeDeLaDime: e.target.checked })}
+              className="accent-or w-4 h-4"
+            />
+            Ce retrait correspond à la dîme de la dîme (déduit du montant dû)
+          </label>
           <button
             type="submit"
             disabled={submitting || loading || !form.montant || !form.telephone}
