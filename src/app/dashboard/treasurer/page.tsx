@@ -10,7 +10,7 @@ import { getSuiviDimeDeLaDime } from "@/lib/dimes";
 export default async function TreasurerDashboard() {
   const now = new Date();
 
-  const [transactions, repartitions, caisse, depenses, allTransactions, dimeMoisStatut, suiviDime, paiementsEnLigne] = await Promise.all([
+  const [transactions, repartitions, caisse, depenses, allTransactions, suiviDime, paiementsEnLigne] = await Promise.all([
     prisma.transaction.findMany({
       where: { statut: "VALIDE" },
       orderBy: { createdAt: "desc" },
@@ -28,9 +28,6 @@ export default async function TreasurerDashboard() {
     prisma.transaction.findMany({
       where: { statut: "VALIDE" },
       orderBy: { createdAt: "asc" },
-    }),
-    prisma.dimeMensuelle.findUnique({
-      where: { mois_annee: { mois: now.getMonth() + 1, annee: now.getFullYear() } },
     }),
     getSuiviDimeDeLaDime(),
     prisma.transaction.findMany({
@@ -60,14 +57,11 @@ export default async function TreasurerDashboard() {
     .filter((d) => d.type === "DEPENSE_NORMALE" && estCeMois(new Date(d.dateDepense)))
     .reduce((s, d) => s + Number(d.montant), 0);
   const repartitionsMois = repartitions.filter((r) => estCeMois(new Date(r.transaction.createdAt)));
-  const dimeMoisTotal = repartitionsMois.reduce((s, r) => s + Number(r.montantDimeDeLaDime || 0), 0);
-  // Si la dîme du mois a été versée, ne montrer que le restant (dîmes reçues après la date de versement)
-  const dateVersementMois = dimeMoisStatut?.dateVersement ?? null;
-  const dimeMoisActuel = dimeMoisStatut?.statut === "VERSE" && dateVersementMois !== null
-    ? repartitionsMois
-        .filter((r) => new Date(r.transaction.createdAt) > new Date(dateVersementMois))
-        .reduce((s, r) => s + Number(r.montantDimeDeLaDime || 0), 0)
-    : dimeMoisTotal;
+  // Dîme de la dîme du mois en cours (10% des reçus du pasteur ce mois)
+  const moisKeyActuel = `${anneeActuelle}-${String(moisActuel + 1).padStart(2, "0")}`;
+  const suiviMoisActuel = suiviDime.moisArray.find((m) => m.key === moisKeyActuel);
+  const dimeMoisActuel = suiviMoisActuel?.dimeDeLaDime || 0;
+  const dimeMoisRemis = suiviMoisActuel?.remis || 0;
   const nbTransactionsMois = txMoisActuel.length;
 
   // === MOIS PASSÉS (par mois) ===
@@ -93,12 +87,12 @@ export default async function TreasurerDashboard() {
     moisPassesMap[key].nbTx++;
   }
 
-  for (const r of repartitions) {
-    const d = new Date(r.transaction.createdAt);
-    if (!estMoisPasse(d)) continue;
-    const key = `${d.getFullYear()}-${d.getMonth()}`;
+  // Dîme de la dîme par mois passé (même source que le suivi pasteur)
+  for (const m of suiviDime.moisArray) {
+    const [a, mm] = m.key.split("-").map(Number);
+    const key = `${a}-${mm - 1}`;
     if (moisPassesMap[key]) {
-      moisPassesMap[key].dime += Number(r.montantDimeDeLaDime || 0);
+      moisPassesMap[key].dime = m.dimeDeLaDime;
     }
   }
 
@@ -201,15 +195,15 @@ export default async function TreasurerDashboard() {
           </div>
           <div className="bg-noir-soft rounded-xl p-3">
             <Coins className="w-5 h-5 text-or mb-1" />
-            <p className="text-blanc/50 text-xs">Dîme à donner</p>
+            <p className="text-blanc/50 text-xs">Dîme de la dîme (mois)</p>
             <p className="font-aeonik text-sm text-blanc mt-1 whitespace-nowrap">{formatMontant(dimeMoisActuel)}</p>
             {dimeMoisActuel > 0 && (
               <span className={`text-xs px-2 py-0.5 rounded-lg mt-1 inline-block ${
-                dimeMoisStatut?.statut === "VERSE"
+                dimeMoisRemis >= dimeMoisActuel
                   ? "bg-green-500/10 text-green-400"
                   : "bg-or/10 text-or"
               }`}>
-                {dimeMoisStatut?.statut === "VERSE" ? "✓ Donnée" : "Non donnée"}
+                {dimeMoisRemis >= dimeMoisActuel ? "✓ Remise" : `En attente${dimeMoisRemis > 0 ? ` (${formatMontant(dimeMoisRemis)} remis)` : ""}`}
               </span>
             )}
           </div>
