@@ -35,7 +35,7 @@ const roleMenus: Record<string, { href: string; label: string; icon: any }[]> = 
   TREASURER: [
     { href: "/dashboard/treasurer", label: "Tableau de bord", icon: LayoutDashboard },
     { href: "/dashboard/treasurer/depenses", label: "Dépenses", icon: Receipt },
-    { href: "/dashboard/treasurer/dimes", label: "Dîme mensuelle", icon: Calendar },
+    { href: "/dashboard/treasurer/dimes", label: "Dîme de la dîme", icon: Calendar },
     { href: "/dashboard/treasurer/saisie", label: "Saisie manuelle", icon: Wallet },
     { href: "/dashboard/treasurer/lien-paiement", label: "Lien de paiement", icon: LinkIcon },
     { href: "/dashboard/treasurer/rapports", label: "Rapports & Export", icon: FileText },

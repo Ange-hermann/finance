@@ -1,4 +1,3 @@
-import DimeManager from "@/components/DimeManager";
 import { getSuiviDimeDeLaDime } from "@/lib/dimes";
 import { formatMontant } from "@/lib/utils";
 import { Calendar, CheckCircle, Clock, Wallet } from "lucide-react";
@@ -11,23 +10,18 @@ export default async function DimesPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-aeonik text-2xl sm:text-3xl font-bold text-blanc uppercase">Dîme mensuelle</h1>
+        <h1 className="font-aeonik text-2xl sm:text-3xl font-bold text-blanc uppercase">Dîme de la dîme</h1>
         <p className="text-blanc/50 text-sm mt-1">
-          Suivi automatique de la dîme — le montant est calculé depuis les répartitions des transactions DÎME
+          10% détenus par le pasteur — le statut se met à jour automatiquement quand il la remet
         </p>
       </div>
 
-      <DimeManager />
-
       {/* Dîme de la dîme — chez le pasteur */}
       <div className="card-noir p-6">
-        <h3 className="font-aeonik text-xl text-blanc mb-1 flex items-center gap-2">
+        <h3 className="font-aeonik text-xl text-blanc mb-4 flex items-center gap-2">
           <Wallet className="w-5 h-5 text-or" />
-          Dîme de la dîme — chez le pasteur
+          Chez le pasteur
         </h3>
-        <p className="text-blanc/50 text-sm mb-4">
-          Statut remis automatiquement quand le pasteur la marque ou la retire.
-        </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
           <div className="bg-noir-card rounded-lg p-4 border border-or/10">
@@ -45,7 +39,7 @@ export default async function DimesPage() {
         </div>
 
         {suivi.moisArray.length === 0 ? (
-          <p className="text-blanc/40 text-sm">Aucun reçu pour le moment.</p>
+          <p className="text-blanc/40 text-sm">Aucune dîme de la dîme pour le moment.</p>
         ) : (
           <div className="space-y-2">
             {suivi.moisArray.map((mois) => (

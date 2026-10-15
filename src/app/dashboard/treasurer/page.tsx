@@ -5,11 +5,12 @@ import { TrendingUp, Wallet, PiggyBank, Heart, Building2, Coins, Receipt, Calend
 import TreasurerCharts from "@/components/TreasurerCharts";
 import TransactionsParMois from "@/components/TransactionsParMois";
 import PushNotificationButton from "@/components/PushNotificationButton";
+import { getSuiviDimeDeLaDime } from "@/lib/dimes";
 
 export default async function TreasurerDashboard() {
   const now = new Date();
 
-  const [transactions, repartitions, caisse, depenses, allTransactions, dimeMoisStatut, dimesVersees, paiementsEnLigne] = await Promise.all([
+  const [transactions, repartitions, caisse, depenses, allTransactions, dimeMoisStatut, suiviDime, paiementsEnLigne] = await Promise.all([
     prisma.transaction.findMany({
       where: { statut: "VALIDE" },
       orderBy: { createdAt: "desc" },
@@ -31,9 +32,7 @@ export default async function TreasurerDashboard() {
     prisma.dimeMensuelle.findUnique({
       where: { mois_annee: { mois: now.getMonth() + 1, annee: now.getFullYear() } },
     }),
-    prisma.dimeMensuelle.findMany({
-      where: { statut: "VERSE" },
-    }),
+    getSuiviDimeDeLaDime(),
     prisma.transaction.findMany({
       where: { mode: "EN_LIGNE" },
       orderBy: { createdAt: "desc" },
@@ -123,21 +122,8 @@ export default async function TreasurerDashboard() {
   const grandTotalEconomie = repartitions.reduce((sum, r) => sum + Number(r.montantEconomie), 0) - depParSource("ECONOMIE");
   const grandTotalEpargne = repartitions.reduce((sum, r) => sum + Number(r.montantEpargne), 0) - depParSource("EPARGNE");
   const grandTotalActionSociale = repartitions.reduce((sum, r) => sum + Number(r.montantActionSociale), 0) - depParSource("ACTION_SOCIALE");
-  const grandTotalDimeDeLaDimeBrut = repartitions.reduce((sum, r) => sum + Number(r.montantDimeDeLaDime || 0), 0);
-
-  // Déduire les dîmes déjà versées (uniquement celles reçues avant la date de versement)
-  const dimesVerseesMap = new Map(dimesVersees.map((d) => [`${d.annee}-${d.mois}`, d.dateVersement ? new Date(d.dateVersement) : null]));
-  const montantDimeVersee = repartitions
-    .filter((r) => {
-      const d = new Date(r.transaction.createdAt);
-      const key = `${d.getFullYear()}-${d.getMonth() + 1}`;
-      const dateVersement = dimesVerseesMap.get(key);
-      if (!dateVersement) return false;
-      // Ne compter que les dîmes reçues avant la date de versement
-      return d <= dateVersement;
-    })
-    .reduce((s, r) => s + Number(r.montantDimeDeLaDime || 0), 0);
-  const grandTotalDimeDeLaDime = grandTotalDimeDeLaDimeBrut - montantDimeVersee;
+  // Montant de la dîme de la dîme actuellement détenu par le pasteur
+  const grandTotalDimeDeLaDime = suiviDime.dimeDeLaDimeRestante;
   const grandTotalConstruction = repartitions.reduce((sum, r) => sum + Number(r.montantFondsDedie), 0) - depParSource("CONSTRUCTION");
   const grandTotalCaisse = Number(caisse?.soldeActuel || 0);
   const grandTotalCaisseRepartition = repartitions.reduce((sum, r) => sum + Number(r.montantCaisse), 0) - totalDepensesNormales;
@@ -168,7 +154,7 @@ export default async function TreasurerDashboard() {
     { label: "Action sociale", value: grandTotalActionSociale, icon: Heart },
     { label: "Construction", value: grandTotalConstruction, icon: Building2 },
     { label: "Caisse", value: grandTotalCaisseRepartition, icon: Wallet },
-    { label: "Dîme de la dîme", value: grandTotalDimeDeLaDime, icon: TrendingUp },
+    { label: "Dîme de la dîme (pasteur)", value: grandTotalDimeDeLaDime, icon: TrendingUp },
   ];
 
   return (
