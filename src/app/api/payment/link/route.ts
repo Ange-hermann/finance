@@ -30,7 +30,6 @@ export async function POST(request: NextRequest) {
         mode: "EN_LIGNE",
         statut: "EN_ATTENTE",
         contributeurId,
-        referencePaiement: null, // Sera mis à jour par le webhook
       },
     });
 
@@ -45,7 +44,11 @@ export async function POST(request: NextRequest) {
       }
     );
 
-    console.log("Session créée:", session);
+    // Associer la référence de paiement pour que le webhook retrouve la transaction
+    await prisma.transaction.update({
+      where: { id: transaction.id },
+      data: { referencePaiement: session.sessionId },
+    });
 
     return NextResponse.json({
       success: true,
