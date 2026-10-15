@@ -52,14 +52,15 @@ export async function sendPushNotification(
 }
 
 export async function sendPushNotificationToRole(
-  role: string,
+  role: string | string[],
   payload: NotificationPayload,
   prisma: any
 ) {
   try {
-    // Récupérer tous les abonnements pour ce rôle
+    const roles = Array.isArray(role) ? role : [role];
+    // Récupérer tous les abonnements pour ce(s) rôle(s)
     const subscriptions = await prisma.pushSubscription.findMany({
-      where: { role },
+      where: { role: { in: roles } },
     });
 
     const results = await Promise.all(

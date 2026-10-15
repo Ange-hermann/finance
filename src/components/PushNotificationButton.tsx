@@ -72,11 +72,11 @@ export default function PushNotificationButton() {
   return (
     <button
       onClick={requestPermission}
-      disabled={loading || permission === "granted"}
+      disabled={loading}
       className="btn-outline-or text-xs px-3 py-1 flex items-center gap-2"
     >
       <Bell className="w-4 h-4" />
-      {loading ? "Activation..." : permission === "granted" ? "Notifications activées" : "Activer les notifications"}
+      {loading ? "Activation..." : permission === "granted" ? "Réactiver les notifications" : "Activer les notifications"}
     </button>
   );
 }

@@ -4,10 +4,10 @@ import { useEffect } from "react";
 
 export default function ServiceWorkerRegister() {
   useEffect(() => {
-    // Service worker temporairement désactivé pour éviter les erreurs de redirection
+    // Enregistre le service worker (requis pour les notifications push)
     if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.getRegistrations().then((registrations) => {
-        registrations.forEach((registration) => registration.unregister());
+      navigator.serviceWorker.register("/sw.js").catch((err) => {
+        console.error("Erreur enregistrement service worker:", err);
       });
     }
   }, []);

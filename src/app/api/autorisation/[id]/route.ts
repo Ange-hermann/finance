@@ -105,10 +105,10 @@ export async function PUT(
         }
       }
 
-      // Envoyer notification à la trésorière
+      // Envoyer notification à la trésorière + commissaire aux comptes
       try {
         await sendPushNotificationToRole(
-          "TREASURER",
+          ["TREASURER", "AUDITOR"],
           {
             title: "Dépense approuvée",
             body: `${demande.typeAction} de ${demande.montant} FCFA approuvée${payoutReference ? " - Paiement initié" : ""}`,

@@ -3,6 +3,7 @@ import { formatMontant, formatDate } from "@/lib/utils";
 import { Eye, FileText, Coins, Wallet, PiggyBank, Heart, Building2, TrendingUp } from "lucide-react";
 import AnnotationForm from "@/components/AnnotationForm";
 import AuditorTransactions from "@/components/AuditorTransactions";
+import PushNotificationButton from "@/components/PushNotificationButton";
 
 export const dynamic = "force-dynamic";
 
@@ -74,9 +75,12 @@ export default async function AuditorDashboard() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="font-aeonik text-2xl sm:text-3xl font-bold text-blanc uppercase">Audit — Commissaire aux comptes</h1>
-        <p className="text-blanc/50 text-sm mt-1">Lecture seule + annotations d'audit</p>
+      <div className="flex items-center justify-between gap-4">
+        <div>
+          <h1 className="font-aeonik text-2xl sm:text-3xl font-bold text-blanc uppercase">Audit — Commissaire aux comptes</h1>
+          <p className="text-blanc/50 text-sm mt-1">Lecture seule + annotations d'audit</p>
+        </div>
+        <PushNotificationButton />
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">

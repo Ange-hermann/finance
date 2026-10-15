@@ -76,7 +76,7 @@ export async function POST(request: NextRequest) {
 
         try {
           await sendPushNotificationToRole(
-            "TREASURER",
+            ["TREASURER", "AUDITOR"],
             {
               title: succeeded ? "Dépense payée" : "Paiement échoué",
               body: `${depense.montant} FCFA - ${depense.description}`,

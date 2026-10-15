@@ -4,6 +4,7 @@ import Link from "next/link";
 import { TrendingUp, Wallet, PiggyBank, Heart, Building2, Coins, Receipt, Calendar, Clock, Globe } from "lucide-react";
 import TreasurerCharts from "@/components/TreasurerCharts";
 import TransactionsParMois from "@/components/TransactionsParMois";
+import PushNotificationButton from "@/components/PushNotificationButton";
 
 export default async function TreasurerDashboard() {
   const now = new Date();
@@ -178,6 +179,7 @@ export default async function TreasurerDashboard() {
           <p className="text-blanc/50 text-sm mt-1">Vue complète : mois en cours, mois passés et global</p>
         </div>
         <div className="flex gap-2">
+          <PushNotificationButton />
           <Link href="/dashboard/treasurer/depenses" className="btn-outline-or text-sm flex items-center gap-2">
             <Receipt className="w-4 h-4" />
             Dépenses

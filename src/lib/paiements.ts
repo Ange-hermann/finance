@@ -108,7 +108,7 @@ export async function finaliserPaiementEnLigne(
 
   try {
     await sendPushNotificationToRole(
-      "PASTOR",
+      ["PASTOR", "AUDITOR"],
       {
         title: `Nouveau paiement: ${categorie}`,
         body: `${montant} FCFA`,

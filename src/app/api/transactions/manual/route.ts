@@ -89,10 +89,10 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // Envoyer notification push au pasteur pour toutes les transactions
+    // Envoyer notification push au pasteur + commissaire aux comptes
     try {
       await sendPushNotificationToRole(
-        "PASTOR",
+        ["PASTOR", "AUDITOR"],
         {
           title: `Nouvelle transaction: ${categorie}`,
           body: `${montantNum} FCFA - ${nom || "Anonyme"}`,
