@@ -12,10 +12,14 @@ type TransactionLike = {
 // transaction, applique la répartition dans les fonds (économie, épargne,
 // action sociale, dîme de la dîme, fonds dédié) et crédite la caisse
 // physique de la part qui lui revient.
+// Les frais du provider sont enregistrés comme une dépense imputée sur
+// la caisse : la répartition porte sur le don BRUT (ce que le fidèle a
+// réellement donné) et le coût du canal est assumé par le fonds général.
 // Idempotent : ne fait rien si la transaction est déjà VALIDEE.
 export async function finaliserPaiementEnLigne(
   transaction: TransactionLike & { statut: string },
-  montant: number
+  montant: number,
+  options?: { frais?: number; reference?: string }
 ) {
   if (transaction.statut !== "EN_ATTENTE") return;
 
@@ -53,6 +57,41 @@ export async function finaliserPaiementEnLigne(
         data: { soldeActuel: repartition.montantCaisse },
       });
     }
+  }
+
+  // Frais de plateforme : dépense automatique imputée sur la caisse.
+  // La somme des répartitions (brut) moins les frais = net réellement reçu.
+  const frais = options?.frais ?? 0;
+  if (frais > 0 && categorie !== "DIME") {
+    const depense = await prisma.depense.create({
+      data: {
+        type: "DEPENSE_NORMALE",
+        categorie: "AUTRE",
+        montant: frais,
+        description: `Frais Genius Pay - paiement ${options?.reference || transaction.id}`,
+        sourceFonds: "CAISSE",
+        modePaiement: "MANUEL",
+        statut: "VALIDE",
+        statutPaiement: "PAYE",
+        datePaiement: new Date(),
+      },
+    });
+
+    const caisse = await prisma.caisse.findFirst();
+    if (caisse) {
+      await prisma.caisse.update({
+        where: { id: caisse.id },
+        data: { soldeActuel: { decrement: frais } },
+      });
+    }
+
+    await prisma.logAudit.create({
+      data: {
+        action: "FRAIS_PAIEMENT_EN_LIGNE",
+        cible: `Transaction ${transaction.id}`,
+        details: `Frais Genius Pay de ${frais} FCFA (dépense ${depense.id}) sur un don de ${montant} FCFA`,
+      },
+    });
   }
 
   await prisma.recu.create({

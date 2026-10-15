@@ -49,7 +49,8 @@ export async function GET(request: NextRequest) {
     if (transaction) {
       await finaliserPaiementEnLigne(
         { ...transaction, montant: Number(transaction.montant) },
-        Number(payment.amount || transaction.montant)
+        Number(payment.amount || transaction.montant),
+        { frais: Number(payment.fees) || 0, reference }
       );
     } else {
       console.warn(`Verify: aucune transaction pour la référence ${reference}`);

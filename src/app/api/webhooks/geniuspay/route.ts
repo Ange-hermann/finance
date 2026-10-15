@@ -94,7 +94,7 @@ export async function POST(request: NextRequest) {
 
     // ─── Paiement entrant réussi ───
     if (event === "payment.success" || event === "payment.completed") {
-      const { reference, amount, customer, description } = data;
+      const { reference, amount, customer, description, fees } = data;
 
       // Ancien flux : référence EXP- = dépense (checkout legacy)
       if (reference?.startsWith("EXP-")) {
@@ -153,7 +153,8 @@ export async function POST(request: NextRequest) {
 
       await finaliserPaiementEnLigne(
         { ...transaction, montant: Number(transaction.montant) },
-        Number(amount)
+        Number(amount),
+        { frais: Number(fees) || 0, reference }
       );
     }
 

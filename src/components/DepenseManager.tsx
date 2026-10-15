@@ -223,10 +223,11 @@ export default function DepenseManager({
       });
       if (res.ok) {
         const data = await res.json();
+        const frais = data.fees ? ` (frais: ${Number(data.fees).toLocaleString("fr-FR")} FCFA)` : "";
         toast.success(
           data.statutPaiement === "PAYE"
-            ? "Paiement effectué"
-            : "Paiement initié — versement en cours vers le bénéficiaire"
+            ? `Paiement effectué${frais}`
+            : `Paiement initié — versement en cours vers le bénéficiaire${frais}`
         );
         fetchDepenses();
       } else {
@@ -578,6 +579,11 @@ export default function DepenseManager({
                     {Number(d.montant).toLocaleString("fr-FR")}
                     <span className="text-blanc/40 text-xs ml-1">FCFA</span>
                   </p>
+                  {d.modePaiement === "GENIUS_PAY" && d.statutPaiement !== "PAYE" && (
+                    <p className="text-blanc/40 text-xs whitespace-nowrap">
+                      + ~{Math.ceil(Number(d.montant) * 0.015).toLocaleString("fr-FR")} FCFA de frais
+                    </p>
+                  )}
                   {d.modePaiement === "GENIUS_PAY" && d.statut === "VALIDE" && d.statutPaiement !== "PAYE" && d.statutPaiement !== "EN_COURS" && (
                     <button
                       onClick={() => handlePayerDepense(d.id)}

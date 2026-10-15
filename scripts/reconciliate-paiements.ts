@@ -28,9 +28,11 @@ async function main() {
       console.log(`${ref} (${tx.montant} FCFA, ${tx.categorie}) → ${status || "inconnu"}`);
 
       if (status === "completed" || status === "success") {
+        const payment = data.data || data;
         await finaliserPaiementEnLigne(
           { id: tx.id, montant: Number(tx.montant), categorie: tx.categorie, statut: tx.statut },
-          Number((data.data || data).amount || tx.montant)
+          Number(payment.amount || tx.montant),
+          { frais: Number(payment.fees) || 0, reference: ref }
         );
         console.log(`  ✓ Validée + répartition appliquée`);
       } else if (["failed", "cancelled", "expired"].includes(status)) {

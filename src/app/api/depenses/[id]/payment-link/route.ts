@@ -102,7 +102,7 @@ export async function POST(
         userId: (session.user as any)?.id,
         action: 'PAIEMENT_DEPENSE_INITIE',
         cible: `Dépense ${depense.id}`,
-        details: `Payout ${payout.reference} de ${depense.montant} FCFA vers ${depense.beneficiaire.nom} (${provider})`,
+        details: `Payout ${payout.reference} de ${depense.montant} FCFA vers ${depense.beneficiaire.nom} (${provider})${payout.fees ? ` - frais: ${payout.fees} FCFA` : ''}`,
       },
     });
 
