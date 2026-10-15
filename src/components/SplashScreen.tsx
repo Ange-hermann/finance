@@ -56,7 +56,7 @@ export default function SplashScreen() {
         }}
       >
         <Image
-          src="/Logo.png"
+          src="/ctf.png"
           alt="Logo"
           width={180}
           height={180}

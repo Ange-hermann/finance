@@ -96,7 +96,7 @@ export default function SaisieManuellePage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-aeonik text-2xl sm:text-3xl font-bold text-blanc">Saisie manuelle</h1>
+        <h1 className="font-aeonik text-2xl sm:text-3xl font-bold text-blanc uppercase">Saisie manuelle</h1>
         <p className="text-blanc/50 text-sm mt-1">Enregistrer un paiement reçu en main propre</p>
       </div>
 

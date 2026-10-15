@@ -77,3 +77,23 @@ export type Depense = Prisma.DepenseModel
  * 
  */
 export type DimeMensuelle = Prisma.DimeMensuelleModel
+/**
+ * Model DemandeAutorisation
+ * 
+ */
+export type DemandeAutorisation = Prisma.DemandeAutorisationModel
+/**
+ * Model PermissionRole
+ * 
+ */
+export type PermissionRole = Prisma.PermissionRoleModel
+/**
+ * Model PushSubscription
+ * 
+ */
+export type PushSubscription = Prisma.PushSubscriptionModel
+/**
+ * Model Beneficiaire
+ * 
+ */
+export type Beneficiaire = Prisma.BeneficiaireModel

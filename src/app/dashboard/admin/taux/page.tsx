@@ -19,7 +19,7 @@ export default async function TauxPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-aeonik text-2xl sm:text-3xl font-bold text-blanc">Taux de répartition</h1>
+        <h1 className="font-aeonik text-2xl sm:text-3xl font-bold text-blanc uppercase">Taux de répartition</h1>
         <p className="text-blanc/50 text-sm mt-1">Configuration des pourcentages de ventilation par catégorie</p>
       </div>
 

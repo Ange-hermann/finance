@@ -77,7 +77,7 @@ export default function PWAInstallPrompt() {
         <div className="flex items-start justify-between gap-3 mb-3">
           <div className="flex items-center gap-2">
             <div className="w-10 h-10 rounded-xl bg-blanc-pur flex items-center justify-center shrink-0 overflow-hidden">
-              <img src="/Logo.png" alt="CTF Finance" className="w-full h-full object-contain" />
+              <img src="/ctf.png" alt="CTF Finance" className="w-full h-full object-contain" />
             </div>
             <div>
               <p className="font-aeonik text-sm text-blanc font-medium">Installer CTF Finance</p>

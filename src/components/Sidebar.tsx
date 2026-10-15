@@ -20,6 +20,7 @@ import {
   X,
   Receipt,
   Calendar,
+  Link as LinkIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -28,18 +29,24 @@ const roleMenus: Record<string, { href: string; label: string; icon: any }[]> = 
     { href: "/dashboard/collector", label: "Tableau de bord", icon: LayoutDashboard },
     { href: "/dashboard/collector/saisie", label: "Saisie manuelle", icon: Wallet },
     { href: "/dashboard/collector/scan", label: "Scan QR", icon: ScanLine },
+    { href: "/dashboard/collector/lien-paiement", label: "Lien de paiement", icon: LinkIcon },
   ],
   TREASURER: [
     { href: "/dashboard/treasurer", label: "Tableau de bord", icon: LayoutDashboard },
     { href: "/dashboard/treasurer/depenses", label: "Dépenses", icon: Receipt },
     { href: "/dashboard/treasurer/dimes", label: "Dîme mensuelle", icon: Calendar },
+    { href: "/dashboard/treasurer/saisie", label: "Saisie manuelle", icon: Wallet },
+    { href: "/dashboard/treasurer/lien-paiement", label: "Lien de paiement", icon: LinkIcon },
     { href: "/dashboard/treasurer/rapports", label: "Rapports & Export", icon: FileText },
   ],
   PASTOR: [
     { href: "/dashboard/pastor", label: "Vue globale", icon: BarChart3 },
+    { href: "/dashboard/pastor/dimes", label: "Gestion Dîmes", icon: Wallet },
+    { href: "/dashboard/pastor/autorisations", label: "Autorisations", icon: ShieldCheck },
   ],
   AUDITOR: [
     { href: "/dashboard/auditor", label: "Audit & Annotations", icon: Eye },
+    { href: "/dashboard/auditor/autorisations", label: "Autorisations", icon: ShieldCheck },
   ],
   ADMIN: [
     { href: "/dashboard/admin", label: "Tableau de bord", icon: LayoutDashboard },
@@ -76,7 +83,7 @@ export default function Sidebar() {
       {/* Mobile top bar */}
       <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-noir-soft border-b border-or/20 flex items-center justify-between px-4 h-14">
         <Link href="/dashboard" className="flex items-center gap-2">
-          <Image src="/Logo.png" alt="Logo" width={40} height={40} className="rounded-lg" style={{ width: "auto", height: "auto" }} />
+          <Image src="/ctf.png" alt="CTF Logo" width={40} height={40} className="rounded-lg" style={{ width: "auto", height: "auto" }} />
           <span className="font-aeonik text-base font-bold text-blanc">
             CTF <span className="text-or">Finance</span>
           </span>
@@ -100,33 +107,36 @@ export default function Sidebar() {
 
       <aside
         className={cn(
-          "w-64 min-h-screen bg-noir border-r border-or/20 flex flex-col fixed left-0 top-0 z-50 transition-transform duration-300",
+          "w-64 h-screen bg-noir border-r border-or/20 flex flex-col fixed left-0 top-0 z-50 transition-transform duration-300",
           mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         )}
       >
-        {/* Grand cadre noir avec logo */}
-        <div className="p-8 border-b border-or/20 flex flex-col items-center justify-center h-64">
-          <Link href="/dashboard" className="flex flex-col items-center gap-4" onClick={() => setMobileOpen(false)}>
-            <Image src="/Logo.png" alt="Logo" width={220} height={220} className="rounded-lg" style={{ width: "auto", height: "auto" }} />
-          </Link>
-          <button
-            onClick={() => setMobileOpen(false)}
-            className="md:hidden absolute top-4 right-4 text-blanc/60 hover:text-or"
-            aria-label="Fermer le menu"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
+        {/* Header fixe (logo + FINANCE) */}
+        <div className="flex-shrink-0">
+          {/* Logo sans cadre */}
+          <div className="p-4 flex flex-col items-center justify-center">
+            <Link href="/dashboard" className="flex flex-col items-center gap-4" onClick={() => setMobileOpen(false)}>
+              <img src="/ctf.png" alt="CTF Logo" width={400} className="shadow-gold hover:shadow-gold-lg transition-all duration-300" style={{ width: "400px", height: "auto" }} />
+            </Link>
+            <button
+              onClick={() => setMobileOpen(false)}
+              className="md:hidden absolute top-4 right-4 text-blanc/60 hover:text-or"
+              aria-label="Fermer le menu"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
 
-        {/* Petit cadre or avec FINANCE */}
-        <div className="p-4 border-b border-or/20 bg-or">
-          <div className="text-center">
-            <span className="font-aeonik text-2xl font-bold text-noir tracking-wider">FINANCE</span>
+          {/* Petit cadre or avec FINANCE */}
+          <div className="py-1.5 px-2 border-b-2 border-or bg-gradient-to-r from-or via-or-light to-or shadow-gold">
+            <div className="text-center">
+              <span className="font-aeonik text-base font-bold text-noir tracking-widest drop-shadow-sm">FINANCE</span>
+            </div>
           </div>
         </div>
 
-        {/* Menu de navigation */}
-        <nav className="flex-1 p-4 space-y-1 overflow-y-auto scrollbar-thin">
+        {/* Menu de navigation scrollable */}
+        <nav className="flex-1 p-4 space-y-1 overflow-y-auto scrollbar-thin" style={{ minHeight: "200px" }}>
           <div className="px-6 py-4 border-b border-or/10">
             <div className="flex items-center gap-2 text-or/80 text-xs">
               <ShieldCheck className="w-4 h-4" />
@@ -159,7 +169,7 @@ export default function Sidebar() {
         </nav>
 
         {/* Bouton de déconnexion */}
-        <div className="p-4 border-t border-or/20">
+        <div className="p-4 border-t border-or/20 flex-shrink-0">
           <button
             onClick={handleLogout}
             className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-blanc/60 hover:text-red-400 hover:bg-red-500/10 transition-all w-full"

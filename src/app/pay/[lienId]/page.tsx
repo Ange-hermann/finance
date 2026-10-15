@@ -86,7 +86,7 @@ export default function PayPage() {
     <div className="min-h-screen bg-gradient-noir flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-lg">
         <div className="text-center mb-8">
-          <Image src="/Logo.png" alt="Logo" width={56} height={56} className="rounded-xl mx-auto mb-4" style={{ width: "auto", height: "auto" }} />
+          <Image src="/ctf.png" alt="CTF Logo" width={56} height={56} className="rounded-xl mx-auto mb-4" style={{ width: "auto", height: "auto" }} />
           <h1 className="font-aeonik text-2xl sm:text-3xl font-bold text-blanc">
             Faire un <span className="text-or">don</span>
           </h1>

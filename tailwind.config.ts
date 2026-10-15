@@ -25,7 +25,7 @@ const config: Config = {
         },
       },
       fontFamily: {
-        aeonik: ["Aeonik", "sans-serif"],
+        aeonik: ["'Space Grotesk'", "sans-serif"],
       },
       borderRadius: {
         "2xl": "1rem",

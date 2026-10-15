@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Volume2, VolumeX, Mic, X, ArrowRight } from "lucide-react";
 
-const LOGO = "/Logo.png";
+const LOGO = "/ctf.png";
 
 export default function AIAgent() {
   const [voiceEnabled, setVoiceEnabled] = useState(true);

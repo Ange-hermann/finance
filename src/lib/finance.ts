@@ -72,10 +72,23 @@ const tauxParDefaut: Record<CategorieTransaction, TauxRepartitionConfig> = {
 export function calculerRepartition(
   montant: number,
   categorie: CategorieTransaction,
-  tauxCustom?: Partial<Record<CategorieTransaction, Partial<TauxRepartitionConfig>>>
+  tauxCustom?: Partial<Record<CategorieTransaction, Partial<TauxRepartitionConfig>>>,
+  skipDimeRepartition: boolean = false
 ): ResultatRepartition {
   if (montant < 0) {
     throw new Error("Le montant ne peut pas être négatif");
+  }
+
+  // Si c'est une dîme et qu'on ne veut pas répartir automatiquement
+  if (skipDimeRepartition && categorie === "DIME") {
+    return {
+      montantEconomie: 0,
+      montantEpargne: 0,
+      montantActionSociale: 0,
+      montantDimeDeLaDime: null,
+      montantCaisse: 0,
+      montantFondsDedie: 0,
+    };
   }
 
   const taux = tauxCustom?.[categorie]

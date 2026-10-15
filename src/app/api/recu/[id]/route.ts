@@ -43,7 +43,7 @@ export async function GET(
     const gris = rgb(0.5, 0.5, 0.5);
 
     // Logo
-    const logoPath = path.join(process.cwd(), "public", "Logo.png");
+    const logoPath = path.join(process.cwd(), "public", "ctf.png");
     let logoEmbed = null;
     try {
       const logoBytes = fs.readFileSync(logoPath);

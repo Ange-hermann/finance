@@ -35,7 +35,7 @@ export default function LoginPage() {
     <div className="min-h-screen bg-gradient-noir flex items-center justify-center px-6">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <Image src="/Logo.png" alt="Logo" width={100} height={100} className="rounded-xl mx-auto mb-4" style={{ width: "auto", height: "auto" }} />
+          <Image src="/ctf.png" alt="CTF Logo" width={100} height={100} className="rounded-xl mx-auto mb-4" style={{ width: "auto", height: "auto" }} />
           <h1 className="font-aeonik text-3xl font-bold text-blanc">
             CTF <span className="text-or">Finance</span>
           </h1>

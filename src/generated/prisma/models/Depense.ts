@@ -46,6 +46,12 @@ export type DepenseMinAggregateOutputType = {
   dateDepense: Date | null
   justificatif: string | null
   statut: $Enums.StatutDepense | null
+  beneficiaireId: string | null
+  modePaiement: string | null
+  lienPaiement: string | null
+  statutPaiement: string | null
+  datePaiement: Date | null
+  referencePaiement: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -62,6 +68,12 @@ export type DepenseMaxAggregateOutputType = {
   dateDepense: Date | null
   justificatif: string | null
   statut: $Enums.StatutDepense | null
+  beneficiaireId: string | null
+  modePaiement: string | null
+  lienPaiement: string | null
+  statutPaiement: string | null
+  datePaiement: Date | null
+  referencePaiement: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -78,6 +90,12 @@ export type DepenseCountAggregateOutputType = {
   dateDepense: number
   justificatif: number
   statut: number
+  beneficiaireId: number
+  modePaiement: number
+  lienPaiement: number
+  statutPaiement: number
+  datePaiement: number
+  referencePaiement: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -104,6 +122,12 @@ export type DepenseMinAggregateInputType = {
   dateDepense?: true
   justificatif?: true
   statut?: true
+  beneficiaireId?: true
+  modePaiement?: true
+  lienPaiement?: true
+  statutPaiement?: true
+  datePaiement?: true
+  referencePaiement?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -120,6 +144,12 @@ export type DepenseMaxAggregateInputType = {
   dateDepense?: true
   justificatif?: true
   statut?: true
+  beneficiaireId?: true
+  modePaiement?: true
+  lienPaiement?: true
+  statutPaiement?: true
+  datePaiement?: true
+  referencePaiement?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -136,6 +166,12 @@ export type DepenseCountAggregateInputType = {
   dateDepense?: true
   justificatif?: true
   statut?: true
+  beneficiaireId?: true
+  modePaiement?: true
+  lienPaiement?: true
+  statutPaiement?: true
+  datePaiement?: true
+  referencePaiement?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -239,6 +275,12 @@ export type DepenseGroupByOutputType = {
   dateDepense: Date
   justificatif: string | null
   statut: $Enums.StatutDepense
+  beneficiaireId: string | null
+  modePaiement: string
+  lienPaiement: string | null
+  statutPaiement: string | null
+  datePaiement: Date | null
+  referencePaiement: string | null
   createdAt: Date
   updatedAt: Date
   _count: DepenseCountAggregateOutputType | null
@@ -278,10 +320,17 @@ export type DepenseWhereInput = {
   dateDepense?: Prisma.DateTimeFilter<"Depense"> | Date | string
   justificatif?: Prisma.StringNullableFilter<"Depense"> | string | null
   statut?: Prisma.EnumStatutDepenseFilter<"Depense"> | $Enums.StatutDepense
+  beneficiaireId?: Prisma.StringNullableFilter<"Depense"> | string | null
+  modePaiement?: Prisma.StringFilter<"Depense"> | string
+  lienPaiement?: Prisma.StringNullableFilter<"Depense"> | string | null
+  statutPaiement?: Prisma.StringNullableFilter<"Depense"> | string | null
+  datePaiement?: Prisma.DateTimeNullableFilter<"Depense"> | Date | string | null
+  referencePaiement?: Prisma.StringNullableFilter<"Depense"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Depense"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Depense"> | Date | string
   transaction?: Prisma.XOR<Prisma.TransactionNullableScalarRelationFilter, Prisma.TransactionWhereInput> | null
   agent?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  beneficiaire?: Prisma.XOR<Prisma.BeneficiaireNullableScalarRelationFilter, Prisma.BeneficiaireWhereInput> | null
 }
 
 export type DepenseOrderByWithRelationInput = {
@@ -296,10 +345,17 @@ export type DepenseOrderByWithRelationInput = {
   dateDepense?: Prisma.SortOrder
   justificatif?: Prisma.SortOrderInput | Prisma.SortOrder
   statut?: Prisma.SortOrder
+  beneficiaireId?: Prisma.SortOrderInput | Prisma.SortOrder
+  modePaiement?: Prisma.SortOrder
+  lienPaiement?: Prisma.SortOrderInput | Prisma.SortOrder
+  statutPaiement?: Prisma.SortOrderInput | Prisma.SortOrder
+  datePaiement?: Prisma.SortOrderInput | Prisma.SortOrder
+  referencePaiement?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   transaction?: Prisma.TransactionOrderByWithRelationInput
   agent?: Prisma.UserOrderByWithRelationInput
+  beneficiaire?: Prisma.BeneficiaireOrderByWithRelationInput
 }
 
 export type DepenseWhereUniqueInput = Prisma.AtLeast<{
@@ -317,10 +373,17 @@ export type DepenseWhereUniqueInput = Prisma.AtLeast<{
   dateDepense?: Prisma.DateTimeFilter<"Depense"> | Date | string
   justificatif?: Prisma.StringNullableFilter<"Depense"> | string | null
   statut?: Prisma.EnumStatutDepenseFilter<"Depense"> | $Enums.StatutDepense
+  beneficiaireId?: Prisma.StringNullableFilter<"Depense"> | string | null
+  modePaiement?: Prisma.StringFilter<"Depense"> | string
+  lienPaiement?: Prisma.StringNullableFilter<"Depense"> | string | null
+  statutPaiement?: Prisma.StringNullableFilter<"Depense"> | string | null
+  datePaiement?: Prisma.DateTimeNullableFilter<"Depense"> | Date | string | null
+  referencePaiement?: Prisma.StringNullableFilter<"Depense"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Depense"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Depense"> | Date | string
   transaction?: Prisma.XOR<Prisma.TransactionNullableScalarRelationFilter, Prisma.TransactionWhereInput> | null
   agent?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  beneficiaire?: Prisma.XOR<Prisma.BeneficiaireNullableScalarRelationFilter, Prisma.BeneficiaireWhereInput> | null
 }, "id">
 
 export type DepenseOrderByWithAggregationInput = {
@@ -335,6 +398,12 @@ export type DepenseOrderByWithAggregationInput = {
   dateDepense?: Prisma.SortOrder
   justificatif?: Prisma.SortOrderInput | Prisma.SortOrder
   statut?: Prisma.SortOrder
+  beneficiaireId?: Prisma.SortOrderInput | Prisma.SortOrder
+  modePaiement?: Prisma.SortOrder
+  lienPaiement?: Prisma.SortOrderInput | Prisma.SortOrder
+  statutPaiement?: Prisma.SortOrderInput | Prisma.SortOrder
+  datePaiement?: Prisma.SortOrderInput | Prisma.SortOrder
+  referencePaiement?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.DepenseCountOrderByAggregateInput
@@ -359,6 +428,12 @@ export type DepenseScalarWhereWithAggregatesInput = {
   dateDepense?: Prisma.DateTimeWithAggregatesFilter<"Depense"> | Date | string
   justificatif?: Prisma.StringNullableWithAggregatesFilter<"Depense"> | string | null
   statut?: Prisma.EnumStatutDepenseWithAggregatesFilter<"Depense"> | $Enums.StatutDepense
+  beneficiaireId?: Prisma.StringNullableWithAggregatesFilter<"Depense"> | string | null
+  modePaiement?: Prisma.StringWithAggregatesFilter<"Depense"> | string
+  lienPaiement?: Prisma.StringNullableWithAggregatesFilter<"Depense"> | string | null
+  statutPaiement?: Prisma.StringNullableWithAggregatesFilter<"Depense"> | string | null
+  datePaiement?: Prisma.DateTimeNullableWithAggregatesFilter<"Depense"> | Date | string | null
+  referencePaiement?: Prisma.StringNullableWithAggregatesFilter<"Depense"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Depense"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Depense"> | Date | string
 }
@@ -373,10 +448,16 @@ export type DepenseCreateInput = {
   dateDepense?: Date | string
   justificatif?: string | null
   statut?: $Enums.StatutDepense
+  modePaiement: string
+  lienPaiement?: string | null
+  statutPaiement?: string | null
+  datePaiement?: Date | string | null
+  referencePaiement?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   transaction?: Prisma.TransactionCreateNestedOneWithoutDepensesInput
   agent?: Prisma.UserCreateNestedOneWithoutDepensesInput
+  beneficiaire?: Prisma.BeneficiaireCreateNestedOneWithoutDepensesInput
 }
 
 export type DepenseUncheckedCreateInput = {
@@ -391,6 +472,12 @@ export type DepenseUncheckedCreateInput = {
   dateDepense?: Date | string
   justificatif?: string | null
   statut?: $Enums.StatutDepense
+  beneficiaireId?: string | null
+  modePaiement: string
+  lienPaiement?: string | null
+  statutPaiement?: string | null
+  datePaiement?: Date | string | null
+  referencePaiement?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -405,10 +492,16 @@ export type DepenseUpdateInput = {
   dateDepense?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   justificatif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   statut?: Prisma.EnumStatutDepenseFieldUpdateOperationsInput | $Enums.StatutDepense
+  modePaiement?: Prisma.StringFieldUpdateOperationsInput | string
+  lienPaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  statutPaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  datePaiement?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  referencePaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transaction?: Prisma.TransactionUpdateOneWithoutDepensesNestedInput
   agent?: Prisma.UserUpdateOneWithoutDepensesNestedInput
+  beneficiaire?: Prisma.BeneficiaireUpdateOneWithoutDepensesNestedInput
 }
 
 export type DepenseUncheckedUpdateInput = {
@@ -423,6 +516,12 @@ export type DepenseUncheckedUpdateInput = {
   dateDepense?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   justificatif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   statut?: Prisma.EnumStatutDepenseFieldUpdateOperationsInput | $Enums.StatutDepense
+  beneficiaireId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  modePaiement?: Prisma.StringFieldUpdateOperationsInput | string
+  lienPaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  statutPaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  datePaiement?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  referencePaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -439,6 +538,12 @@ export type DepenseCreateManyInput = {
   dateDepense?: Date | string
   justificatif?: string | null
   statut?: $Enums.StatutDepense
+  beneficiaireId?: string | null
+  modePaiement: string
+  lienPaiement?: string | null
+  statutPaiement?: string | null
+  datePaiement?: Date | string | null
+  referencePaiement?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -453,6 +558,11 @@ export type DepenseUpdateManyMutationInput = {
   dateDepense?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   justificatif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   statut?: Prisma.EnumStatutDepenseFieldUpdateOperationsInput | $Enums.StatutDepense
+  modePaiement?: Prisma.StringFieldUpdateOperationsInput | string
+  lienPaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  statutPaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  datePaiement?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  referencePaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -469,6 +579,12 @@ export type DepenseUncheckedUpdateManyInput = {
   dateDepense?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   justificatif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   statut?: Prisma.EnumStatutDepenseFieldUpdateOperationsInput | $Enums.StatutDepense
+  beneficiaireId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  modePaiement?: Prisma.StringFieldUpdateOperationsInput | string
+  lienPaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  statutPaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  datePaiement?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  referencePaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -495,6 +611,12 @@ export type DepenseCountOrderByAggregateInput = {
   dateDepense?: Prisma.SortOrder
   justificatif?: Prisma.SortOrder
   statut?: Prisma.SortOrder
+  beneficiaireId?: Prisma.SortOrder
+  modePaiement?: Prisma.SortOrder
+  lienPaiement?: Prisma.SortOrder
+  statutPaiement?: Prisma.SortOrder
+  datePaiement?: Prisma.SortOrder
+  referencePaiement?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -515,6 +637,12 @@ export type DepenseMaxOrderByAggregateInput = {
   dateDepense?: Prisma.SortOrder
   justificatif?: Prisma.SortOrder
   statut?: Prisma.SortOrder
+  beneficiaireId?: Prisma.SortOrder
+  modePaiement?: Prisma.SortOrder
+  lienPaiement?: Prisma.SortOrder
+  statutPaiement?: Prisma.SortOrder
+  datePaiement?: Prisma.SortOrder
+  referencePaiement?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -531,6 +659,12 @@ export type DepenseMinOrderByAggregateInput = {
   dateDepense?: Prisma.SortOrder
   justificatif?: Prisma.SortOrder
   statut?: Prisma.SortOrder
+  beneficiaireId?: Prisma.SortOrder
+  modePaiement?: Prisma.SortOrder
+  lienPaiement?: Prisma.SortOrder
+  statutPaiement?: Prisma.SortOrder
+  datePaiement?: Prisma.SortOrder
+  referencePaiement?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -639,6 +773,48 @@ export type EnumStatutDepenseFieldUpdateOperationsInput = {
   set?: $Enums.StatutDepense
 }
 
+export type DepenseCreateNestedManyWithoutBeneficiaireInput = {
+  create?: Prisma.XOR<Prisma.DepenseCreateWithoutBeneficiaireInput, Prisma.DepenseUncheckedCreateWithoutBeneficiaireInput> | Prisma.DepenseCreateWithoutBeneficiaireInput[] | Prisma.DepenseUncheckedCreateWithoutBeneficiaireInput[]
+  connectOrCreate?: Prisma.DepenseCreateOrConnectWithoutBeneficiaireInput | Prisma.DepenseCreateOrConnectWithoutBeneficiaireInput[]
+  createMany?: Prisma.DepenseCreateManyBeneficiaireInputEnvelope
+  connect?: Prisma.DepenseWhereUniqueInput | Prisma.DepenseWhereUniqueInput[]
+}
+
+export type DepenseUncheckedCreateNestedManyWithoutBeneficiaireInput = {
+  create?: Prisma.XOR<Prisma.DepenseCreateWithoutBeneficiaireInput, Prisma.DepenseUncheckedCreateWithoutBeneficiaireInput> | Prisma.DepenseCreateWithoutBeneficiaireInput[] | Prisma.DepenseUncheckedCreateWithoutBeneficiaireInput[]
+  connectOrCreate?: Prisma.DepenseCreateOrConnectWithoutBeneficiaireInput | Prisma.DepenseCreateOrConnectWithoutBeneficiaireInput[]
+  createMany?: Prisma.DepenseCreateManyBeneficiaireInputEnvelope
+  connect?: Prisma.DepenseWhereUniqueInput | Prisma.DepenseWhereUniqueInput[]
+}
+
+export type DepenseUpdateManyWithoutBeneficiaireNestedInput = {
+  create?: Prisma.XOR<Prisma.DepenseCreateWithoutBeneficiaireInput, Prisma.DepenseUncheckedCreateWithoutBeneficiaireInput> | Prisma.DepenseCreateWithoutBeneficiaireInput[] | Prisma.DepenseUncheckedCreateWithoutBeneficiaireInput[]
+  connectOrCreate?: Prisma.DepenseCreateOrConnectWithoutBeneficiaireInput | Prisma.DepenseCreateOrConnectWithoutBeneficiaireInput[]
+  upsert?: Prisma.DepenseUpsertWithWhereUniqueWithoutBeneficiaireInput | Prisma.DepenseUpsertWithWhereUniqueWithoutBeneficiaireInput[]
+  createMany?: Prisma.DepenseCreateManyBeneficiaireInputEnvelope
+  set?: Prisma.DepenseWhereUniqueInput | Prisma.DepenseWhereUniqueInput[]
+  disconnect?: Prisma.DepenseWhereUniqueInput | Prisma.DepenseWhereUniqueInput[]
+  delete?: Prisma.DepenseWhereUniqueInput | Prisma.DepenseWhereUniqueInput[]
+  connect?: Prisma.DepenseWhereUniqueInput | Prisma.DepenseWhereUniqueInput[]
+  update?: Prisma.DepenseUpdateWithWhereUniqueWithoutBeneficiaireInput | Prisma.DepenseUpdateWithWhereUniqueWithoutBeneficiaireInput[]
+  updateMany?: Prisma.DepenseUpdateManyWithWhereWithoutBeneficiaireInput | Prisma.DepenseUpdateManyWithWhereWithoutBeneficiaireInput[]
+  deleteMany?: Prisma.DepenseScalarWhereInput | Prisma.DepenseScalarWhereInput[]
+}
+
+export type DepenseUncheckedUpdateManyWithoutBeneficiaireNestedInput = {
+  create?: Prisma.XOR<Prisma.DepenseCreateWithoutBeneficiaireInput, Prisma.DepenseUncheckedCreateWithoutBeneficiaireInput> | Prisma.DepenseCreateWithoutBeneficiaireInput[] | Prisma.DepenseUncheckedCreateWithoutBeneficiaireInput[]
+  connectOrCreate?: Prisma.DepenseCreateOrConnectWithoutBeneficiaireInput | Prisma.DepenseCreateOrConnectWithoutBeneficiaireInput[]
+  upsert?: Prisma.DepenseUpsertWithWhereUniqueWithoutBeneficiaireInput | Prisma.DepenseUpsertWithWhereUniqueWithoutBeneficiaireInput[]
+  createMany?: Prisma.DepenseCreateManyBeneficiaireInputEnvelope
+  set?: Prisma.DepenseWhereUniqueInput | Prisma.DepenseWhereUniqueInput[]
+  disconnect?: Prisma.DepenseWhereUniqueInput | Prisma.DepenseWhereUniqueInput[]
+  delete?: Prisma.DepenseWhereUniqueInput | Prisma.DepenseWhereUniqueInput[]
+  connect?: Prisma.DepenseWhereUniqueInput | Prisma.DepenseWhereUniqueInput[]
+  update?: Prisma.DepenseUpdateWithWhereUniqueWithoutBeneficiaireInput | Prisma.DepenseUpdateWithWhereUniqueWithoutBeneficiaireInput[]
+  updateMany?: Prisma.DepenseUpdateManyWithWhereWithoutBeneficiaireInput | Prisma.DepenseUpdateManyWithWhereWithoutBeneficiaireInput[]
+  deleteMany?: Prisma.DepenseScalarWhereInput | Prisma.DepenseScalarWhereInput[]
+}
+
 export type DepenseCreateWithoutAgentInput = {
   id?: string
   type: $Enums.TypeDepense
@@ -649,9 +825,15 @@ export type DepenseCreateWithoutAgentInput = {
   dateDepense?: Date | string
   justificatif?: string | null
   statut?: $Enums.StatutDepense
+  modePaiement: string
+  lienPaiement?: string | null
+  statutPaiement?: string | null
+  datePaiement?: Date | string | null
+  referencePaiement?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   transaction?: Prisma.TransactionCreateNestedOneWithoutDepensesInput
+  beneficiaire?: Prisma.BeneficiaireCreateNestedOneWithoutDepensesInput
 }
 
 export type DepenseUncheckedCreateWithoutAgentInput = {
@@ -665,6 +847,12 @@ export type DepenseUncheckedCreateWithoutAgentInput = {
   dateDepense?: Date | string
   justificatif?: string | null
   statut?: $Enums.StatutDepense
+  beneficiaireId?: string | null
+  modePaiement: string
+  lienPaiement?: string | null
+  statutPaiement?: string | null
+  datePaiement?: Date | string | null
+  referencePaiement?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -710,6 +898,12 @@ export type DepenseScalarWhereInput = {
   dateDepense?: Prisma.DateTimeFilter<"Depense"> | Date | string
   justificatif?: Prisma.StringNullableFilter<"Depense"> | string | null
   statut?: Prisma.EnumStatutDepenseFilter<"Depense"> | $Enums.StatutDepense
+  beneficiaireId?: Prisma.StringNullableFilter<"Depense"> | string | null
+  modePaiement?: Prisma.StringFilter<"Depense"> | string
+  lienPaiement?: Prisma.StringNullableFilter<"Depense"> | string | null
+  statutPaiement?: Prisma.StringNullableFilter<"Depense"> | string | null
+  datePaiement?: Prisma.DateTimeNullableFilter<"Depense"> | Date | string | null
+  referencePaiement?: Prisma.StringNullableFilter<"Depense"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Depense"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Depense"> | Date | string
 }
@@ -724,9 +918,15 @@ export type DepenseCreateWithoutTransactionInput = {
   dateDepense?: Date | string
   justificatif?: string | null
   statut?: $Enums.StatutDepense
+  modePaiement: string
+  lienPaiement?: string | null
+  statutPaiement?: string | null
+  datePaiement?: Date | string | null
+  referencePaiement?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   agent?: Prisma.UserCreateNestedOneWithoutDepensesInput
+  beneficiaire?: Prisma.BeneficiaireCreateNestedOneWithoutDepensesInput
 }
 
 export type DepenseUncheckedCreateWithoutTransactionInput = {
@@ -740,6 +940,12 @@ export type DepenseUncheckedCreateWithoutTransactionInput = {
   dateDepense?: Date | string
   justificatif?: string | null
   statut?: $Enums.StatutDepense
+  beneficiaireId?: string | null
+  modePaiement: string
+  lienPaiement?: string | null
+  statutPaiement?: string | null
+  datePaiement?: Date | string | null
+  referencePaiement?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -770,6 +976,74 @@ export type DepenseUpdateManyWithWhereWithoutTransactionInput = {
   data: Prisma.XOR<Prisma.DepenseUpdateManyMutationInput, Prisma.DepenseUncheckedUpdateManyWithoutTransactionInput>
 }
 
+export type DepenseCreateWithoutBeneficiaireInput = {
+  id?: string
+  type: $Enums.TypeDepense
+  categorie: $Enums.CategorieDepense
+  sourceFonds?: $Enums.SourceFonds
+  description: string
+  montant: runtime.Decimal | runtime.DecimalJsLike | number | string
+  dateDepense?: Date | string
+  justificatif?: string | null
+  statut?: $Enums.StatutDepense
+  modePaiement: string
+  lienPaiement?: string | null
+  statutPaiement?: string | null
+  datePaiement?: Date | string | null
+  referencePaiement?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  transaction?: Prisma.TransactionCreateNestedOneWithoutDepensesInput
+  agent?: Prisma.UserCreateNestedOneWithoutDepensesInput
+}
+
+export type DepenseUncheckedCreateWithoutBeneficiaireInput = {
+  id?: string
+  type: $Enums.TypeDepense
+  categorie: $Enums.CategorieDepense
+  sourceFonds?: $Enums.SourceFonds
+  description: string
+  montant: runtime.Decimal | runtime.DecimalJsLike | number | string
+  transactionId?: string | null
+  agentId?: string | null
+  dateDepense?: Date | string
+  justificatif?: string | null
+  statut?: $Enums.StatutDepense
+  modePaiement: string
+  lienPaiement?: string | null
+  statutPaiement?: string | null
+  datePaiement?: Date | string | null
+  referencePaiement?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type DepenseCreateOrConnectWithoutBeneficiaireInput = {
+  where: Prisma.DepenseWhereUniqueInput
+  create: Prisma.XOR<Prisma.DepenseCreateWithoutBeneficiaireInput, Prisma.DepenseUncheckedCreateWithoutBeneficiaireInput>
+}
+
+export type DepenseCreateManyBeneficiaireInputEnvelope = {
+  data: Prisma.DepenseCreateManyBeneficiaireInput | Prisma.DepenseCreateManyBeneficiaireInput[]
+  skipDuplicates?: boolean
+}
+
+export type DepenseUpsertWithWhereUniqueWithoutBeneficiaireInput = {
+  where: Prisma.DepenseWhereUniqueInput
+  update: Prisma.XOR<Prisma.DepenseUpdateWithoutBeneficiaireInput, Prisma.DepenseUncheckedUpdateWithoutBeneficiaireInput>
+  create: Prisma.XOR<Prisma.DepenseCreateWithoutBeneficiaireInput, Prisma.DepenseUncheckedCreateWithoutBeneficiaireInput>
+}
+
+export type DepenseUpdateWithWhereUniqueWithoutBeneficiaireInput = {
+  where: Prisma.DepenseWhereUniqueInput
+  data: Prisma.XOR<Prisma.DepenseUpdateWithoutBeneficiaireInput, Prisma.DepenseUncheckedUpdateWithoutBeneficiaireInput>
+}
+
+export type DepenseUpdateManyWithWhereWithoutBeneficiaireInput = {
+  where: Prisma.DepenseScalarWhereInput
+  data: Prisma.XOR<Prisma.DepenseUpdateManyMutationInput, Prisma.DepenseUncheckedUpdateManyWithoutBeneficiaireInput>
+}
+
 export type DepenseCreateManyAgentInput = {
   id?: string
   type: $Enums.TypeDepense
@@ -781,6 +1055,12 @@ export type DepenseCreateManyAgentInput = {
   dateDepense?: Date | string
   justificatif?: string | null
   statut?: $Enums.StatutDepense
+  beneficiaireId?: string | null
+  modePaiement: string
+  lienPaiement?: string | null
+  statutPaiement?: string | null
+  datePaiement?: Date | string | null
+  referencePaiement?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -795,9 +1075,15 @@ export type DepenseUpdateWithoutAgentInput = {
   dateDepense?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   justificatif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   statut?: Prisma.EnumStatutDepenseFieldUpdateOperationsInput | $Enums.StatutDepense
+  modePaiement?: Prisma.StringFieldUpdateOperationsInput | string
+  lienPaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  statutPaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  datePaiement?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  referencePaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transaction?: Prisma.TransactionUpdateOneWithoutDepensesNestedInput
+  beneficiaire?: Prisma.BeneficiaireUpdateOneWithoutDepensesNestedInput
 }
 
 export type DepenseUncheckedUpdateWithoutAgentInput = {
@@ -811,6 +1097,12 @@ export type DepenseUncheckedUpdateWithoutAgentInput = {
   dateDepense?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   justificatif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   statut?: Prisma.EnumStatutDepenseFieldUpdateOperationsInput | $Enums.StatutDepense
+  beneficiaireId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  modePaiement?: Prisma.StringFieldUpdateOperationsInput | string
+  lienPaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  statutPaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  datePaiement?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  referencePaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -826,6 +1118,12 @@ export type DepenseUncheckedUpdateManyWithoutAgentInput = {
   dateDepense?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   justificatif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   statut?: Prisma.EnumStatutDepenseFieldUpdateOperationsInput | $Enums.StatutDepense
+  beneficiaireId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  modePaiement?: Prisma.StringFieldUpdateOperationsInput | string
+  lienPaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  statutPaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  datePaiement?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  referencePaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -841,6 +1139,12 @@ export type DepenseCreateManyTransactionInput = {
   dateDepense?: Date | string
   justificatif?: string | null
   statut?: $Enums.StatutDepense
+  beneficiaireId?: string | null
+  modePaiement: string
+  lienPaiement?: string | null
+  statutPaiement?: string | null
+  datePaiement?: Date | string | null
+  referencePaiement?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -855,9 +1159,15 @@ export type DepenseUpdateWithoutTransactionInput = {
   dateDepense?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   justificatif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   statut?: Prisma.EnumStatutDepenseFieldUpdateOperationsInput | $Enums.StatutDepense
+  modePaiement?: Prisma.StringFieldUpdateOperationsInput | string
+  lienPaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  statutPaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  datePaiement?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  referencePaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   agent?: Prisma.UserUpdateOneWithoutDepensesNestedInput
+  beneficiaire?: Prisma.BeneficiaireUpdateOneWithoutDepensesNestedInput
 }
 
 export type DepenseUncheckedUpdateWithoutTransactionInput = {
@@ -871,6 +1181,12 @@ export type DepenseUncheckedUpdateWithoutTransactionInput = {
   dateDepense?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   justificatif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   statut?: Prisma.EnumStatutDepenseFieldUpdateOperationsInput | $Enums.StatutDepense
+  beneficiaireId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  modePaiement?: Prisma.StringFieldUpdateOperationsInput | string
+  lienPaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  statutPaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  datePaiement?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  referencePaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -886,6 +1202,96 @@ export type DepenseUncheckedUpdateManyWithoutTransactionInput = {
   dateDepense?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   justificatif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   statut?: Prisma.EnumStatutDepenseFieldUpdateOperationsInput | $Enums.StatutDepense
+  beneficiaireId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  modePaiement?: Prisma.StringFieldUpdateOperationsInput | string
+  lienPaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  statutPaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  datePaiement?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  referencePaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type DepenseCreateManyBeneficiaireInput = {
+  id?: string
+  type: $Enums.TypeDepense
+  categorie: $Enums.CategorieDepense
+  sourceFonds?: $Enums.SourceFonds
+  description: string
+  montant: runtime.Decimal | runtime.DecimalJsLike | number | string
+  transactionId?: string | null
+  agentId?: string | null
+  dateDepense?: Date | string
+  justificatif?: string | null
+  statut?: $Enums.StatutDepense
+  modePaiement: string
+  lienPaiement?: string | null
+  statutPaiement?: string | null
+  datePaiement?: Date | string | null
+  referencePaiement?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type DepenseUpdateWithoutBeneficiaireInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTypeDepenseFieldUpdateOperationsInput | $Enums.TypeDepense
+  categorie?: Prisma.EnumCategorieDepenseFieldUpdateOperationsInput | $Enums.CategorieDepense
+  sourceFonds?: Prisma.EnumSourceFondsFieldUpdateOperationsInput | $Enums.SourceFonds
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  montant?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  dateDepense?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  justificatif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  statut?: Prisma.EnumStatutDepenseFieldUpdateOperationsInput | $Enums.StatutDepense
+  modePaiement?: Prisma.StringFieldUpdateOperationsInput | string
+  lienPaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  statutPaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  datePaiement?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  referencePaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transaction?: Prisma.TransactionUpdateOneWithoutDepensesNestedInput
+  agent?: Prisma.UserUpdateOneWithoutDepensesNestedInput
+}
+
+export type DepenseUncheckedUpdateWithoutBeneficiaireInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTypeDepenseFieldUpdateOperationsInput | $Enums.TypeDepense
+  categorie?: Prisma.EnumCategorieDepenseFieldUpdateOperationsInput | $Enums.CategorieDepense
+  sourceFonds?: Prisma.EnumSourceFondsFieldUpdateOperationsInput | $Enums.SourceFonds
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  montant?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  transactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  agentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateDepense?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  justificatif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  statut?: Prisma.EnumStatutDepenseFieldUpdateOperationsInput | $Enums.StatutDepense
+  modePaiement?: Prisma.StringFieldUpdateOperationsInput | string
+  lienPaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  statutPaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  datePaiement?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  referencePaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type DepenseUncheckedUpdateManyWithoutBeneficiaireInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTypeDepenseFieldUpdateOperationsInput | $Enums.TypeDepense
+  categorie?: Prisma.EnumCategorieDepenseFieldUpdateOperationsInput | $Enums.CategorieDepense
+  sourceFonds?: Prisma.EnumSourceFondsFieldUpdateOperationsInput | $Enums.SourceFonds
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  montant?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  transactionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  agentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateDepense?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  justificatif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  statut?: Prisma.EnumStatutDepenseFieldUpdateOperationsInput | $Enums.StatutDepense
+  modePaiement?: Prisma.StringFieldUpdateOperationsInput | string
+  lienPaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  statutPaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  datePaiement?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  referencePaiement?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -904,10 +1310,17 @@ export type DepenseSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   dateDepense?: boolean
   justificatif?: boolean
   statut?: boolean
+  beneficiaireId?: boolean
+  modePaiement?: boolean
+  lienPaiement?: boolean
+  statutPaiement?: boolean
+  datePaiement?: boolean
+  referencePaiement?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   transaction?: boolean | Prisma.Depense$transactionArgs<ExtArgs>
   agent?: boolean | Prisma.Depense$agentArgs<ExtArgs>
+  beneficiaire?: boolean | Prisma.Depense$beneficiaireArgs<ExtArgs>
 }, ExtArgs["result"]["depense"]>
 
 export type DepenseSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -922,10 +1335,17 @@ export type DepenseSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   dateDepense?: boolean
   justificatif?: boolean
   statut?: boolean
+  beneficiaireId?: boolean
+  modePaiement?: boolean
+  lienPaiement?: boolean
+  statutPaiement?: boolean
+  datePaiement?: boolean
+  referencePaiement?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   transaction?: boolean | Prisma.Depense$transactionArgs<ExtArgs>
   agent?: boolean | Prisma.Depense$agentArgs<ExtArgs>
+  beneficiaire?: boolean | Prisma.Depense$beneficiaireArgs<ExtArgs>
 }, ExtArgs["result"]["depense"]>
 
 export type DepenseSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -940,10 +1360,17 @@ export type DepenseSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   dateDepense?: boolean
   justificatif?: boolean
   statut?: boolean
+  beneficiaireId?: boolean
+  modePaiement?: boolean
+  lienPaiement?: boolean
+  statutPaiement?: boolean
+  datePaiement?: boolean
+  referencePaiement?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   transaction?: boolean | Prisma.Depense$transactionArgs<ExtArgs>
   agent?: boolean | Prisma.Depense$agentArgs<ExtArgs>
+  beneficiaire?: boolean | Prisma.Depense$beneficiaireArgs<ExtArgs>
 }, ExtArgs["result"]["depense"]>
 
 export type DepenseSelectScalar = {
@@ -958,22 +1385,31 @@ export type DepenseSelectScalar = {
   dateDepense?: boolean
   justificatif?: boolean
   statut?: boolean
+  beneficiaireId?: boolean
+  modePaiement?: boolean
+  lienPaiement?: boolean
+  statutPaiement?: boolean
+  datePaiement?: boolean
+  referencePaiement?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type DepenseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "type" | "categorie" | "sourceFonds" | "description" | "montant" | "transactionId" | "agentId" | "dateDepense" | "justificatif" | "statut" | "createdAt" | "updatedAt", ExtArgs["result"]["depense"]>
+export type DepenseOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "type" | "categorie" | "sourceFonds" | "description" | "montant" | "transactionId" | "agentId" | "dateDepense" | "justificatif" | "statut" | "beneficiaireId" | "modePaiement" | "lienPaiement" | "statutPaiement" | "datePaiement" | "referencePaiement" | "createdAt" | "updatedAt", ExtArgs["result"]["depense"]>
 export type DepenseInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   transaction?: boolean | Prisma.Depense$transactionArgs<ExtArgs>
   agent?: boolean | Prisma.Depense$agentArgs<ExtArgs>
+  beneficiaire?: boolean | Prisma.Depense$beneficiaireArgs<ExtArgs>
 }
 export type DepenseIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   transaction?: boolean | Prisma.Depense$transactionArgs<ExtArgs>
   agent?: boolean | Prisma.Depense$agentArgs<ExtArgs>
+  beneficiaire?: boolean | Prisma.Depense$beneficiaireArgs<ExtArgs>
 }
 export type DepenseIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   transaction?: boolean | Prisma.Depense$transactionArgs<ExtArgs>
   agent?: boolean | Prisma.Depense$agentArgs<ExtArgs>
+  beneficiaire?: boolean | Prisma.Depense$beneficiaireArgs<ExtArgs>
 }
 
 export type $DepensePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -981,6 +1417,7 @@ export type $DepensePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   objects: {
     transaction: Prisma.$TransactionPayload<ExtArgs> | null
     agent: Prisma.$UserPayload<ExtArgs> | null
+    beneficiaire: Prisma.$BeneficiairePayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -994,6 +1431,12 @@ export type $DepensePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     dateDepense: Date
     justificatif: string | null
     statut: $Enums.StatutDepense
+    beneficiaireId: string | null
+    modePaiement: string
+    lienPaiement: string | null
+    statutPaiement: string | null
+    datePaiement: Date | null
+    referencePaiement: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["depense"]>
@@ -1392,6 +1835,7 @@ export interface Prisma__DepenseClient<T, Null = never, ExtArgs extends runtime.
   readonly [Symbol.toStringTag]: "PrismaPromise"
   transaction<T extends Prisma.Depense$transactionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Depense$transactionArgs<ExtArgs>>): Prisma.Prisma__TransactionClient<runtime.Types.Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   agent<T extends Prisma.Depense$agentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Depense$agentArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  beneficiaire<T extends Prisma.Depense$beneficiaireArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Depense$beneficiaireArgs<ExtArgs>>): Prisma.Prisma__BeneficiaireClient<runtime.Types.Result.GetResult<Prisma.$BeneficiairePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1432,6 +1876,12 @@ export interface DepenseFieldRefs {
   readonly dateDepense: Prisma.FieldRef<"Depense", 'DateTime'>
   readonly justificatif: Prisma.FieldRef<"Depense", 'String'>
   readonly statut: Prisma.FieldRef<"Depense", 'StatutDepense'>
+  readonly beneficiaireId: Prisma.FieldRef<"Depense", 'String'>
+  readonly modePaiement: Prisma.FieldRef<"Depense", 'String'>
+  readonly lienPaiement: Prisma.FieldRef<"Depense", 'String'>
+  readonly statutPaiement: Prisma.FieldRef<"Depense", 'String'>
+  readonly datePaiement: Prisma.FieldRef<"Depense", 'DateTime'>
+  readonly referencePaiement: Prisma.FieldRef<"Depense", 'String'>
   readonly createdAt: Prisma.FieldRef<"Depense", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Depense", 'DateTime'>
 }
@@ -1870,6 +2320,25 @@ export type Depense$agentArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    */
   include?: Prisma.UserInclude<ExtArgs> | null
   where?: Prisma.UserWhereInput
+}
+
+/**
+ * Depense.beneficiaire
+ */
+export type Depense$beneficiaireArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Beneficiaire
+   */
+  select?: Prisma.BeneficiaireSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Beneficiaire
+   */
+  omit?: Prisma.BeneficiaireOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BeneficiaireInclude<ExtArgs> | null
+  where?: Prisma.BeneficiaireWhereInput
 }
 
 /**

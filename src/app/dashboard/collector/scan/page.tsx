@@ -35,7 +35,7 @@ export default function ScanPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-aeonik text-2xl sm:text-3xl font-bold text-blanc">Scan QR Code</h1>
+        <h1 className="font-aeonik text-2xl sm:text-3xl font-bold text-blanc uppercase">Scan QR Code</h1>
         <p className="text-blanc/50 text-sm mt-1">
           Scannez un QR code de paiement pour le rapprocher avec une transaction
         </p>

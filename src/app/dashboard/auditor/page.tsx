@@ -75,7 +75,7 @@ export default async function AuditorDashboard() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-aeonik text-2xl sm:text-3xl font-bold text-blanc">Audit — Commissaire aux comptes</h1>
+        <h1 className="font-aeonik text-2xl sm:text-3xl font-bold text-blanc uppercase">Audit — Commissaire aux comptes</h1>
         <p className="text-blanc/50 text-sm mt-1">Lecture seule + annotations d'audit</p>
       </div>
 

@@ -8,7 +8,7 @@ import TransactionsParMois from "@/components/TransactionsParMois";
 export default async function TreasurerDashboard() {
   const now = new Date();
 
-  const [transactions, repartitions, caisse, depenses, allTransactions, dimeMoisStatut, dimesVersees] = await Promise.all([
+  const [transactions, repartitions, caisse, depenses, allTransactions, dimeMoisStatut, dimesVersees, paiementsEnLigne] = await Promise.all([
     prisma.transaction.findMany({
       where: { statut: "VALIDE" },
       orderBy: { createdAt: "desc" },
@@ -32,6 +32,11 @@ export default async function TreasurerDashboard() {
     }),
     prisma.dimeMensuelle.findMany({
       where: { statut: "VERSE" },
+    }),
+    prisma.transaction.findMany({
+      where: { mode: "EN_LIGNE" },
+      orderBy: { createdAt: "desc" },
+      include: { contributeur: true },
     }),
   ]);
 
@@ -169,7 +174,7 @@ export default async function TreasurerDashboard() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-aeonik text-2xl sm:text-3xl font-bold text-blanc">Tableau de bord — Trésorière</h1>
+          <h1 className="font-aeonik text-2xl sm:text-3xl font-bold text-blanc uppercase">Tableau de bord — Trésorière</h1>
           <p className="text-blanc/50 text-sm mt-1">Vue complète : mois en cours, mois passés et global</p>
         </div>
         <div className="flex gap-2">
@@ -303,6 +308,34 @@ export default async function TreasurerDashboard() {
             </div>
           ))}
         </div>
+      </div>
+
+      {/* Paiements en ligne */}
+      <div className="card-noir">
+        <h2 className="font-aeonik text-xl text-blanc mb-4 flex items-center gap-2">
+          <Globe className="w-5 h-5 text-or" />
+          Paiements en ligne récents
+        </h2>
+        {paiementsEnLigne.length === 0 ? (
+          <p className="text-blanc/50 text-center py-8">Aucun paiement en ligne pour le moment</p>
+        ) : (
+          <div className="space-y-3">
+            {paiementsEnLigne.slice(0, 5).map((p) => (
+              <div key={p.id} className="flex items-center justify-between p-3 rounded-xl bg-noir-soft border border-or/10">
+                <div className="flex items-center gap-3">
+                  <Globe className="w-5 h-5 text-or" />
+                  <div>
+                    <p className="text-blanc font-aeonik">{formatMontant(Number(p.montant))}</p>
+                    <p className="text-blanc/50 text-sm">
+                      {p.categorie} • {p.contributeur?.nom || "Anonyme"} • {formatDate(p.createdAt)}
+                    </p>
+                  </div>
+                </div>
+                <span className="text-xs text-green-400 px-2 py-1 bg-green-500/10 rounded">EN_LIGNE</span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Charts */}

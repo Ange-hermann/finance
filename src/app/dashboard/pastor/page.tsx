@@ -3,6 +3,7 @@ import { formatMontant } from "@/lib/utils";
 import { Coins, Wallet, PiggyBank, Heart, Building2, TrendingUp } from "lucide-react";
 import PastorCharts from "@/components/PastorCharts";
 import TransactionsParMois from "@/components/TransactionsParMois";
+import PushNotificationButton from "@/components/PushNotificationButton";
 
 export const dynamic = "force-dynamic";
 
@@ -89,9 +90,12 @@ export default async function PastorDashboard() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="font-aeonik text-2xl sm:text-3xl font-bold text-blanc">Vue globale — Pasteur</h1>
-        <p className="text-blanc/50 text-sm mt-1">Lecture seule — grands totaux et graphiques</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="font-aeonik text-2xl sm:text-3xl font-bold text-blanc uppercase">Vue globale — Pasteur</h1>
+          <p className="text-blanc/50 text-sm mt-1">Lecture seule — grands totaux et graphiques</p>
+        </div>
+        <PushNotificationButton />
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">

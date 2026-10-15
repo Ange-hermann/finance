@@ -1,15 +1,15 @@
-import { PaymentProvider, PaymentSession, PaymentVerification } from "./provider";
+import { PaymentProvider, PaymentSession, PaymentVerification, PayoutResult, PayoutRecipient } from "./provider";
 
 export class MockPaymentProvider implements PaymentProvider {
   async createPaymentSession(
-    montant: number,
-    categorie: string,
-    metadata: Record<string, unknown>
+    amount: number,
+    description: string,
+    metadata?: Record<string, any>
   ): Promise<PaymentSession> {
     const sessionId = `mock_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
-    const url = `/pay/mock-checkout?session=${sessionId}&montant=${montant}&categorie=${categorie}`;
+    const url = `/pay/mock-checkout?session=${sessionId}&amount=${amount}&description=${encodeURIComponent(description)}`;
 
-    return { url, sessionId };
+    return { url, sessionId, amount, currency: "XAF" };
   }
 
   async verifyPayment(sessionId: string): Promise<PaymentVerification> {
@@ -17,6 +17,23 @@ export class MockPaymentProvider implements PaymentProvider {
       statut: "PAYE",
       reference: `REF_${sessionId}`,
     };
+  }
+
+  async createPayout(
+    amount: number,
+    description: string,
+    recipient: PayoutRecipient,
+    metadata?: Record<string, any>
+  ): Promise<PayoutResult> {
+    return {
+      reference: `PYT-MOCK-${Date.now()}`,
+      status: "completed",
+      fees: 0,
+    };
+  }
+
+  async cancelPayout(): Promise<boolean> {
+    return true;
   }
 
   async handleWebhook(payload: unknown, signature?: string): Promise<PaymentVerification> {

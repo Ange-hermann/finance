@@ -177,17 +177,25 @@ export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
 
-  const body = await req.json();
-  const { message, isInitial } = body;
-  const userName = session.user?.name || "";
-  const role = (session.user as any)?.role as string;
+  try {
+    const body = await req.json();
+    const { message, isInitial } = body;
+    const userName = session.user?.name || "";
+    const role = (session.user as any)?.role as string;
 
-  if (isInitial) {
+    if (isInitial) {
+      const greeting = await getInitialGreeting(userName, role, (session.user as any)?.id);
+      return NextResponse.json({ ...greeting, message: correctPronunciation(greeting.message) });
+    }
+    const result = await processMessage(message, role, userName);
+    return NextResponse.json({ ...result, message: correctPronunciation(result.message) });
+  } catch (error) {
+    // Si le corps est vide ou invalide, retourner une réponse par défaut
+    const userName = session.user?.name || "";
+    const role = (session.user as any)?.role as string;
     const greeting = await getInitialGreeting(userName, role, (session.user as any)?.id);
     return NextResponse.json({ ...greeting, message: correctPronunciation(greeting.message) });
   }
-  const result = await processMessage(message, role, userName);
-  return NextResponse.json({ ...result, message: correctPronunciation(result.message) });
 }
 
 // === Greeting instantané (DB directe, pas d'IA) ===

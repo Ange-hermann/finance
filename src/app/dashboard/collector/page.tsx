@@ -26,12 +26,12 @@ export default async function CollectorDashboard() {
   ]);
 
   const appUrl = process.env.APP_URL || "http://localhost:3000";
-  const lienPaiement = `${appUrl}/pay/general`;
+  const lienPaiement = `${appUrl}/pay`;
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-aeonik text-2xl sm:text-3xl font-bold text-blanc">Espace Agent</h1>
+        <h1 className="font-aeonik text-2xl sm:text-3xl font-bold text-blanc uppercase">Espace Agent</h1>
         <p className="text-blanc/50 text-sm mt-1">Saisie manuelle et scan des paiements</p>
       </div>
 

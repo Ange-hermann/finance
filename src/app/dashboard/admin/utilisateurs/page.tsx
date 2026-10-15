@@ -22,7 +22,7 @@ export default async function UtilisateursPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-aeonik text-2xl sm:text-3xl font-bold text-blanc">Gestion des utilisateurs</h1>
+        <h1 className="font-aeonik text-2xl sm:text-3xl font-bold text-blanc uppercase">Gestion des utilisateurs</h1>
         <p className="text-blanc/50 text-sm mt-1">Créer, modifier, désactiver des comptes et assigner des rôles</p>
       </div>
 

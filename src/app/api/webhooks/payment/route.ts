@@ -26,32 +26,36 @@ export async function POST(req: NextRequest) {
           data: { statut: "VALIDE", referencePaiement: reference },
         });
 
-        const repartition = calculerRepartition(
-          Number(existingTransaction.montant),
-          existingTransaction.categorie as CategorieTransaction
-        );
-        await prisma.repartition.create({
-          data: {
-            transactionId: existingTransaction.id,
-            montantEconomie: repartition.montantEconomie,
-            montantEpargne: repartition.montantEpargne,
-            montantActionSociale: repartition.montantActionSociale,
-            montantDimeDeLaDime: repartition.montantDimeDeLaDime,
-            montantCaisse: repartition.montantCaisse,
-            montantFondsDedie: repartition.montantFondsDedie,
-          },
-        });
+        // Répartition automatique SEULEMENT pour les offrandes et dons
+        // Les dîmes sont gérées par le pasteur (pas de répartition automatique)
+        if (existingTransaction.categorie !== "DIME") {
+          const repartition = calculerRepartition(
+            Number(existingTransaction.montant),
+            existingTransaction.categorie as CategorieTransaction
+          );
+          await prisma.repartition.create({
+            data: {
+              transactionId: existingTransaction.id,
+              montantEconomie: repartition.montantEconomie,
+              montantEpargne: repartition.montantEpargne,
+              montantActionSociale: repartition.montantActionSociale,
+              montantDimeDeLaDime: repartition.montantDimeDeLaDime,
+              montantCaisse: repartition.montantCaisse,
+              montantFondsDedie: repartition.montantFondsDedie,
+            },
+          });
 
-        const caisse = await prisma.caisse.findFirst();
-        if (caisse) {
-          await prisma.caisse.update({
-            where: { id: caisse.id },
-            data: { soldeActuel: { increment: Number(existingTransaction.montant) } },
-          });
-        } else {
-          await prisma.caisse.create({
-            data: { soldeActuel: Number(existingTransaction.montant) },
-          });
+          const caisse = await prisma.caisse.findFirst();
+          if (caisse) {
+            await prisma.caisse.update({
+              where: { id: caisse.id },
+              data: { soldeActuel: { increment: repartition.montantCaisse } },
+            });
+          } else {
+            await prisma.caisse.create({
+              data: { soldeActuel: repartition.montantCaisse },
+            });
+          }
         }
 
         await prisma.recu.create({
@@ -93,29 +97,33 @@ export async function POST(req: NextRequest) {
           },
         });
 
-        const repartition = calculerRepartition(parseFloat(montant), categorie as CategorieTransaction);
-        await prisma.repartition.create({
-          data: {
-            transactionId: transaction.id,
-            montantEconomie: repartition.montantEconomie,
-            montantEpargne: repartition.montantEpargne,
-            montantActionSociale: repartition.montantActionSociale,
-            montantDimeDeLaDime: repartition.montantDimeDeLaDime,
-            montantCaisse: repartition.montantCaisse,
-            montantFondsDedie: repartition.montantFondsDedie,
-          },
-        });
+        // Répartition automatique SEULEMENT pour les offrandes et dons
+        // Les dîmes sont gérées par le pasteur (pas de répartition automatique)
+        if (categorie !== "DIME") {
+          const repartition = calculerRepartition(parseFloat(montant), categorie as CategorieTransaction);
+          await prisma.repartition.create({
+            data: {
+              transactionId: transaction.id,
+              montantEconomie: repartition.montantEconomie,
+              montantEpargne: repartition.montantEpargne,
+              montantActionSociale: repartition.montantActionSociale,
+              montantDimeDeLaDime: repartition.montantDimeDeLaDime,
+              montantCaisse: repartition.montantCaisse,
+              montantFondsDedie: repartition.montantFondsDedie,
+            },
+          });
 
-        const caisse = await prisma.caisse.findFirst();
-        if (caisse) {
-          await prisma.caisse.update({
-            where: { id: caisse.id },
-            data: { soldeActuel: { increment: parseFloat(montant) } },
-          });
-        } else {
-          await prisma.caisse.create({
-            data: { soldeActuel: parseFloat(montant) },
-          });
+          const caisse = await prisma.caisse.findFirst();
+          if (caisse) {
+            await prisma.caisse.update({
+              where: { id: caisse.id },
+              data: { soldeActuel: { increment: repartition.montantCaisse } },
+            });
+          } else {
+            await prisma.caisse.create({
+              data: { soldeActuel: repartition.montantCaisse },
+            });
+          }
         }
 
         await prisma.recu.create({

@@ -57,7 +57,7 @@ export default async function AdminDashboard() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-aeonik text-2xl sm:text-3xl font-bold text-blanc">Administration</h1>
+        <h1 className="font-aeonik text-2xl sm:text-3xl font-bold text-blanc uppercase">Administration</h1>
         <p className="text-blanc/50 text-sm mt-1">Gestion des utilisateurs, rôles et taux de répartition</p>
       </div>
 

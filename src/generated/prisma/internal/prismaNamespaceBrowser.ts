@@ -62,7 +62,11 @@ export const ModelName = {
   LogAudit: 'LogAudit',
   LienPaiement: 'LienPaiement',
   Depense: 'Depense',
-  DimeMensuelle: 'DimeMensuelle'
+  DimeMensuelle: 'DimeMensuelle',
+  DemandeAutorisation: 'DemandeAutorisation',
+  PermissionRole: 'PermissionRole',
+  PushSubscription: 'PushSubscription',
+  Beneficiaire: 'Beneficiaire'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -218,6 +222,12 @@ export const DepenseScalarFieldEnum = {
   dateDepense: 'dateDepense',
   justificatif: 'justificatif',
   statut: 'statut',
+  beneficiaireId: 'beneficiaireId',
+  modePaiement: 'modePaiement',
+  lienPaiement: 'lienPaiement',
+  statutPaiement: 'statutPaiement',
+  datePaiement: 'datePaiement',
+  referencePaiement: 'referencePaiement',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -240,12 +250,80 @@ export const DimeMensuelleScalarFieldEnum = {
 export type DimeMensuelleScalarFieldEnum = (typeof DimeMensuelleScalarFieldEnum)[keyof typeof DimeMensuelleScalarFieldEnum]
 
 
+export const DemandeAutorisationScalarFieldEnum = {
+  id: 'id',
+  demandeurId: 'demandeurId',
+  sourceFonds: 'sourceFonds',
+  typeAction: 'typeAction',
+  montant: 'montant',
+  description: 'description',
+  motif: 'motif',
+  statut: 'statut',
+  approbateurId: 'approbateurId',
+  commentaire: 'commentaire',
+  dateDemande: 'dateDemande',
+  dateReponse: 'dateReponse',
+  depenseId: 'depenseId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DemandeAutorisationScalarFieldEnum = (typeof DemandeAutorisationScalarFieldEnum)[keyof typeof DemandeAutorisationScalarFieldEnum]
+
+
+export const PermissionRoleScalarFieldEnum = {
+  id: 'id',
+  role: 'role',
+  sourceFonds: 'sourceFonds',
+  niveauAcces: 'niveauAcces',
+  montantMax: 'montantMax',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PermissionRoleScalarFieldEnum = (typeof PermissionRoleScalarFieldEnum)[keyof typeof PermissionRoleScalarFieldEnum]
+
+
+export const PushSubscriptionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  role: 'role',
+  subscription: 'subscription',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PushSubscriptionScalarFieldEnum = (typeof PushSubscriptionScalarFieldEnum)[keyof typeof PushSubscriptionScalarFieldEnum]
+
+
+export const BeneficiaireScalarFieldEnum = {
+  id: 'id',
+  nom: 'nom',
+  telephone: 'telephone',
+  email: 'email',
+  modePaiement: 'modePaiement',
+  actif: 'actif',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BeneficiaireScalarFieldEnum = (typeof BeneficiaireScalarFieldEnum)[keyof typeof BeneficiaireScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {
@@ -262,4 +340,13 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 

@@ -14,25 +14,26 @@ export class MoneyFusionProvider implements PaymentProvider {
   }
 
   async createPaymentSession(
-    montant: number,
-    categorie: string,
-    metadata: Record<string, unknown>
+    amount: number,
+    description: string,
+    metadata?: Record<string, any>
   ): Promise<PaymentSession> {
+    const categorie = metadata?.categorie || "AUTRE";
     const paymentData = {
-      totalPrice: montant,
-      article: [{ [categorie]: montant }],
+      totalPrice: amount,
+      article: [{ [categorie]: amount }],
       personal_Info: [
         {
-          lienId: metadata.lienId || null,
-          contributeurNom: metadata.contributeurNom || null,
-          contributeurTelephone: metadata.contributeurTelephone || null,
-          contributeurEmail: metadata.contributeurEmail || null,
+          lienId: metadata?.lienId || null,
+          contributeurNom: metadata?.contributeurNom || null,
+          contributeurTelephone: metadata?.contributeurTelephone || null,
+          contributeurEmail: metadata?.contributeurEmail || null,
           categorie,
-          montant,
+          montant: amount,
         },
       ],
-      numeroSend: metadata.contributeurTelephone || "",
-      nomclient: metadata.contributeurNom || "Fidèle",
+      numeroSend: metadata?.contributeurTelephone || "",
+      nomclient: metadata?.contributeurNom || "Fidèle",
       return_url: `${this.appUrl}/pay/callback`,
       webhook_url: `${this.appUrl}/api/webhooks/payment`,
     };
@@ -52,7 +53,7 @@ export class MoneyFusionProvider implements PaymentProvider {
     const token = data.tokenPay || data.token || data.sessionId;
     const url = data.url || data.payment_url || `https://www.pay.moneyfusion.net/paiement/${token}`;
 
-    return { url, sessionId: token };
+    return { url, sessionId: token, amount, currency: "XAF" };
   }
 
   async verifyPayment(sessionId: string): Promise<PaymentVerification> {

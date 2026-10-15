@@ -408,7 +408,11 @@ export const ModelName = {
   LogAudit: 'LogAudit',
   LienPaiement: 'LienPaiement',
   Depense: 'Depense',
-  DimeMensuelle: 'DimeMensuelle'
+  DimeMensuelle: 'DimeMensuelle',
+  DemandeAutorisation: 'DemandeAutorisation',
+  PermissionRole: 'PermissionRole',
+  PushSubscription: 'PushSubscription',
+  Beneficiaire: 'Beneficiaire'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -424,7 +428,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "contributeur" | "transaction" | "repartition" | "tauxRepartition" | "caisse" | "recu" | "annotationAudit" | "logAudit" | "lienPaiement" | "depense" | "dimeMensuelle"
+    modelProps: "user" | "contributeur" | "transaction" | "repartition" | "tauxRepartition" | "caisse" | "recu" | "annotationAudit" | "logAudit" | "lienPaiement" | "depense" | "dimeMensuelle" | "demandeAutorisation" | "permissionRole" | "pushSubscription" | "beneficiaire"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1316,6 +1320,302 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    DemandeAutorisation: {
+      payload: Prisma.$DemandeAutorisationPayload<ExtArgs>
+      fields: Prisma.DemandeAutorisationFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DemandeAutorisationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandeAutorisationPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DemandeAutorisationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandeAutorisationPayload>
+        }
+        findFirst: {
+          args: Prisma.DemandeAutorisationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandeAutorisationPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DemandeAutorisationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandeAutorisationPayload>
+        }
+        findMany: {
+          args: Prisma.DemandeAutorisationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandeAutorisationPayload>[]
+        }
+        create: {
+          args: Prisma.DemandeAutorisationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandeAutorisationPayload>
+        }
+        createMany: {
+          args: Prisma.DemandeAutorisationCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.DemandeAutorisationCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandeAutorisationPayload>[]
+        }
+        delete: {
+          args: Prisma.DemandeAutorisationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandeAutorisationPayload>
+        }
+        update: {
+          args: Prisma.DemandeAutorisationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandeAutorisationPayload>
+        }
+        deleteMany: {
+          args: Prisma.DemandeAutorisationDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DemandeAutorisationUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.DemandeAutorisationUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandeAutorisationPayload>[]
+        }
+        upsert: {
+          args: Prisma.DemandeAutorisationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandeAutorisationPayload>
+        }
+        aggregate: {
+          args: Prisma.DemandeAutorisationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDemandeAutorisation>
+        }
+        groupBy: {
+          args: Prisma.DemandeAutorisationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DemandeAutorisationGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DemandeAutorisationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DemandeAutorisationCountAggregateOutputType> | number
+        }
+      }
+    }
+    PermissionRole: {
+      payload: Prisma.$PermissionRolePayload<ExtArgs>
+      fields: Prisma.PermissionRoleFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PermissionRoleFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PermissionRolePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PermissionRoleFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PermissionRolePayload>
+        }
+        findFirst: {
+          args: Prisma.PermissionRoleFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PermissionRolePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PermissionRoleFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PermissionRolePayload>
+        }
+        findMany: {
+          args: Prisma.PermissionRoleFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PermissionRolePayload>[]
+        }
+        create: {
+          args: Prisma.PermissionRoleCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PermissionRolePayload>
+        }
+        createMany: {
+          args: Prisma.PermissionRoleCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PermissionRoleCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PermissionRolePayload>[]
+        }
+        delete: {
+          args: Prisma.PermissionRoleDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PermissionRolePayload>
+        }
+        update: {
+          args: Prisma.PermissionRoleUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PermissionRolePayload>
+        }
+        deleteMany: {
+          args: Prisma.PermissionRoleDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PermissionRoleUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PermissionRoleUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PermissionRolePayload>[]
+        }
+        upsert: {
+          args: Prisma.PermissionRoleUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PermissionRolePayload>
+        }
+        aggregate: {
+          args: Prisma.PermissionRoleAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePermissionRole>
+        }
+        groupBy: {
+          args: Prisma.PermissionRoleGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PermissionRoleGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PermissionRoleCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PermissionRoleCountAggregateOutputType> | number
+        }
+      }
+    }
+    PushSubscription: {
+      payload: Prisma.$PushSubscriptionPayload<ExtArgs>
+      fields: Prisma.PushSubscriptionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PushSubscriptionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PushSubscriptionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PushSubscriptionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PushSubscriptionPayload>
+        }
+        findFirst: {
+          args: Prisma.PushSubscriptionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PushSubscriptionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PushSubscriptionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PushSubscriptionPayload>
+        }
+        findMany: {
+          args: Prisma.PushSubscriptionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PushSubscriptionPayload>[]
+        }
+        create: {
+          args: Prisma.PushSubscriptionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PushSubscriptionPayload>
+        }
+        createMany: {
+          args: Prisma.PushSubscriptionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PushSubscriptionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PushSubscriptionPayload>[]
+        }
+        delete: {
+          args: Prisma.PushSubscriptionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PushSubscriptionPayload>
+        }
+        update: {
+          args: Prisma.PushSubscriptionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PushSubscriptionPayload>
+        }
+        deleteMany: {
+          args: Prisma.PushSubscriptionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PushSubscriptionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PushSubscriptionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PushSubscriptionPayload>[]
+        }
+        upsert: {
+          args: Prisma.PushSubscriptionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PushSubscriptionPayload>
+        }
+        aggregate: {
+          args: Prisma.PushSubscriptionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePushSubscription>
+        }
+        groupBy: {
+          args: Prisma.PushSubscriptionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PushSubscriptionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PushSubscriptionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PushSubscriptionCountAggregateOutputType> | number
+        }
+      }
+    }
+    Beneficiaire: {
+      payload: Prisma.$BeneficiairePayload<ExtArgs>
+      fields: Prisma.BeneficiaireFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BeneficiaireFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BeneficiairePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BeneficiaireFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BeneficiairePayload>
+        }
+        findFirst: {
+          args: Prisma.BeneficiaireFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BeneficiairePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BeneficiaireFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BeneficiairePayload>
+        }
+        findMany: {
+          args: Prisma.BeneficiaireFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BeneficiairePayload>[]
+        }
+        create: {
+          args: Prisma.BeneficiaireCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BeneficiairePayload>
+        }
+        createMany: {
+          args: Prisma.BeneficiaireCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BeneficiaireCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BeneficiairePayload>[]
+        }
+        delete: {
+          args: Prisma.BeneficiaireDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BeneficiairePayload>
+        }
+        update: {
+          args: Prisma.BeneficiaireUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BeneficiairePayload>
+        }
+        deleteMany: {
+          args: Prisma.BeneficiaireDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BeneficiaireUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BeneficiaireUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BeneficiairePayload>[]
+        }
+        upsert: {
+          args: Prisma.BeneficiaireUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BeneficiairePayload>
+        }
+        aggregate: {
+          args: Prisma.BeneficiaireAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBeneficiaire>
+        }
+        groupBy: {
+          args: Prisma.BeneficiaireGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BeneficiaireGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BeneficiaireCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BeneficiaireCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1492,6 +1792,12 @@ export const DepenseScalarFieldEnum = {
   dateDepense: 'dateDepense',
   justificatif: 'justificatif',
   statut: 'statut',
+  beneficiaireId: 'beneficiaireId',
+  modePaiement: 'modePaiement',
+  lienPaiement: 'lienPaiement',
+  statutPaiement: 'statutPaiement',
+  datePaiement: 'datePaiement',
+  referencePaiement: 'referencePaiement',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1514,12 +1820,80 @@ export const DimeMensuelleScalarFieldEnum = {
 export type DimeMensuelleScalarFieldEnum = (typeof DimeMensuelleScalarFieldEnum)[keyof typeof DimeMensuelleScalarFieldEnum]
 
 
+export const DemandeAutorisationScalarFieldEnum = {
+  id: 'id',
+  demandeurId: 'demandeurId',
+  sourceFonds: 'sourceFonds',
+  typeAction: 'typeAction',
+  montant: 'montant',
+  description: 'description',
+  motif: 'motif',
+  statut: 'statut',
+  approbateurId: 'approbateurId',
+  commentaire: 'commentaire',
+  dateDemande: 'dateDemande',
+  dateReponse: 'dateReponse',
+  depenseId: 'depenseId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DemandeAutorisationScalarFieldEnum = (typeof DemandeAutorisationScalarFieldEnum)[keyof typeof DemandeAutorisationScalarFieldEnum]
+
+
+export const PermissionRoleScalarFieldEnum = {
+  id: 'id',
+  role: 'role',
+  sourceFonds: 'sourceFonds',
+  niveauAcces: 'niveauAcces',
+  montantMax: 'montantMax',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PermissionRoleScalarFieldEnum = (typeof PermissionRoleScalarFieldEnum)[keyof typeof PermissionRoleScalarFieldEnum]
+
+
+export const PushSubscriptionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  role: 'role',
+  subscription: 'subscription',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PushSubscriptionScalarFieldEnum = (typeof PushSubscriptionScalarFieldEnum)[keyof typeof PushSubscriptionScalarFieldEnum]
+
+
+export const BeneficiaireScalarFieldEnum = {
+  id: 'id',
+  nom: 'nom',
+  telephone: 'telephone',
+  email: 'email',
+  modePaiement: 'modePaiement',
+  actif: 'actif',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BeneficiaireScalarFieldEnum = (typeof BeneficiaireScalarFieldEnum)[keyof typeof BeneficiaireScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {
@@ -1536,6 +1910,15 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
 
@@ -1748,6 +2131,34 @@ export type ListEnumStatutDimeFieldRefInput<$PrismaModel> = FieldRefInputType<$P
 
 
 /**
+ * Reference to a field of type 'StatutAutorisation'
+ */
+export type EnumStatutAutorisationFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StatutAutorisation'>
+    
+
+
+/**
+ * Reference to a field of type 'StatutAutorisation[]'
+ */
+export type ListEnumStatutAutorisationFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StatutAutorisation[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Json'
+ */
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+/**
+ * Reference to a field of type 'QueryMode'
+ */
+export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -1923,6 +2334,10 @@ export type GlobalOmitConfig = {
   lienPaiement?: Prisma.LienPaiementOmit
   depense?: Prisma.DepenseOmit
   dimeMensuelle?: Prisma.DimeMensuelleOmit
+  demandeAutorisation?: Prisma.DemandeAutorisationOmit
+  permissionRole?: Prisma.PermissionRoleOmit
+  pushSubscription?: Prisma.PushSubscriptionOmit
+  beneficiaire?: Prisma.BeneficiaireOmit
 }
 
 /* Types for Logging */

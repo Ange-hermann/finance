@@ -1,5 +1,5 @@
 const CACHE_NAME = "ctf-finance-v1";
-const STATIC_ASSETS = ["/", "/manifest.json", "/Logo.png"];
+const STATIC_ASSETS = ["/", "/manifest.json", "/ctf.png"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -12,6 +12,22 @@ self.addEventListener("activate", (event) => {
     caches.keys().then((keys) =>
       Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))
     ).then(() => self.clients.claim())
+  );
+});
+
+// Gérer les notifications push
+self.addEventListener("push", (event) => {
+  const data = event.data.json();
+  const options = {
+    body: data.notification.body,
+    icon: data.notification.icon || "/ctf.png",
+    badge: "/ctf.png",
+    vibrate: [200, 100, 200],
+    data: data.data,
+  };
+
+  event.waitUntil(
+    self.registration.showNotification(data.notification.title, options)
   );
 });
 

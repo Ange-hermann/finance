@@ -219,6 +219,10 @@ export type UserWhereInput = {
   logs?: Prisma.LogAuditListRelationFilter
   depenses?: Prisma.DepenseListRelationFilter
   dimes?: Prisma.DimeMensuelleListRelationFilter
+  demandes?: Prisma.DemandeAutorisationListRelationFilter
+  approbations?: Prisma.DemandeAutorisationListRelationFilter
+  pushSubscriptions?: Prisma.PushSubscriptionListRelationFilter
+  beneficiaires?: Prisma.BeneficiaireListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -236,6 +240,10 @@ export type UserOrderByWithRelationInput = {
   logs?: Prisma.LogAuditOrderByRelationAggregateInput
   depenses?: Prisma.DepenseOrderByRelationAggregateInput
   dimes?: Prisma.DimeMensuelleOrderByRelationAggregateInput
+  demandes?: Prisma.DemandeAutorisationOrderByRelationAggregateInput
+  approbations?: Prisma.DemandeAutorisationOrderByRelationAggregateInput
+  pushSubscriptions?: Prisma.PushSubscriptionOrderByRelationAggregateInput
+  beneficiaires?: Prisma.BeneficiaireOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -256,6 +264,10 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   logs?: Prisma.LogAuditListRelationFilter
   depenses?: Prisma.DepenseListRelationFilter
   dimes?: Prisma.DimeMensuelleListRelationFilter
+  demandes?: Prisma.DemandeAutorisationListRelationFilter
+  approbations?: Prisma.DemandeAutorisationListRelationFilter
+  pushSubscriptions?: Prisma.PushSubscriptionListRelationFilter
+  beneficiaires?: Prisma.BeneficiaireListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -303,6 +315,10 @@ export type UserCreateInput = {
   logs?: Prisma.LogAuditCreateNestedManyWithoutUserInput
   depenses?: Prisma.DepenseCreateNestedManyWithoutAgentInput
   dimes?: Prisma.DimeMensuelleCreateNestedManyWithoutAgentInput
+  demandes?: Prisma.DemandeAutorisationCreateNestedManyWithoutDemandeurInput
+  approbations?: Prisma.DemandeAutorisationCreateNestedManyWithoutApprobateurInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
+  beneficiaires?: Prisma.BeneficiaireCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -320,6 +336,10 @@ export type UserUncheckedCreateInput = {
   logs?: Prisma.LogAuditUncheckedCreateNestedManyWithoutUserInput
   depenses?: Prisma.DepenseUncheckedCreateNestedManyWithoutAgentInput
   dimes?: Prisma.DimeMensuelleUncheckedCreateNestedManyWithoutAgentInput
+  demandes?: Prisma.DemandeAutorisationUncheckedCreateNestedManyWithoutDemandeurInput
+  approbations?: Prisma.DemandeAutorisationUncheckedCreateNestedManyWithoutApprobateurInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  beneficiaires?: Prisma.BeneficiaireUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUpdateInput = {
@@ -337,6 +357,10 @@ export type UserUpdateInput = {
   logs?: Prisma.LogAuditUpdateManyWithoutUserNestedInput
   depenses?: Prisma.DepenseUpdateManyWithoutAgentNestedInput
   dimes?: Prisma.DimeMensuelleUpdateManyWithoutAgentNestedInput
+  demandes?: Prisma.DemandeAutorisationUpdateManyWithoutDemandeurNestedInput
+  approbations?: Prisma.DemandeAutorisationUpdateManyWithoutApprobateurNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
+  beneficiaires?: Prisma.BeneficiaireUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -354,6 +378,10 @@ export type UserUncheckedUpdateInput = {
   logs?: Prisma.LogAuditUncheckedUpdateManyWithoutUserNestedInput
   depenses?: Prisma.DepenseUncheckedUpdateManyWithoutAgentNestedInput
   dimes?: Prisma.DimeMensuelleUncheckedUpdateManyWithoutAgentNestedInput
+  demandes?: Prisma.DemandeAutorisationUncheckedUpdateManyWithoutDemandeurNestedInput
+  approbations?: Prisma.DemandeAutorisationUncheckedUpdateManyWithoutApprobateurNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  beneficiaires?: Prisma.BeneficiaireUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -536,6 +564,68 @@ export type UserUpdateOneWithoutDimesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutDimesInput, Prisma.UserUpdateWithoutDimesInput>, Prisma.UserUncheckedUpdateWithoutDimesInput>
 }
 
+export type UserCreateNestedOneWithoutDemandesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDemandesInput, Prisma.UserUncheckedCreateWithoutDemandesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDemandesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutApprobationsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutApprobationsInput, Prisma.UserUncheckedCreateWithoutApprobationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutApprobationsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutDemandesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDemandesInput, Prisma.UserUncheckedCreateWithoutDemandesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDemandesInput
+  upsert?: Prisma.UserUpsertWithoutDemandesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutDemandesInput, Prisma.UserUpdateWithoutDemandesInput>, Prisma.UserUncheckedUpdateWithoutDemandesInput>
+}
+
+export type UserUpdateOneWithoutApprobationsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutApprobationsInput, Prisma.UserUncheckedCreateWithoutApprobationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutApprobationsInput
+  upsert?: Prisma.UserUpsertWithoutApprobationsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutApprobationsInput, Prisma.UserUpdateWithoutApprobationsInput>, Prisma.UserUncheckedUpdateWithoutApprobationsInput>
+}
+
+export type UserCreateNestedOneWithoutPushSubscriptionsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPushSubscriptionsInput, Prisma.UserUncheckedCreateWithoutPushSubscriptionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPushSubscriptionsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutPushSubscriptionsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPushSubscriptionsInput, Prisma.UserUncheckedCreateWithoutPushSubscriptionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPushSubscriptionsInput
+  upsert?: Prisma.UserUpsertWithoutPushSubscriptionsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPushSubscriptionsInput, Prisma.UserUpdateWithoutPushSubscriptionsInput>, Prisma.UserUncheckedUpdateWithoutPushSubscriptionsInput>
+}
+
+export type UserCreateNestedOneWithoutBeneficiairesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBeneficiairesInput, Prisma.UserUncheckedCreateWithoutBeneficiairesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBeneficiairesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutBeneficiairesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBeneficiairesInput, Prisma.UserUncheckedCreateWithoutBeneficiairesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBeneficiairesInput
+  upsert?: Prisma.UserUpsertWithoutBeneficiairesInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutBeneficiairesInput, Prisma.UserUpdateWithoutBeneficiairesInput>, Prisma.UserUncheckedUpdateWithoutBeneficiairesInput>
+}
+
 export type UserCreateWithoutTransactionsInput = {
   id?: string
   nom: string
@@ -550,6 +640,10 @@ export type UserCreateWithoutTransactionsInput = {
   logs?: Prisma.LogAuditCreateNestedManyWithoutUserInput
   depenses?: Prisma.DepenseCreateNestedManyWithoutAgentInput
   dimes?: Prisma.DimeMensuelleCreateNestedManyWithoutAgentInput
+  demandes?: Prisma.DemandeAutorisationCreateNestedManyWithoutDemandeurInput
+  approbations?: Prisma.DemandeAutorisationCreateNestedManyWithoutApprobateurInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
+  beneficiaires?: Prisma.BeneficiaireCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutTransactionsInput = {
@@ -566,6 +660,10 @@ export type UserUncheckedCreateWithoutTransactionsInput = {
   logs?: Prisma.LogAuditUncheckedCreateNestedManyWithoutUserInput
   depenses?: Prisma.DepenseUncheckedCreateNestedManyWithoutAgentInput
   dimes?: Prisma.DimeMensuelleUncheckedCreateNestedManyWithoutAgentInput
+  demandes?: Prisma.DemandeAutorisationUncheckedCreateNestedManyWithoutDemandeurInput
+  approbations?: Prisma.DemandeAutorisationUncheckedCreateNestedManyWithoutApprobateurInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  beneficiaires?: Prisma.BeneficiaireUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutTransactionsInput = {
@@ -598,6 +696,10 @@ export type UserUpdateWithoutTransactionsInput = {
   logs?: Prisma.LogAuditUpdateManyWithoutUserNestedInput
   depenses?: Prisma.DepenseUpdateManyWithoutAgentNestedInput
   dimes?: Prisma.DimeMensuelleUpdateManyWithoutAgentNestedInput
+  demandes?: Prisma.DemandeAutorisationUpdateManyWithoutDemandeurNestedInput
+  approbations?: Prisma.DemandeAutorisationUpdateManyWithoutApprobateurNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
+  beneficiaires?: Prisma.BeneficiaireUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTransactionsInput = {
@@ -614,6 +716,10 @@ export type UserUncheckedUpdateWithoutTransactionsInput = {
   logs?: Prisma.LogAuditUncheckedUpdateManyWithoutUserNestedInput
   depenses?: Prisma.DepenseUncheckedUpdateManyWithoutAgentNestedInput
   dimes?: Prisma.DimeMensuelleUncheckedUpdateManyWithoutAgentNestedInput
+  demandes?: Prisma.DemandeAutorisationUncheckedUpdateManyWithoutDemandeurNestedInput
+  approbations?: Prisma.DemandeAutorisationUncheckedUpdateManyWithoutApprobateurNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  beneficiaires?: Prisma.BeneficiaireUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutAnnotationsInput = {
@@ -630,6 +736,10 @@ export type UserCreateWithoutAnnotationsInput = {
   logs?: Prisma.LogAuditCreateNestedManyWithoutUserInput
   depenses?: Prisma.DepenseCreateNestedManyWithoutAgentInput
   dimes?: Prisma.DimeMensuelleCreateNestedManyWithoutAgentInput
+  demandes?: Prisma.DemandeAutorisationCreateNestedManyWithoutDemandeurInput
+  approbations?: Prisma.DemandeAutorisationCreateNestedManyWithoutApprobateurInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
+  beneficiaires?: Prisma.BeneficiaireCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutAnnotationsInput = {
@@ -646,6 +756,10 @@ export type UserUncheckedCreateWithoutAnnotationsInput = {
   logs?: Prisma.LogAuditUncheckedCreateNestedManyWithoutUserInput
   depenses?: Prisma.DepenseUncheckedCreateNestedManyWithoutAgentInput
   dimes?: Prisma.DimeMensuelleUncheckedCreateNestedManyWithoutAgentInput
+  demandes?: Prisma.DemandeAutorisationUncheckedCreateNestedManyWithoutDemandeurInput
+  approbations?: Prisma.DemandeAutorisationUncheckedCreateNestedManyWithoutApprobateurInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  beneficiaires?: Prisma.BeneficiaireUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutAnnotationsInput = {
@@ -678,6 +792,10 @@ export type UserUpdateWithoutAnnotationsInput = {
   logs?: Prisma.LogAuditUpdateManyWithoutUserNestedInput
   depenses?: Prisma.DepenseUpdateManyWithoutAgentNestedInput
   dimes?: Prisma.DimeMensuelleUpdateManyWithoutAgentNestedInput
+  demandes?: Prisma.DemandeAutorisationUpdateManyWithoutDemandeurNestedInput
+  approbations?: Prisma.DemandeAutorisationUpdateManyWithoutApprobateurNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
+  beneficiaires?: Prisma.BeneficiaireUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAnnotationsInput = {
@@ -694,6 +812,10 @@ export type UserUncheckedUpdateWithoutAnnotationsInput = {
   logs?: Prisma.LogAuditUncheckedUpdateManyWithoutUserNestedInput
   depenses?: Prisma.DepenseUncheckedUpdateManyWithoutAgentNestedInput
   dimes?: Prisma.DimeMensuelleUncheckedUpdateManyWithoutAgentNestedInput
+  demandes?: Prisma.DemandeAutorisationUncheckedUpdateManyWithoutDemandeurNestedInput
+  approbations?: Prisma.DemandeAutorisationUncheckedUpdateManyWithoutApprobateurNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  beneficiaires?: Prisma.BeneficiaireUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutLogsInput = {
@@ -710,6 +832,10 @@ export type UserCreateWithoutLogsInput = {
   annotations?: Prisma.AnnotationAuditCreateNestedManyWithoutAuteurInput
   depenses?: Prisma.DepenseCreateNestedManyWithoutAgentInput
   dimes?: Prisma.DimeMensuelleCreateNestedManyWithoutAgentInput
+  demandes?: Prisma.DemandeAutorisationCreateNestedManyWithoutDemandeurInput
+  approbations?: Prisma.DemandeAutorisationCreateNestedManyWithoutApprobateurInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
+  beneficiaires?: Prisma.BeneficiaireCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutLogsInput = {
@@ -726,6 +852,10 @@ export type UserUncheckedCreateWithoutLogsInput = {
   annotations?: Prisma.AnnotationAuditUncheckedCreateNestedManyWithoutAuteurInput
   depenses?: Prisma.DepenseUncheckedCreateNestedManyWithoutAgentInput
   dimes?: Prisma.DimeMensuelleUncheckedCreateNestedManyWithoutAgentInput
+  demandes?: Prisma.DemandeAutorisationUncheckedCreateNestedManyWithoutDemandeurInput
+  approbations?: Prisma.DemandeAutorisationUncheckedCreateNestedManyWithoutApprobateurInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  beneficiaires?: Prisma.BeneficiaireUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutLogsInput = {
@@ -758,6 +888,10 @@ export type UserUpdateWithoutLogsInput = {
   annotations?: Prisma.AnnotationAuditUpdateManyWithoutAuteurNestedInput
   depenses?: Prisma.DepenseUpdateManyWithoutAgentNestedInput
   dimes?: Prisma.DimeMensuelleUpdateManyWithoutAgentNestedInput
+  demandes?: Prisma.DemandeAutorisationUpdateManyWithoutDemandeurNestedInput
+  approbations?: Prisma.DemandeAutorisationUpdateManyWithoutApprobateurNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
+  beneficiaires?: Prisma.BeneficiaireUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLogsInput = {
@@ -774,6 +908,10 @@ export type UserUncheckedUpdateWithoutLogsInput = {
   annotations?: Prisma.AnnotationAuditUncheckedUpdateManyWithoutAuteurNestedInput
   depenses?: Prisma.DepenseUncheckedUpdateManyWithoutAgentNestedInput
   dimes?: Prisma.DimeMensuelleUncheckedUpdateManyWithoutAgentNestedInput
+  demandes?: Prisma.DemandeAutorisationUncheckedUpdateManyWithoutDemandeurNestedInput
+  approbations?: Prisma.DemandeAutorisationUncheckedUpdateManyWithoutApprobateurNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  beneficiaires?: Prisma.BeneficiaireUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutDepensesInput = {
@@ -790,6 +928,10 @@ export type UserCreateWithoutDepensesInput = {
   annotations?: Prisma.AnnotationAuditCreateNestedManyWithoutAuteurInput
   logs?: Prisma.LogAuditCreateNestedManyWithoutUserInput
   dimes?: Prisma.DimeMensuelleCreateNestedManyWithoutAgentInput
+  demandes?: Prisma.DemandeAutorisationCreateNestedManyWithoutDemandeurInput
+  approbations?: Prisma.DemandeAutorisationCreateNestedManyWithoutApprobateurInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
+  beneficiaires?: Prisma.BeneficiaireCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutDepensesInput = {
@@ -806,6 +948,10 @@ export type UserUncheckedCreateWithoutDepensesInput = {
   annotations?: Prisma.AnnotationAuditUncheckedCreateNestedManyWithoutAuteurInput
   logs?: Prisma.LogAuditUncheckedCreateNestedManyWithoutUserInput
   dimes?: Prisma.DimeMensuelleUncheckedCreateNestedManyWithoutAgentInput
+  demandes?: Prisma.DemandeAutorisationUncheckedCreateNestedManyWithoutDemandeurInput
+  approbations?: Prisma.DemandeAutorisationUncheckedCreateNestedManyWithoutApprobateurInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  beneficiaires?: Prisma.BeneficiaireUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutDepensesInput = {
@@ -838,6 +984,10 @@ export type UserUpdateWithoutDepensesInput = {
   annotations?: Prisma.AnnotationAuditUpdateManyWithoutAuteurNestedInput
   logs?: Prisma.LogAuditUpdateManyWithoutUserNestedInput
   dimes?: Prisma.DimeMensuelleUpdateManyWithoutAgentNestedInput
+  demandes?: Prisma.DemandeAutorisationUpdateManyWithoutDemandeurNestedInput
+  approbations?: Prisma.DemandeAutorisationUpdateManyWithoutApprobateurNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
+  beneficiaires?: Prisma.BeneficiaireUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutDepensesInput = {
@@ -854,6 +1004,10 @@ export type UserUncheckedUpdateWithoutDepensesInput = {
   annotations?: Prisma.AnnotationAuditUncheckedUpdateManyWithoutAuteurNestedInput
   logs?: Prisma.LogAuditUncheckedUpdateManyWithoutUserNestedInput
   dimes?: Prisma.DimeMensuelleUncheckedUpdateManyWithoutAgentNestedInput
+  demandes?: Prisma.DemandeAutorisationUncheckedUpdateManyWithoutDemandeurNestedInput
+  approbations?: Prisma.DemandeAutorisationUncheckedUpdateManyWithoutApprobateurNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  beneficiaires?: Prisma.BeneficiaireUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateWithoutDimesInput = {
@@ -870,6 +1024,10 @@ export type UserCreateWithoutDimesInput = {
   annotations?: Prisma.AnnotationAuditCreateNestedManyWithoutAuteurInput
   logs?: Prisma.LogAuditCreateNestedManyWithoutUserInput
   depenses?: Prisma.DepenseCreateNestedManyWithoutAgentInput
+  demandes?: Prisma.DemandeAutorisationCreateNestedManyWithoutDemandeurInput
+  approbations?: Prisma.DemandeAutorisationCreateNestedManyWithoutApprobateurInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
+  beneficiaires?: Prisma.BeneficiaireCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateWithoutDimesInput = {
@@ -886,6 +1044,10 @@ export type UserUncheckedCreateWithoutDimesInput = {
   annotations?: Prisma.AnnotationAuditUncheckedCreateNestedManyWithoutAuteurInput
   logs?: Prisma.LogAuditUncheckedCreateNestedManyWithoutUserInput
   depenses?: Prisma.DepenseUncheckedCreateNestedManyWithoutAgentInput
+  demandes?: Prisma.DemandeAutorisationUncheckedCreateNestedManyWithoutDemandeurInput
+  approbations?: Prisma.DemandeAutorisationUncheckedCreateNestedManyWithoutApprobateurInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  beneficiaires?: Prisma.BeneficiaireUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserCreateOrConnectWithoutDimesInput = {
@@ -918,6 +1080,10 @@ export type UserUpdateWithoutDimesInput = {
   annotations?: Prisma.AnnotationAuditUpdateManyWithoutAuteurNestedInput
   logs?: Prisma.LogAuditUpdateManyWithoutUserNestedInput
   depenses?: Prisma.DepenseUpdateManyWithoutAgentNestedInput
+  demandes?: Prisma.DemandeAutorisationUpdateManyWithoutDemandeurNestedInput
+  approbations?: Prisma.DemandeAutorisationUpdateManyWithoutApprobateurNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
+  beneficiaires?: Prisma.BeneficiaireUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutDimesInput = {
@@ -934,6 +1100,394 @@ export type UserUncheckedUpdateWithoutDimesInput = {
   annotations?: Prisma.AnnotationAuditUncheckedUpdateManyWithoutAuteurNestedInput
   logs?: Prisma.LogAuditUncheckedUpdateManyWithoutUserNestedInput
   depenses?: Prisma.DepenseUncheckedUpdateManyWithoutAgentNestedInput
+  demandes?: Prisma.DemandeAutorisationUncheckedUpdateManyWithoutDemandeurNestedInput
+  approbations?: Prisma.DemandeAutorisationUncheckedUpdateManyWithoutApprobateurNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  beneficiaires?: Prisma.BeneficiaireUncheckedUpdateManyWithoutCreatorNestedInput
+}
+
+export type UserCreateWithoutDemandesInput = {
+  id?: string
+  nom: string
+  email: string
+  telephone?: string | null
+  role?: $Enums.Role
+  motDePasseHash: string
+  actif?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  transactions?: Prisma.TransactionCreateNestedManyWithoutAgentInput
+  annotations?: Prisma.AnnotationAuditCreateNestedManyWithoutAuteurInput
+  logs?: Prisma.LogAuditCreateNestedManyWithoutUserInput
+  depenses?: Prisma.DepenseCreateNestedManyWithoutAgentInput
+  dimes?: Prisma.DimeMensuelleCreateNestedManyWithoutAgentInput
+  approbations?: Prisma.DemandeAutorisationCreateNestedManyWithoutApprobateurInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
+  beneficiaires?: Prisma.BeneficiaireCreateNestedManyWithoutCreatorInput
+}
+
+export type UserUncheckedCreateWithoutDemandesInput = {
+  id?: string
+  nom: string
+  email: string
+  telephone?: string | null
+  role?: $Enums.Role
+  motDePasseHash: string
+  actif?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutAgentInput
+  annotations?: Prisma.AnnotationAuditUncheckedCreateNestedManyWithoutAuteurInput
+  logs?: Prisma.LogAuditUncheckedCreateNestedManyWithoutUserInput
+  depenses?: Prisma.DepenseUncheckedCreateNestedManyWithoutAgentInput
+  dimes?: Prisma.DimeMensuelleUncheckedCreateNestedManyWithoutAgentInput
+  approbations?: Prisma.DemandeAutorisationUncheckedCreateNestedManyWithoutApprobateurInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  beneficiaires?: Prisma.BeneficiaireUncheckedCreateNestedManyWithoutCreatorInput
+}
+
+export type UserCreateOrConnectWithoutDemandesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutDemandesInput, Prisma.UserUncheckedCreateWithoutDemandesInput>
+}
+
+export type UserCreateWithoutApprobationsInput = {
+  id?: string
+  nom: string
+  email: string
+  telephone?: string | null
+  role?: $Enums.Role
+  motDePasseHash: string
+  actif?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  transactions?: Prisma.TransactionCreateNestedManyWithoutAgentInput
+  annotations?: Prisma.AnnotationAuditCreateNestedManyWithoutAuteurInput
+  logs?: Prisma.LogAuditCreateNestedManyWithoutUserInput
+  depenses?: Prisma.DepenseCreateNestedManyWithoutAgentInput
+  dimes?: Prisma.DimeMensuelleCreateNestedManyWithoutAgentInput
+  demandes?: Prisma.DemandeAutorisationCreateNestedManyWithoutDemandeurInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
+  beneficiaires?: Prisma.BeneficiaireCreateNestedManyWithoutCreatorInput
+}
+
+export type UserUncheckedCreateWithoutApprobationsInput = {
+  id?: string
+  nom: string
+  email: string
+  telephone?: string | null
+  role?: $Enums.Role
+  motDePasseHash: string
+  actif?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutAgentInput
+  annotations?: Prisma.AnnotationAuditUncheckedCreateNestedManyWithoutAuteurInput
+  logs?: Prisma.LogAuditUncheckedCreateNestedManyWithoutUserInput
+  depenses?: Prisma.DepenseUncheckedCreateNestedManyWithoutAgentInput
+  dimes?: Prisma.DimeMensuelleUncheckedCreateNestedManyWithoutAgentInput
+  demandes?: Prisma.DemandeAutorisationUncheckedCreateNestedManyWithoutDemandeurInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  beneficiaires?: Prisma.BeneficiaireUncheckedCreateNestedManyWithoutCreatorInput
+}
+
+export type UserCreateOrConnectWithoutApprobationsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutApprobationsInput, Prisma.UserUncheckedCreateWithoutApprobationsInput>
+}
+
+export type UserUpsertWithoutDemandesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutDemandesInput, Prisma.UserUncheckedUpdateWithoutDemandesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutDemandesInput, Prisma.UserUncheckedCreateWithoutDemandesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutDemandesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutDemandesInput, Prisma.UserUncheckedUpdateWithoutDemandesInput>
+}
+
+export type UserUpdateWithoutDemandesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nom?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  telephone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  motDePasseHash?: Prisma.StringFieldUpdateOperationsInput | string
+  actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transactions?: Prisma.TransactionUpdateManyWithoutAgentNestedInput
+  annotations?: Prisma.AnnotationAuditUpdateManyWithoutAuteurNestedInput
+  logs?: Prisma.LogAuditUpdateManyWithoutUserNestedInput
+  depenses?: Prisma.DepenseUpdateManyWithoutAgentNestedInput
+  dimes?: Prisma.DimeMensuelleUpdateManyWithoutAgentNestedInput
+  approbations?: Prisma.DemandeAutorisationUpdateManyWithoutApprobateurNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
+  beneficiaires?: Prisma.BeneficiaireUpdateManyWithoutCreatorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutDemandesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nom?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  telephone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  motDePasseHash?: Prisma.StringFieldUpdateOperationsInput | string
+  actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutAgentNestedInput
+  annotations?: Prisma.AnnotationAuditUncheckedUpdateManyWithoutAuteurNestedInput
+  logs?: Prisma.LogAuditUncheckedUpdateManyWithoutUserNestedInput
+  depenses?: Prisma.DepenseUncheckedUpdateManyWithoutAgentNestedInput
+  dimes?: Prisma.DimeMensuelleUncheckedUpdateManyWithoutAgentNestedInput
+  approbations?: Prisma.DemandeAutorisationUncheckedUpdateManyWithoutApprobateurNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  beneficiaires?: Prisma.BeneficiaireUncheckedUpdateManyWithoutCreatorNestedInput
+}
+
+export type UserUpsertWithoutApprobationsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutApprobationsInput, Prisma.UserUncheckedUpdateWithoutApprobationsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutApprobationsInput, Prisma.UserUncheckedCreateWithoutApprobationsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutApprobationsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutApprobationsInput, Prisma.UserUncheckedUpdateWithoutApprobationsInput>
+}
+
+export type UserUpdateWithoutApprobationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nom?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  telephone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  motDePasseHash?: Prisma.StringFieldUpdateOperationsInput | string
+  actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transactions?: Prisma.TransactionUpdateManyWithoutAgentNestedInput
+  annotations?: Prisma.AnnotationAuditUpdateManyWithoutAuteurNestedInput
+  logs?: Prisma.LogAuditUpdateManyWithoutUserNestedInput
+  depenses?: Prisma.DepenseUpdateManyWithoutAgentNestedInput
+  dimes?: Prisma.DimeMensuelleUpdateManyWithoutAgentNestedInput
+  demandes?: Prisma.DemandeAutorisationUpdateManyWithoutDemandeurNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
+  beneficiaires?: Prisma.BeneficiaireUpdateManyWithoutCreatorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutApprobationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nom?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  telephone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  motDePasseHash?: Prisma.StringFieldUpdateOperationsInput | string
+  actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutAgentNestedInput
+  annotations?: Prisma.AnnotationAuditUncheckedUpdateManyWithoutAuteurNestedInput
+  logs?: Prisma.LogAuditUncheckedUpdateManyWithoutUserNestedInput
+  depenses?: Prisma.DepenseUncheckedUpdateManyWithoutAgentNestedInput
+  dimes?: Prisma.DimeMensuelleUncheckedUpdateManyWithoutAgentNestedInput
+  demandes?: Prisma.DemandeAutorisationUncheckedUpdateManyWithoutDemandeurNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  beneficiaires?: Prisma.BeneficiaireUncheckedUpdateManyWithoutCreatorNestedInput
+}
+
+export type UserCreateWithoutPushSubscriptionsInput = {
+  id?: string
+  nom: string
+  email: string
+  telephone?: string | null
+  role?: $Enums.Role
+  motDePasseHash: string
+  actif?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  transactions?: Prisma.TransactionCreateNestedManyWithoutAgentInput
+  annotations?: Prisma.AnnotationAuditCreateNestedManyWithoutAuteurInput
+  logs?: Prisma.LogAuditCreateNestedManyWithoutUserInput
+  depenses?: Prisma.DepenseCreateNestedManyWithoutAgentInput
+  dimes?: Prisma.DimeMensuelleCreateNestedManyWithoutAgentInput
+  demandes?: Prisma.DemandeAutorisationCreateNestedManyWithoutDemandeurInput
+  approbations?: Prisma.DemandeAutorisationCreateNestedManyWithoutApprobateurInput
+  beneficiaires?: Prisma.BeneficiaireCreateNestedManyWithoutCreatorInput
+}
+
+export type UserUncheckedCreateWithoutPushSubscriptionsInput = {
+  id?: string
+  nom: string
+  email: string
+  telephone?: string | null
+  role?: $Enums.Role
+  motDePasseHash: string
+  actif?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutAgentInput
+  annotations?: Prisma.AnnotationAuditUncheckedCreateNestedManyWithoutAuteurInput
+  logs?: Prisma.LogAuditUncheckedCreateNestedManyWithoutUserInput
+  depenses?: Prisma.DepenseUncheckedCreateNestedManyWithoutAgentInput
+  dimes?: Prisma.DimeMensuelleUncheckedCreateNestedManyWithoutAgentInput
+  demandes?: Prisma.DemandeAutorisationUncheckedCreateNestedManyWithoutDemandeurInput
+  approbations?: Prisma.DemandeAutorisationUncheckedCreateNestedManyWithoutApprobateurInput
+  beneficiaires?: Prisma.BeneficiaireUncheckedCreateNestedManyWithoutCreatorInput
+}
+
+export type UserCreateOrConnectWithoutPushSubscriptionsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutPushSubscriptionsInput, Prisma.UserUncheckedCreateWithoutPushSubscriptionsInput>
+}
+
+export type UserUpsertWithoutPushSubscriptionsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPushSubscriptionsInput, Prisma.UserUncheckedUpdateWithoutPushSubscriptionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPushSubscriptionsInput, Prisma.UserUncheckedCreateWithoutPushSubscriptionsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutPushSubscriptionsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPushSubscriptionsInput, Prisma.UserUncheckedUpdateWithoutPushSubscriptionsInput>
+}
+
+export type UserUpdateWithoutPushSubscriptionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nom?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  telephone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  motDePasseHash?: Prisma.StringFieldUpdateOperationsInput | string
+  actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transactions?: Prisma.TransactionUpdateManyWithoutAgentNestedInput
+  annotations?: Prisma.AnnotationAuditUpdateManyWithoutAuteurNestedInput
+  logs?: Prisma.LogAuditUpdateManyWithoutUserNestedInput
+  depenses?: Prisma.DepenseUpdateManyWithoutAgentNestedInput
+  dimes?: Prisma.DimeMensuelleUpdateManyWithoutAgentNestedInput
+  demandes?: Prisma.DemandeAutorisationUpdateManyWithoutDemandeurNestedInput
+  approbations?: Prisma.DemandeAutorisationUpdateManyWithoutApprobateurNestedInput
+  beneficiaires?: Prisma.BeneficiaireUpdateManyWithoutCreatorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutPushSubscriptionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nom?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  telephone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  motDePasseHash?: Prisma.StringFieldUpdateOperationsInput | string
+  actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutAgentNestedInput
+  annotations?: Prisma.AnnotationAuditUncheckedUpdateManyWithoutAuteurNestedInput
+  logs?: Prisma.LogAuditUncheckedUpdateManyWithoutUserNestedInput
+  depenses?: Prisma.DepenseUncheckedUpdateManyWithoutAgentNestedInput
+  dimes?: Prisma.DimeMensuelleUncheckedUpdateManyWithoutAgentNestedInput
+  demandes?: Prisma.DemandeAutorisationUncheckedUpdateManyWithoutDemandeurNestedInput
+  approbations?: Prisma.DemandeAutorisationUncheckedUpdateManyWithoutApprobateurNestedInput
+  beneficiaires?: Prisma.BeneficiaireUncheckedUpdateManyWithoutCreatorNestedInput
+}
+
+export type UserCreateWithoutBeneficiairesInput = {
+  id?: string
+  nom: string
+  email: string
+  telephone?: string | null
+  role?: $Enums.Role
+  motDePasseHash: string
+  actif?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  transactions?: Prisma.TransactionCreateNestedManyWithoutAgentInput
+  annotations?: Prisma.AnnotationAuditCreateNestedManyWithoutAuteurInput
+  logs?: Prisma.LogAuditCreateNestedManyWithoutUserInput
+  depenses?: Prisma.DepenseCreateNestedManyWithoutAgentInput
+  dimes?: Prisma.DimeMensuelleCreateNestedManyWithoutAgentInput
+  demandes?: Prisma.DemandeAutorisationCreateNestedManyWithoutDemandeurInput
+  approbations?: Prisma.DemandeAutorisationCreateNestedManyWithoutApprobateurInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutBeneficiairesInput = {
+  id?: string
+  nom: string
+  email: string
+  telephone?: string | null
+  role?: $Enums.Role
+  motDePasseHash: string
+  actif?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  transactions?: Prisma.TransactionUncheckedCreateNestedManyWithoutAgentInput
+  annotations?: Prisma.AnnotationAuditUncheckedCreateNestedManyWithoutAuteurInput
+  logs?: Prisma.LogAuditUncheckedCreateNestedManyWithoutUserInput
+  depenses?: Prisma.DepenseUncheckedCreateNestedManyWithoutAgentInput
+  dimes?: Prisma.DimeMensuelleUncheckedCreateNestedManyWithoutAgentInput
+  demandes?: Prisma.DemandeAutorisationUncheckedCreateNestedManyWithoutDemandeurInput
+  approbations?: Prisma.DemandeAutorisationUncheckedCreateNestedManyWithoutApprobateurInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutBeneficiairesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutBeneficiairesInput, Prisma.UserUncheckedCreateWithoutBeneficiairesInput>
+}
+
+export type UserUpsertWithoutBeneficiairesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutBeneficiairesInput, Prisma.UserUncheckedUpdateWithoutBeneficiairesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutBeneficiairesInput, Prisma.UserUncheckedCreateWithoutBeneficiairesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutBeneficiairesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutBeneficiairesInput, Prisma.UserUncheckedUpdateWithoutBeneficiairesInput>
+}
+
+export type UserUpdateWithoutBeneficiairesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nom?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  telephone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  motDePasseHash?: Prisma.StringFieldUpdateOperationsInput | string
+  actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transactions?: Prisma.TransactionUpdateManyWithoutAgentNestedInput
+  annotations?: Prisma.AnnotationAuditUpdateManyWithoutAuteurNestedInput
+  logs?: Prisma.LogAuditUpdateManyWithoutUserNestedInput
+  depenses?: Prisma.DepenseUpdateManyWithoutAgentNestedInput
+  dimes?: Prisma.DimeMensuelleUpdateManyWithoutAgentNestedInput
+  demandes?: Prisma.DemandeAutorisationUpdateManyWithoutDemandeurNestedInput
+  approbations?: Prisma.DemandeAutorisationUpdateManyWithoutApprobateurNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutBeneficiairesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  nom?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  telephone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  motDePasseHash?: Prisma.StringFieldUpdateOperationsInput | string
+  actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transactions?: Prisma.TransactionUncheckedUpdateManyWithoutAgentNestedInput
+  annotations?: Prisma.AnnotationAuditUncheckedUpdateManyWithoutAuteurNestedInput
+  logs?: Prisma.LogAuditUncheckedUpdateManyWithoutUserNestedInput
+  depenses?: Prisma.DepenseUncheckedUpdateManyWithoutAgentNestedInput
+  dimes?: Prisma.DimeMensuelleUncheckedUpdateManyWithoutAgentNestedInput
+  demandes?: Prisma.DemandeAutorisationUncheckedUpdateManyWithoutDemandeurNestedInput
+  approbations?: Prisma.DemandeAutorisationUncheckedUpdateManyWithoutApprobateurNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -947,6 +1501,10 @@ export type UserCountOutputType = {
   logs: number
   depenses: number
   dimes: number
+  demandes: number
+  approbations: number
+  pushSubscriptions: number
+  beneficiaires: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -955,6 +1513,10 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   logs?: boolean | UserCountOutputTypeCountLogsArgs
   depenses?: boolean | UserCountOutputTypeCountDepensesArgs
   dimes?: boolean | UserCountOutputTypeCountDimesArgs
+  demandes?: boolean | UserCountOutputTypeCountDemandesArgs
+  approbations?: boolean | UserCountOutputTypeCountApprobationsArgs
+  pushSubscriptions?: boolean | UserCountOutputTypeCountPushSubscriptionsArgs
+  beneficiaires?: boolean | UserCountOutputTypeCountBeneficiairesArgs
 }
 
 /**
@@ -1002,6 +1564,34 @@ export type UserCountOutputTypeCountDimesArgs<ExtArgs extends runtime.Types.Exte
   where?: Prisma.DimeMensuelleWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountDemandesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DemandeAutorisationWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountApprobationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DemandeAutorisationWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountPushSubscriptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PushSubscriptionWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountBeneficiairesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BeneficiaireWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1018,6 +1608,10 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   logs?: boolean | Prisma.User$logsArgs<ExtArgs>
   depenses?: boolean | Prisma.User$depensesArgs<ExtArgs>
   dimes?: boolean | Prisma.User$dimesArgs<ExtArgs>
+  demandes?: boolean | Prisma.User$demandesArgs<ExtArgs>
+  approbations?: boolean | Prisma.User$approbationsArgs<ExtArgs>
+  pushSubscriptions?: boolean | Prisma.User$pushSubscriptionsArgs<ExtArgs>
+  beneficiaires?: boolean | Prisma.User$beneficiairesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1064,6 +1658,10 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   logs?: boolean | Prisma.User$logsArgs<ExtArgs>
   depenses?: boolean | Prisma.User$depensesArgs<ExtArgs>
   dimes?: boolean | Prisma.User$dimesArgs<ExtArgs>
+  demandes?: boolean | Prisma.User$demandesArgs<ExtArgs>
+  approbations?: boolean | Prisma.User$approbationsArgs<ExtArgs>
+  pushSubscriptions?: boolean | Prisma.User$pushSubscriptionsArgs<ExtArgs>
+  beneficiaires?: boolean | Prisma.User$beneficiairesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1077,6 +1675,10 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     logs: Prisma.$LogAuditPayload<ExtArgs>[]
     depenses: Prisma.$DepensePayload<ExtArgs>[]
     dimes: Prisma.$DimeMensuellePayload<ExtArgs>[]
+    demandes: Prisma.$DemandeAutorisationPayload<ExtArgs>[]
+    approbations: Prisma.$DemandeAutorisationPayload<ExtArgs>[]
+    pushSubscriptions: Prisma.$PushSubscriptionPayload<ExtArgs>[]
+    beneficiaires: Prisma.$BeneficiairePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1487,6 +2089,10 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   logs<T extends Prisma.User$logsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$logsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LogAuditPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   depenses<T extends Prisma.User$depensesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$depensesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DepensePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   dimes<T extends Prisma.User$dimesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$dimesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DimeMensuellePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  demandes<T extends Prisma.User$demandesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$demandesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DemandeAutorisationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  approbations<T extends Prisma.User$approbationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$approbationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DemandeAutorisationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  pushSubscriptions<T extends Prisma.User$pushSubscriptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$pushSubscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PushSubscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  beneficiaires<T extends Prisma.User$beneficiairesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$beneficiairesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BeneficiairePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2035,6 +2641,102 @@ export type User$dimesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
   take?: number
   skip?: number
   distinct?: Prisma.DimeMensuelleScalarFieldEnum | Prisma.DimeMensuelleScalarFieldEnum[]
+}
+
+/**
+ * User.demandes
+ */
+export type User$demandesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DemandeAutorisation
+   */
+  select?: Prisma.DemandeAutorisationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DemandeAutorisation
+   */
+  omit?: Prisma.DemandeAutorisationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DemandeAutorisationInclude<ExtArgs> | null
+  where?: Prisma.DemandeAutorisationWhereInput
+  orderBy?: Prisma.DemandeAutorisationOrderByWithRelationInput | Prisma.DemandeAutorisationOrderByWithRelationInput[]
+  cursor?: Prisma.DemandeAutorisationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DemandeAutorisationScalarFieldEnum | Prisma.DemandeAutorisationScalarFieldEnum[]
+}
+
+/**
+ * User.approbations
+ */
+export type User$approbationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DemandeAutorisation
+   */
+  select?: Prisma.DemandeAutorisationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DemandeAutorisation
+   */
+  omit?: Prisma.DemandeAutorisationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DemandeAutorisationInclude<ExtArgs> | null
+  where?: Prisma.DemandeAutorisationWhereInput
+  orderBy?: Prisma.DemandeAutorisationOrderByWithRelationInput | Prisma.DemandeAutorisationOrderByWithRelationInput[]
+  cursor?: Prisma.DemandeAutorisationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DemandeAutorisationScalarFieldEnum | Prisma.DemandeAutorisationScalarFieldEnum[]
+}
+
+/**
+ * User.pushSubscriptions
+ */
+export type User$pushSubscriptionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PushSubscription
+   */
+  select?: Prisma.PushSubscriptionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PushSubscription
+   */
+  omit?: Prisma.PushSubscriptionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PushSubscriptionInclude<ExtArgs> | null
+  where?: Prisma.PushSubscriptionWhereInput
+  orderBy?: Prisma.PushSubscriptionOrderByWithRelationInput | Prisma.PushSubscriptionOrderByWithRelationInput[]
+  cursor?: Prisma.PushSubscriptionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PushSubscriptionScalarFieldEnum | Prisma.PushSubscriptionScalarFieldEnum[]
+}
+
+/**
+ * User.beneficiaires
+ */
+export type User$beneficiairesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Beneficiaire
+   */
+  select?: Prisma.BeneficiaireSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Beneficiaire
+   */
+  omit?: Prisma.BeneficiaireOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BeneficiaireInclude<ExtArgs> | null
+  where?: Prisma.BeneficiaireWhereInput
+  orderBy?: Prisma.BeneficiaireOrderByWithRelationInput | Prisma.BeneficiaireOrderByWithRelationInput[]
+  cursor?: Prisma.BeneficiaireWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BeneficiaireScalarFieldEnum | Prisma.BeneficiaireScalarFieldEnum[]
 }
 
 /**

@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { calculerRepartition } from "@/lib/finance";
+import { sendPushNotificationToRole } from "@/lib/notifications";
 import { CategorieTransaction, ModePaiementPhysique } from "@/generated/prisma";
 
 export async function POST(req: NextRequest) {
@@ -46,29 +47,33 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    const repartition = calculerRepartition(montantNum, categorie as CategorieTransaction);
-    await prisma.repartition.create({
-      data: {
-        transactionId: transaction.id,
-        montantEconomie: repartition.montantEconomie,
-        montantEpargne: repartition.montantEpargne,
-        montantActionSociale: repartition.montantActionSociale,
-        montantDimeDeLaDime: repartition.montantDimeDeLaDime,
-        montantCaisse: repartition.montantCaisse,
-        montantFondsDedie: repartition.montantFondsDedie,
-      },
-    });
+    // Répartition automatique SEULEMENT pour les offrandes et dons
+    // Les dîmes sont gérées par le pasteur (pas de répartition automatique)
+    if (categorie !== "DIME") {
+      const repartition = calculerRepartition(montantNum, categorie as CategorieTransaction);
+      await prisma.repartition.create({
+        data: {
+          transactionId: transaction.id,
+          montantEconomie: repartition.montantEconomie,
+          montantEpargne: repartition.montantEpargne,
+          montantActionSociale: repartition.montantActionSociale,
+          montantDimeDeLaDime: repartition.montantDimeDeLaDime,
+          montantCaisse: repartition.montantCaisse,
+          montantFondsDedie: repartition.montantFondsDedie,
+        },
+      });
 
-    const caisse = await prisma.caisse.findFirst();
-    if (caisse) {
-      await prisma.caisse.update({
-        where: { id: caisse.id },
-        data: { soldeActuel: { increment: montantNum } },
-      });
-    } else {
-      await prisma.caisse.create({
-        data: { soldeActuel: montantNum },
-      });
+      const caisse = await prisma.caisse.findFirst();
+      if (caisse) {
+        await prisma.caisse.update({
+          where: { id: caisse.id },
+          data: { soldeActuel: { increment: repartition.montantCaisse } },
+        });
+      } else {
+        await prisma.caisse.create({
+          data: { soldeActuel: repartition.montantCaisse },
+        });
+      }
     }
 
     const recu = await prisma.recu.create({
@@ -83,6 +88,21 @@ export async function POST(req: NextRequest) {
         details: `Saisie manuelle de ${montantNum} FCFA pour ${categorie} par ${session.user?.name}`,
       },
     });
+
+    // Envoyer notification push au pasteur pour toutes les transactions
+    try {
+      await sendPushNotificationToRole(
+        "PASTOR",
+        {
+          title: `Nouvelle transaction: ${categorie}`,
+          body: `${montantNum} FCFA - ${nom || "Anonyme"}`,
+          data: { transactionId: transaction.id },
+        },
+        prisma
+      );
+    } catch (error) {
+      console.error("Erreur envoi notification:", error);
+    }
 
     return NextResponse.json({
       success: true,

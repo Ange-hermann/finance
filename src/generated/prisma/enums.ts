@@ -57,6 +57,14 @@ export const ModePaiementPhysique = {
 export type ModePaiementPhysique = (typeof ModePaiementPhysique)[keyof typeof ModePaiementPhysique]
 
 
+export const ModePaiementSortant = {
+  MANUEL: 'MANUEL',
+  GENIUS_PAY: 'GENIUS_PAY'
+} as const
+
+export type ModePaiementSortant = (typeof ModePaiementSortant)[keyof typeof ModePaiementSortant]
+
+
 export const TypeDepense = {
   DEPENSE_CULTE: 'DEPENSE_CULTE',
   DEPENSE_NORMALE: 'DEPENSE_NORMALE'
@@ -104,3 +112,12 @@ export const StatutDime = {
 } as const
 
 export type StatutDime = (typeof StatutDime)[keyof typeof StatutDime]
+
+
+export const StatutAutorisation = {
+  EN_ATTENTE: 'EN_ATTENTE',
+  APPROUVEE: 'APPROUVEE',
+  REFUSEE: 'REFUSEE'
+} as const
+
+export type StatutAutorisation = (typeof StatutAutorisation)[keyof typeof StatutAutorisation]

@@ -67,7 +67,7 @@ export default async function DepensesPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-aeonik text-2xl sm:text-3xl font-bold text-blanc">Dépenses</h1>
+          <h1 className="font-aeonik text-2xl sm:text-3xl font-bold text-blanc uppercase">Dépenses</h1>
           <p className="text-blanc/50 text-sm mt-1">
             Dépenses après culte (avant répartition) et dépenses normales (caisse)
           </p>
