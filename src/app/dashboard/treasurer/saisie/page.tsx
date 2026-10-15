@@ -51,12 +51,12 @@ export default function SaisieManuellePage() {
       return;
     }
     const taux: Record<string, any> = {
-      OFFRANDE: { economie: 0.10, epargne: 0.10, actionSociale: 0.10, caisse: 0.70, dimeDeLaDime: null, fondsDedie: 0 },
-      DIME: { economie: 0.10, epargne: 0.10, actionSociale: 0.10, caisse: 0.60, dimeDeLaDime: 0.10, fondsDedie: 0 },
+      OFFRANDE: { economie: 0.10, epargne: 0.10, actionSociale: 0.10, caisse: 0.60, dimeDeLaDime: 0.10, fondsDedie: 0 },
+      DIME: { economie: 0, epargne: 0, actionSociale: 0, caisse: 0, dimeDeLaDime: 1.00, fondsDedie: 0 },
       CONSTRUCTION: { economie: 0, epargne: 0, actionSociale: 0, caisse: 0, dimeDeLaDime: null, fondsDedie: 1.00 },
-      DON_SPECIAL: { economie: 0.10, epargne: 0.10, actionSociale: 0.10, caisse: 0.70, dimeDeLaDime: null, fondsDedie: 0 },
-      PROJET: { economie: 0.10, epargne: 0.10, actionSociale: 0.10, caisse: 0.70, dimeDeLaDime: null, fondsDedie: 0 },
-      AUTRE: { economie: 0.10, epargne: 0.10, actionSociale: 0.10, caisse: 0.70, dimeDeLaDime: null, fondsDedie: 0 },
+      DON_SPECIAL: { economie: 0.10, epargne: 0.10, actionSociale: 0.10, caisse: 0.60, dimeDeLaDime: 0.10, fondsDedie: 0 },
+      PROJET: { economie: 0.10, epargne: 0.10, actionSociale: 0.10, caisse: 0.60, dimeDeLaDime: 0.10, fondsDedie: 0 },
+      AUTRE: { economie: 0.10, epargne: 0.10, actionSociale: 0.10, caisse: 0.60, dimeDeLaDime: 0.10, fondsDedie: 0 },
     };
     const t = taux[cat];
     setPreview({
@@ -196,9 +196,9 @@ export default function SaisieManuellePage() {
                     <span className="text-blanc/60 text-sm">Action sociale (10%)</span>
                     <span className="text-blanc font-medium">{formatMontant(preview.actionSociale)}</span>
                   </div>
-                  {preview.dimeDeLaDime !== null && (
+                  {preview.dimeDeLaDime !== null && preview.dimeDeLaDime > 0 && (
                     <div className="flex justify-between p-3 rounded-xl bg-or/5">
-                      <span className="text-blanc/60 text-sm">Dîme de la dîme (10%)</span>
+                      <span className="text-blanc/60 text-sm">{categorie === "DIME" ? "Pasteur (100%)" : "Part pasteur (10%)"}</span>
                       <span className="text-blanc font-medium">{formatMontant(preview.dimeDeLaDime)}</span>
                     </div>
                   )}

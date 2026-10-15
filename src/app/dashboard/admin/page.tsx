@@ -2,11 +2,12 @@ import { prisma } from "@/lib/prisma";
 import { formatMontant } from "@/lib/utils";
 import Link from "next/link";
 import { Users, Settings, TrendingUp, Wallet, Coins } from "lucide-react";
+import { getSuiviDimeDeLaDime } from "@/lib/dimes";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminDashboard() {
-  const [users, transactions, taux, caisse, repartitions, dimesVersees, depensesNormales, depEconomie, depEpargne, depActionSociale, depConstruction] = await Promise.all([
+  const [users, transactions, taux, caisse, repartitions, suiviDime, depensesNormales, depEconomie, depEpargne, depActionSociale, depConstruction] = await Promise.all([
     prisma.user.count(),
     prisma.transaction.count({ where: { statut: "VALIDE" } }),
     prisma.tauxRepartition.count(),
@@ -15,9 +16,7 @@ export default async function AdminDashboard() {
       where: { transaction: { statut: "VALIDE" } },
       include: { transaction: { select: { createdAt: true } } },
     }),
-    prisma.dimeMensuelle.findMany({
-      where: { statut: "VERSE" },
-    }),
+    getSuiviDimeDeLaDime(),
     prisma.depense.aggregate({
       where: { type: "DEPENSE_NORMALE", statut: "VALIDE" },
       _sum: { montant: true },
@@ -30,20 +29,9 @@ export default async function AdminDashboard() {
 
   const totalDepensesNormales = Number(depensesNormales._sum?.montant || 0);
   const grandTotalCaisseRepartition = repartitions.reduce((sum, r) => sum + Number(r.montantCaisse), 0) - totalDepensesNormales;
-  const grandTotalDimeDeLaDimeBrut = repartitions.reduce((sum, r) => sum + Number(r.montantDimeDeLaDime || 0), 0);
 
-  // Déduire les dîmes déjà versées (uniquement celles reçues avant la date de versement)
-  const dimesVerseesMap = new Map(dimesVersees.map((d) => [`${d.annee}-${d.mois}`, d.dateVersement ? new Date(d.dateVersement) : null]));
-  const montantDimeVersee = repartitions
-    .filter((r) => {
-      const d = new Date(r.transaction.createdAt);
-      const key = `${d.getFullYear()}-${d.getMonth() + 1}`;
-      const dateVersement = dimesVerseesMap.get(key);
-      if (!dateVersement) return false;
-      return d <= dateVersement;
-    })
-    .reduce((s, r) => s + Number(r.montantDimeDeLaDime || 0), 0);
-  const grandTotalDimeDeLaDime = grandTotalDimeDeLaDimeBrut - montantDimeVersee;
+  // Montant de la dîme de la dîme actuellement détenu par le pasteur
+  const grandTotalDimeDeLaDime = suiviDime.dimeDeLaDimeRestante;
 
   const stats = [
     { label: "Utilisateurs", value: users.toString(), icon: Users, href: "/dashboard/admin/utilisateurs" },

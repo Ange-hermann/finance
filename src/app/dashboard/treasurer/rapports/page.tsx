@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { formatMontant, formatDate } from "@/lib/utils";
 import { FileText } from "lucide-react";
 import ExportButtons from "@/components/ExportButtons";
+import { getSuiviDimeDeLaDime } from "@/lib/dimes";
 
 export const dynamic = "force-dynamic";
 
@@ -11,7 +12,7 @@ export default async function RapportsPage() {
   const session = await getServerSession(authOptions);
   if (!session) return null;
 
-  const [transactions, repartitions, caisse, depensesNormales, depEconomie, depEpargne, depActionSociale, depConstruction] = await Promise.all([
+  const [transactions, repartitions, caisse, depensesNormales, depEconomie, depEpargne, depActionSociale, depConstruction, suiviDime] = await Promise.all([
     prisma.transaction.findMany({
       where: { statut: "VALIDE" },
       orderBy: { createdAt: "desc" },
@@ -29,13 +30,15 @@ export default async function RapportsPage() {
     prisma.depense.aggregate({ where: { type: "DEPENSE_NORMALE", statut: "VALIDE", sourceFonds: "EPARGNE" }, _sum: { montant: true } }),
     prisma.depense.aggregate({ where: { type: "DEPENSE_NORMALE", statut: "VALIDE", sourceFonds: "ACTION_SOCIALE" }, _sum: { montant: true } }),
     prisma.depense.aggregate({ where: { type: "DEPENSE_NORMALE", statut: "VALIDE", sourceFonds: "CONSTRUCTION" }, _sum: { montant: true } }),
+    getSuiviDimeDeLaDime(),
   ]);
 
   const totalDepensesNormales = Number(depensesNormales._sum?.montant || 0);
   const grandTotalEconomie = repartitions.reduce((sum, r) => sum + Number(r.montantEconomie), 0) - Number(depEconomie._sum?.montant || 0);
   const grandTotalEpargne = repartitions.reduce((sum, r) => sum + Number(r.montantEpargne), 0) - Number(depEpargne._sum?.montant || 0);
   const grandTotalActionSociale = repartitions.reduce((sum, r) => sum + Number(r.montantActionSociale), 0) - Number(depActionSociale._sum?.montant || 0);
-  const grandTotalDimeDeLaDime = repartitions.reduce((sum, r) => sum + Number(r.montantDimeDeLaDime || 0), 0);
+  // Montant de la dîme de la dîme actuellement détenu par le pasteur
+  const grandTotalDimeDeLaDime = suiviDime.dimeDeLaDimeRestante;
   const grandTotalConstruction = repartitions.reduce((sum, r) => sum + Number(r.montantFondsDedie), 0) - Number(depConstruction._sum?.montant || 0);
   const grandTotalCaisseRepartition = repartitions.reduce((sum, r) => sum + Number(r.montantCaisse), 0) - totalDepensesNormales;
   const totalGeneral = Number(caisse?.soldeActuel || 0);

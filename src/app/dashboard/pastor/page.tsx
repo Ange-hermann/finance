@@ -4,11 +4,12 @@ import { Coins, Wallet, PiggyBank, Heart, Building2, TrendingUp } from "lucide-r
 import PastorCharts from "@/components/PastorCharts";
 import TransactionsParMois from "@/components/TransactionsParMois";
 import PushNotificationButton from "@/components/PushNotificationButton";
+import { getSuiviDimeDeLaDime } from "@/lib/dimes";
 
 export const dynamic = "force-dynamic";
 
 export default async function PastorDashboard() {
-  const [repartitions, caisse, transactions, dimesVersees, depensesNormales, depEconomie, depEpargne, depActionSociale, depConstruction] = await Promise.all([
+  const [repartitions, caisse, transactions, suiviDime, depensesNormales, depEconomie, depEpargne, depActionSociale, depConstruction] = await Promise.all([
     prisma.repartition.findMany({
       where: { transaction: { statut: "VALIDE" } },
       include: { transaction: { select: { createdAt: true } } },
@@ -19,9 +20,7 @@ export default async function PastorDashboard() {
       orderBy: { createdAt: "desc" },
       include: { contributeur: true },
     }),
-    prisma.dimeMensuelle.findMany({
-      where: { statut: "VERSE" },
-    }),
+    getSuiviDimeDeLaDime(),
     prisma.depense.aggregate({
       where: { type: "DEPENSE_NORMALE", statut: "VALIDE" },
       _sum: { montant: true },
@@ -38,21 +37,10 @@ export default async function PastorDashboard() {
   const grandTotalEconomie = repartitions.reduce((sum, r) => sum + Number(r.montantEconomie), 0) - Number(depEconomie._sum?.montant || 0);
   const grandTotalEpargne = repartitions.reduce((sum, r) => sum + Number(r.montantEpargne), 0) - Number(depEpargne._sum?.montant || 0);
   const grandTotalActionSociale = repartitions.reduce((sum, r) => sum + Number(r.montantActionSociale), 0) - Number(depActionSociale._sum?.montant || 0);
-  const grandTotalDimeDeLaDimeBrut = repartitions.reduce((sum, r) => sum + Number(r.montantDimeDeLaDime || 0), 0);
   const grandTotalConstruction = repartitions.reduce((sum, r) => sum + Number(r.montantFondsDedie), 0) - Number(depConstruction._sum?.montant || 0);
 
-  // Déduire les dîmes déjà versées (uniquement celles reçues avant la date de versement)
-  const dimesVerseesMap = new Map(dimesVersees.map((d) => [`${d.annee}-${d.mois}`, d.dateVersement ? new Date(d.dateVersement) : null]));
-  const montantDimeVersee = repartitions
-    .filter((r) => {
-      const d = new Date(r.transaction.createdAt);
-      const key = `${d.getFullYear()}-${d.getMonth() + 1}`;
-      const dateVersement = dimesVerseesMap.get(key);
-      if (!dateVersement) return false;
-      return d <= dateVersement;
-    })
-    .reduce((s, r) => s + Number(r.montantDimeDeLaDime || 0), 0);
-  const grandTotalDimeDeLaDime = grandTotalDimeDeLaDimeBrut - montantDimeVersee;
+  // Montant de la dîme de la dîme actuellement détenu par le pasteur
+  const grandTotalDimeDeLaDime = suiviDime.dimeDeLaDimeRestante;
 
   const kpis = [
     { label: "Grande caisse", value: grandTotalCaisse, icon: Coins },
