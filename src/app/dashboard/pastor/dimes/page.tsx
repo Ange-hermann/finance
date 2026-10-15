@@ -53,6 +53,16 @@ export default async function PastorDimesPage() {
     },
   });
 
+  // Part du pasteur (10%) prélevée sur les offrandes, dons, projets, etc.
+  const partPasteurDonsAgg = await prisma.repartition.aggregate({
+    _sum: { montantDimeDeLaDime: true },
+    where: {
+      transaction: { categorie: { not: "DIME" } },
+      montantDimeDeLaDime: { not: null },
+    },
+  });
+  const partPasteurDons = Number(partPasteurDonsAgg._sum.montantDimeDeLaDime || 0);
+
   // Dîmes non distribuées
   const dimesNonDistribuees = dimes.filter(d => !d.repartition);
 
@@ -66,6 +76,7 @@ export default async function PastorDimesPage() {
       dimes={dimes}
       totalDimes={totalDimes}
       dimeDeLaDime={dimeDeLaDime}
+      partPasteurDons={partPasteurDons}
       dimesDistribuees={dimesDistribuees}
       dimesNonDistribuees={dimesNonDistribuees}
       dimesParMois={moisArray}

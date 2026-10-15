@@ -12,8 +12,8 @@ describe("calculerRepartition", () => {
     expect(resultat.montantEconomie).toBe(10000);
     expect(resultat.montantEpargne).toBe(10000);
     expect(resultat.montantActionSociale).toBe(10000);
-    expect(resultat.montantDimeDeLaDime).toBeNull();
-    expect(resultat.montantCaisse).toBe(70000);
+    expect(resultat.montantDimeDeLaDime).toBe(10000);
+    expect(resultat.montantCaisse).toBe(60000);
     expect(resultat.montantFondsDedie).toBe(0);
   });
 
@@ -42,19 +42,20 @@ describe("calculerRepartition", () => {
     expect(resultat.montantEconomie).toBe(5000);
     expect(resultat.montantEpargne).toBe(5000);
     expect(resultat.montantActionSociale).toBe(5000);
-    expect(resultat.montantCaisse).toBe(35000);
+    expect(resultat.montantDimeDeLaDime).toBe(5000);
+    expect(resultat.montantCaisse).toBe(30000);
   });
 
   it("calcule correctement la répartition pour PROJET", () => {
     const resultat = calculerRepartition(50000, CategorieTransaction.PROJET);
     expect(resultat.montantEconomie).toBe(5000);
-    expect(resultat.montantCaisse).toBe(35000);
+    expect(resultat.montantCaisse).toBe(30000);
   });
 
   it("calcule correctement la répartition pour AUTRE", () => {
     const resultat = calculerRepartition(50000, CategorieTransaction.AUTRE);
     expect(resultat.montantEconomie).toBe(5000);
-    expect(resultat.montantCaisse).toBe(35000);
+    expect(resultat.montantCaisse).toBe(30000);
   });
 
   it("lève une erreur pour un montant négatif", () => {
@@ -75,9 +76,10 @@ describe("calculerRepartition", () => {
     };
     const resultat = calculerRepartition(100000, CategorieTransaction.OFFRANDE, tauxCustom);
     expect(resultat.montantEconomie).toBe(20000);
-    expect(resultat.montantCaisse).toBe(60000);
+    expect(resultat.montantCaisse).toBe(50000);
     expect(resultat.montantEpargne).toBe(10000);
     expect(resultat.montantActionSociale).toBe(10000);
+    expect(resultat.montantDimeDeLaDime).toBe(10000);
   });
 });
 
@@ -114,7 +116,8 @@ describe("getTauxParDefaut", () => {
   it("retourne les taux par défaut pour OFFRANDE", () => {
     const taux = getTauxParDefaut(CategorieTransaction.OFFRANDE);
     expect(taux.economie).toBe(0.10);
-    expect(taux.caisse).toBe(0.70);
+    expect(taux.dimeDeLaDime).toBe(0.10);
+    expect(taux.caisse).toBe(0.60);
   });
 
   it("retourne les taux par défaut pour DIME", () => {

@@ -9,6 +9,7 @@ interface DimesManagerProps {
   dimes: any[];
   totalDimes: number;
   dimeDeLaDime: number;
+  partPasteurDons: number;
   dimesDistribuees: number;
   dimesNonDistribuees: any[];
   dimesParMois: any[];
@@ -18,6 +19,7 @@ export default function DimesManager({
   dimes,
   totalDimes,
   dimeDeLaDime,
+  partPasteurDons,
   dimesDistribuees,
   dimesNonDistribuees,
   dimesParMois,
@@ -100,11 +102,16 @@ export default function DimesManager({
       </div>
 
       {/* Statistiques globales */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card-noir">
           <Wallet className="w-8 h-8 text-or mb-2" />
           <p className="text-blanc/50 text-sm">Total dîmes reçues</p>
           <p className="font-aeonik text-2xl text-blanc">{formatMontant(totalDimes)}</p>
+        </div>
+        <div className="card-noir">
+          <Wallet className="w-8 h-8 text-or mb-2" />
+          <p className="text-blanc/50 text-sm">Votre part sur les dons (10%)</p>
+          <p className="font-aeonik text-2xl text-blanc">{formatMontant(partPasteurDons)}</p>
         </div>
         <div className="card-noir">
           <TrendingUp className="w-8 h-8 text-or mb-2" />
@@ -145,7 +152,7 @@ export default function DimesManager({
       <div className="card-noir p-6">
         <h3 className="font-aeonik text-xl text-blanc mb-4">Marquer la dîme de la dîme comme remise</h3>
         <p className="text-blanc/60 text-sm mb-4">
-          La dîme de la dîme représente 10% du total des dîmes reçues. Cliquez sur le bouton pour marquer qu'elle a été remise manuellement (ne pas affecter les soldes).
+          La dîme de la dîme représente 10% du total des dîmes reçues. Cliquez sur le bouton pour marquer qu'elle a été remise — les 10% sont automatiquement reversés à la caisse de l'église.
         </p>
         <button
           onClick={marquerDimeDeLaDimeRemise}

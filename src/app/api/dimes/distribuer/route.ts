@@ -60,21 +60,33 @@ export async function POST(request: NextRequest) {
     const totalDimes = dimesNonMarquees.reduce((sum, d) => sum + Number(d.montant), 0);
     const dimeDeLaDime = Math.round(totalDimes * 0.10);
 
-    // Marquer chaque dîme comme remise (créer une répartition sans affecter les soldes)
+    // Marquer chaque dîme comme remise : la dîme de la dîme (10% de ce
+    // que le pasteur a reçu) est automatiquement reversée à la caisse.
     for (const dime of dimesNonMarquees) {
       const montantDimeDeLaDime = Math.round(Number(dime.montant) * 0.10);
 
       await prisma.repartition.create({
         data: {
           transactionId: dime.id,
-          montantCaisse: 0,
+          montantCaisse: montantDimeDeLaDime, // la dîme de la dîme entre en caisse
           montantEconomie: 0,
           montantEpargne: 0, // NE PAS affecter Épargne
           montantActionSociale: 0,
-          montantDimeDeLaDime: montantDimeDeLaDime, // Juste pour mémoriser le montant
+          montantDimeDeLaDime: montantDimeDeLaDime,
           montantFondsDedie: 0,
         },
       });
+    }
+
+    // Créditer la caisse physique de la dîme de la dîme reversée
+    const caisse = await prisma.caisse.findFirst();
+    if (caisse) {
+      await prisma.caisse.update({
+        where: { id: caisse.id },
+        data: { soldeActuel: { increment: dimeDeLaDime } },
+      });
+    } else {
+      await prisma.caisse.create({ data: { soldeActuel: dimeDeLaDime } });
     }
 
     // Log d'audit

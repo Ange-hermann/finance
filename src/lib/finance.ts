@@ -18,13 +18,14 @@ export interface TauxRepartitionConfig {
   fondsDedie: number;
 }
 
+// 10% "dimeDeLaDime" = part du pasteur prélevée sur chaque don.
 const tauxParDefaut: Record<CategorieTransaction, TauxRepartitionConfig> = {
   OFFRANDE: {
     economie: 0.10,
     epargne: 0.10,
     actionSociale: 0.10,
-    dimeDeLaDime: null,
-    caisse: 0.70,
+    dimeDeLaDime: 0.10,
+    caisse: 0.60,
     fondsDedie: 0,
   },
   DIME: {
@@ -47,24 +48,24 @@ const tauxParDefaut: Record<CategorieTransaction, TauxRepartitionConfig> = {
     economie: 0.10,
     epargne: 0.10,
     actionSociale: 0.10,
-    dimeDeLaDime: null,
-    caisse: 0.70,
+    dimeDeLaDime: 0.10,
+    caisse: 0.60,
     fondsDedie: 0,
   },
   PROJET: {
     economie: 0.10,
     epargne: 0.10,
     actionSociale: 0.10,
-    dimeDeLaDime: null,
-    caisse: 0.70,
+    dimeDeLaDime: 0.10,
+    caisse: 0.60,
     fondsDedie: 0,
   },
   AUTRE: {
     economie: 0.10,
     epargne: 0.10,
     actionSociale: 0.10,
-    dimeDeLaDime: null,
-    caisse: 0.70,
+    dimeDeLaDime: 0.10,
+    caisse: 0.60,
     fondsDedie: 0,
   },
 };
