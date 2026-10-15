@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getPaymentProvider } from "@/lib/payment";
 import { prisma } from "@/lib/prisma";
-import { calculerRepartition } from "@/lib/finance";
 import { CategorieTransaction } from "@/generated/prisma";
+import { finaliserPaiementEnLigne, getFraisPaiement } from "@/lib/paiements";
 
 export async function POST(req: NextRequest) {
   try {
@@ -19,58 +19,18 @@ export async function POST(req: NextRequest) {
         where: { referencePaiement: tokenPay },
       });
 
-      if (existingTransaction && existingTransaction.statut === "EN_ATTENTE") {
-        // Valider la transaction existante
-        await prisma.transaction.update({
-          where: { id: existingTransaction.id },
-          data: { statut: "VALIDE", referencePaiement: reference },
-        });
+      const frais = await getFraisPaiement(reference);
 
-        // Répartition automatique SEULEMENT pour les offrandes et dons
-        // Les dîmes sont gérées par le pasteur (pas de répartition automatique)
-        if (existingTransaction.categorie !== "DIME") {
-          const repartition = calculerRepartition(
-            Number(existingTransaction.montant),
-            existingTransaction.categorie as CategorieTransaction
-          );
-          await prisma.repartition.create({
-            data: {
-              transactionId: existingTransaction.id,
-              montantEconomie: repartition.montantEconomie,
-              montantEpargne: repartition.montantEpargne,
-              montantActionSociale: repartition.montantActionSociale,
-              montantDimeDeLaDime: repartition.montantDimeDeLaDime,
-              montantCaisse: repartition.montantCaisse,
-              montantFondsDedie: repartition.montantFondsDedie,
-            },
-          });
-
-          const caisse = await prisma.caisse.findFirst();
-          if (caisse) {
-            await prisma.caisse.update({
-              where: { id: caisse.id },
-              data: { soldeActuel: { increment: repartition.montantCaisse } },
-            });
-          } else {
-            await prisma.caisse.create({
-              data: { soldeActuel: repartition.montantCaisse },
-            });
-          }
-        }
-
-        await prisma.recu.create({
-          data: { transactionId: existingTransaction.id },
-        });
-
-        await prisma.logAudit.create({
-          data: {
-            action: "PAIEMENT_EN_LIGNE",
-            cible: `Transaction ${existingTransaction.id}`,
-            details: `Paiement en ligne de ${existingTransaction.montant} FCFA pour ${existingTransaction.categorie}`,
-          },
-        });
-      } else if (!existingTransaction) {
-        // Fallback: créer la transaction si elle n'existe pas (compatibilité mock)
+      if (existingTransaction) {
+        // Valider la transaction existante via le flux commun
+        // (répartition + frais + reçu + notification — idempotent)
+        await finaliserPaiementEnLigne(
+          { ...existingTransaction, montant: Number(existingTransaction.montant) },
+          Number(existingTransaction.montant),
+          { frais, reference }
+        );
+      } else {
+        // Fallback : créer la transaction si elle n'existe pas (compatibilité mock)
         const { montant, categorie, contributeurNom, contributeurTelephone, contributeurEmail, lienId } = body;
 
         let contributeurId: string | null = null;
@@ -91,52 +51,17 @@ export async function POST(req: NextRequest) {
             categorie: categorie as CategorieTransaction,
             mode: "EN_LIGNE",
             contributeurId,
-            statut: "VALIDE",
+            statut: "EN_ATTENTE",
             referencePaiement: reference,
             lienId: lienId || null,
           },
         });
 
-        // Répartition automatique SEULEMENT pour les offrandes et dons
-        // Les dîmes sont gérées par le pasteur (pas de répartition automatique)
-        if (categorie !== "DIME") {
-          const repartition = calculerRepartition(parseFloat(montant), categorie as CategorieTransaction);
-          await prisma.repartition.create({
-            data: {
-              transactionId: transaction.id,
-              montantEconomie: repartition.montantEconomie,
-              montantEpargne: repartition.montantEpargne,
-              montantActionSociale: repartition.montantActionSociale,
-              montantDimeDeLaDime: repartition.montantDimeDeLaDime,
-              montantCaisse: repartition.montantCaisse,
-              montantFondsDedie: repartition.montantFondsDedie,
-            },
-          });
-
-          const caisse = await prisma.caisse.findFirst();
-          if (caisse) {
-            await prisma.caisse.update({
-              where: { id: caisse.id },
-              data: { soldeActuel: { increment: repartition.montantCaisse } },
-            });
-          } else {
-            await prisma.caisse.create({
-              data: { soldeActuel: repartition.montantCaisse },
-            });
-          }
-        }
-
-        await prisma.recu.create({
-          data: { transactionId: transaction.id },
-        });
-
-        await prisma.logAudit.create({
-          data: {
-            action: "PAIEMENT_EN_LIGNE",
-            cible: `Transaction ${transaction.id}`,
-            details: `Paiement en ligne de ${montant} pour ${categorie}`,
-          },
-        });
+        await finaliserPaiementEnLigne(
+          { ...transaction, montant: Number(transaction.montant) },
+          parseFloat(montant),
+          { frais, reference }
+        );
       }
     }
 

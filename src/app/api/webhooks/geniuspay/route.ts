@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { sendPushNotificationToRole } from "@/lib/notifications";
 import { depenseImputableAuSolde, marquerDepensePayee } from "@/lib/depenses";
-import { finaliserPaiementEnLigne, devinerCategorieDepuisDescription } from "@/lib/paiements";
+import { finaliserPaiementEnLigne, devinerCategorieDepuisDescription, getFraisPaiement } from "@/lib/paiements";
 import crypto from "crypto";
 
 export async function POST(request: NextRequest) {
@@ -151,10 +151,13 @@ export async function POST(request: NextRequest) {
         });
       }
 
+      // Frais : depuis le webhook, sinon on les récupère via l'API
+      const fraisReels = Number(fees) || (await getFraisPaiement(reference));
+
       await finaliserPaiementEnLigne(
         { ...transaction, montant: Number(transaction.montant) },
         Number(amount),
-        { frais: Number(fees) || 0, reference }
+        { frais: fraisReels, reference }
       );
     }
 

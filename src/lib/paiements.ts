@@ -8,6 +8,34 @@ type TransactionLike = {
   categorie: string;
 };
 
+// Récupère les frais réels d'un paiement via l'API Genius Pay quand le
+// webhook ne les fournit pas (ou qu'ils arrivent sous un autre champ).
+export async function getFraisPaiement(reference?: string | null): Promise<number> {
+  if (!reference) return 0;
+  try {
+    const res = await fetch(
+      `https://geniuspay.ci/api/v1/merchant/payments/${encodeURIComponent(reference)}`,
+      {
+        headers: {
+          "X-API-Key": process.env.GENIUSPAY_API_KEY || "",
+          "X-API-Secret": process.env.GENIUSPAY_API_SECRET || "",
+        },
+      }
+    );
+    if (!res.ok) return 0;
+    const data = await res.json();
+    const p = data.data || data;
+    const frais = Number(p.fees ?? p.fee ?? p.commission) || 0;
+    if (frais > 0) return frais;
+    // Fallback : brut - net reçu si le provider expose le montant net
+    const brut = Number(p.amount);
+    const net = Number(p.amount_received ?? p.net_amount ?? p.net);
+    return brut > 0 && net > 0 && net < brut ? brut - net : 0;
+  } catch {
+    return 0;
+  }
+}
+
 // Finalise un paiement EN LIGNE confirmé par le provider : valide la
 // transaction, applique la répartition dans les fonds (économie, épargne,
 // action sociale, dîme de la dîme, fonds dédié) et crédite la caisse

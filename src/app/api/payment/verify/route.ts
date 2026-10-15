@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { finaliserPaiementEnLigne } from "@/lib/paiements";
+import { finaliserPaiementEnLigne, getFraisPaiement } from "@/lib/paiements";
 
 // Filet de sécurité : après redirection vers /payment/success, la page
 // appelle cette route avec la référence Genius Pay pour vérifier
@@ -47,10 +47,12 @@ export async function GET(request: NextRequest) {
     });
 
     if (transaction) {
+      // Frais : depuis la réponse, sinon via l'API (autre nom de champ)
+      const fraisReels = Number(payment.fees ?? payment.fee ?? payment.commission) || (await getFraisPaiement(reference));
       await finaliserPaiementEnLigne(
         { ...transaction, montant: Number(transaction.montant) },
         Number(payment.amount || transaction.montant),
-        { frais: Number(payment.fees) || 0, reference }
+        { frais: fraisReels, reference }
       );
     } else {
       console.warn(`Verify: aucune transaction pour la référence ${reference}`);

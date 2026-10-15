@@ -107,8 +107,8 @@ export default async function AuditorDashboard() {
             createdAt: ann.createdAt.toISOString(),
             auteur: { nom: ann.auteur.nom },
           })),
+          annotationForm: <AnnotationForm transactionId={t.id} />,
         }))}
-        renderAnnotationForm={(transactionId) => <AnnotationForm transactionId={transactionId} />}
       />
 
       <div className="card-noir">

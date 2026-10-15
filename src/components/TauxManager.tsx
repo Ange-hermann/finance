@@ -12,6 +12,15 @@ interface TauxItem {
   dateEffet: Date;
 }
 
+const POSTE_LABELS: Record<string, string> = {
+  economie: "Économie",
+  epargne: "Épargne",
+  actionSociale: "Action sociale",
+  dimeDeLaDime: "Dîme (pasteur)",
+  caisse: "Caisse",
+  fondsDedie: "Fonds dédié",
+};
+
 export default function TauxManager({ grouped }: { grouped: Record<string, TauxItem[]> }) {
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -81,7 +90,7 @@ export default function TauxManager({ grouped }: { grouped: Record<string, TauxI
                 className="input-noir w-full"
               >
                 {["economie", "epargne", "actionSociale", "dimeDeLaDime", "caisse", "fondsDedie"].map((p) => (
-                  <option key={p} value={p}>{p}</option>
+                  <option key={p} value={p}>{POSTE_LABELS[p]}</option>
                 ))}
               </select>
             </div>
@@ -110,7 +119,7 @@ export default function TauxManager({ grouped }: { grouped: Record<string, TauxI
             <div className="space-y-2">
               {tauxList.map((t) => (
                 <div key={t.id} className="flex justify-between text-sm">
-                  <span className="text-blanc/60">{t.nomPoste}</span>
+                  <span className="text-blanc/60">{POSTE_LABELS[t.nomPoste] || t.nomPoste}</span>
                   <span className="text-blanc font-medium">{typeof t.pourcentage === "number" ? t.pourcentage : t.pourcentage.toNumber()}%</span>
                 </div>
               ))}

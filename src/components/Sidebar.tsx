@@ -52,6 +52,7 @@ const roleMenus: Record<string, { href: string; label: string; icon: any }[]> = 
   ],
   ADMIN: [
     { href: "/dashboard/admin", label: "Tableau de bord", icon: LayoutDashboard },
+    { href: "/dashboard/admin/lien-paiement", label: "Lien de paiement", icon: LinkIcon },
     { href: "/dashboard/admin/taux", label: "Taux de répartition", icon: Settings },
     { href: "/dashboard/admin/utilisateurs", label: "Utilisateurs", icon: Users },
   ],

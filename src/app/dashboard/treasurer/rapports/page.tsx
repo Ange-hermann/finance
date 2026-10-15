@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { formatMontant, formatDate } from "@/lib/utils";
 import { FileText } from "lucide-react";
 import ExportButtons from "@/components/ExportButtons";
+import RapportDetaille from "@/components/RapportDetaille";
 import { getSuiviDimeDeLaDime } from "@/lib/dimes";
 
 export const dynamic = "force-dynamic";
@@ -12,7 +13,7 @@ export default async function RapportsPage() {
   const session = await getServerSession(authOptions);
   if (!session) return null;
 
-  const [transactions, repartitions, caisse, depensesNormales, depEconomie, depEpargne, depActionSociale, depConstruction, suiviDime] = await Promise.all([
+  const [transactions, repartitions, caisse, depensesNormales, depEconomie, depEpargne, depActionSociale, depConstruction, suiviDime, depenses] = await Promise.all([
     prisma.transaction.findMany({
       where: { statut: "VALIDE" },
       orderBy: { createdAt: "desc" },
@@ -31,6 +32,11 @@ export default async function RapportsPage() {
     prisma.depense.aggregate({ where: { type: "DEPENSE_NORMALE", statut: "VALIDE", sourceFonds: "ACTION_SOCIALE" }, _sum: { montant: true } }),
     prisma.depense.aggregate({ where: { type: "DEPENSE_NORMALE", statut: "VALIDE", sourceFonds: "CONSTRUCTION" }, _sum: { montant: true } }),
     getSuiviDimeDeLaDime(),
+    prisma.depense.findMany({
+      where: { statut: "VALIDE" },
+      orderBy: { dateDepense: "desc" },
+      include: { beneficiaire: { select: { nom: true } }, agent: { select: { nom: true } } },
+    }),
   ]);
 
   const totalDepensesNormales = Number(depensesNormales._sum?.montant || 0);
@@ -72,6 +78,19 @@ export default async function RapportsPage() {
     } : null,
   }));
 
+  const serializedDepenses = depenses.map((d) => ({
+    id: d.id,
+    type: d.type,
+    categorie: d.categorie,
+    sourceFonds: d.sourceFonds,
+    description: d.description,
+    montant: Number(d.montant),
+    dateDepense: d.dateDepense.toISOString(),
+    statutPaiement: d.statutPaiement,
+    beneficiaire: d.beneficiaire ? { nom: d.beneficiaire.nom } : null,
+    agent: d.agent ? { nom: d.agent.nom } : null,
+  }));
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -105,6 +124,8 @@ export default async function RapportsPage() {
           ))}
         </div>
       </div>
+
+      <RapportDetaille transactions={serializedTransactions} depenses={serializedDepenses} />
 
       <div className="card-noir">
         <h3 className="font-aeonik text-xl text-blanc mb-4">Toutes les transactions validées</h3>

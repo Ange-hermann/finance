@@ -198,7 +198,7 @@ export default function SaisieManuellePage() {
                   </div>
                   {preview.dimeDeLaDime !== null && preview.dimeDeLaDime > 0 && (
                     <div className="flex justify-between p-3 rounded-xl bg-or/5">
-                      <span className="text-blanc/60 text-sm">{categorie === "DIME" ? "Pasteur (100%)" : "Part pasteur (10%)"}</span>
+                      <span className="text-blanc/60 text-sm">{categorie === "DIME" ? "Dîme (pasteur) 100%" : "Dîme (pasteur) 10%"}</span>
                       <span className="text-blanc font-medium">{formatMontant(preview.dimeDeLaDime)}</span>
                     </div>
                   )}

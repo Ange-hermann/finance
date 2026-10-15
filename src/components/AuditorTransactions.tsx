@@ -32,14 +32,13 @@ interface Transaction {
     montantCaisse: number;
   } | null;
   annotations: Annotation[];
+  annotationForm?: React.ReactNode;
 }
 
 export default function AuditorTransactions({
   transactions,
-  renderAnnotationForm,
 }: {
   transactions: Transaction[];
-  renderAnnotationForm: (transactionId: string) => React.ReactNode;
 }) {
   const groupes = useMemo(() => {
     const map: Record<string, { mois: number; annee: number; items: Transaction[]; total: number }> = {};
@@ -142,7 +141,7 @@ export default function AuditorTransactions({
                   </div>
                 )}
 
-                {renderAnnotationForm(t.id)}
+                {t.annotationForm}
               </div>
             ))}
           </div>
